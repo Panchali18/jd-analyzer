@@ -79,7 +79,7 @@ SKILLS_DICTIONARY = {
         "deep_learning": ["deep learning"],
         "neural_networks": ["neural networks", "neural network"],
         "llm": ["llm", "large language model", "large language models"],
-        "generative_ai": ["generative ai", "generative artificial intelligence", "gen ai"],
+        "generative_ai": ["generative ai", "generative artificial intelligence", "gen ai", "genai"],
         "nlp": ["nlp", "natural language processing"],
         "computer_vision": ["computer vision", "image processing"],
         "transformers": ["transformers"],
@@ -281,8 +281,17 @@ SKILLS_DICTIONARY = {
         "finance": ["finance", "financial analysis"],
         "accounting": ["accounting"],
     },
-    
-    # DESIGN
+           # MICROSOFT BUSINESS PLATFORM
+       "microsoft_platform": {
+           "dynamics_365": ["dynamics 365", "d365", "microsoft dynamics"],
+           "power_automate": ["power automate"],
+           "copilot_studio": ["copilot studio"],
+           "microsoft_fabric": ["microsoft fabric"],
+           "azure_devops": ["azure devops"],
+           "sharepoint": ["sharepoint"],
+       },
+       
+       # DESIGN
     "design": {
         "ui_ux": ["ui/ux", "ux design", "ui design"],
         "figma": ["figma"],
