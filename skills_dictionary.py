@@ -89,7 +89,6 @@ SKILLS_DICTIONARY = {
     # RAG & RETRIEVAL SYSTEMS
     "rag_retrieval": {
         "rag": ["rag", "retrieval augmented generation"],
-        "retrieval_augmented_generation": ["retrieval augmented generation"],
         "semantic_search": ["semantic search"],
         "similarity_search": ["similarity search"],
         "information_retrieval": ["information retrieval"],
