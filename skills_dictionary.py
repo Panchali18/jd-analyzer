@@ -9,7 +9,7 @@ SKILLS_DICTIONARY = {
         "javascript": ["javascript", "js", "node", "nodejs", "node.js"],
         "java": ["java", "j2ee"],
         "csharp": ["c#", "csharp", "c sharp"],
-        "go": ["golang", "go"],
+        "go": ["golang"],
         "rust": ["rust"],
         "php": ["php"],
         "ruby": ["ruby", "rails", "ruby on rails"],
@@ -117,8 +117,8 @@ SKILLS_DICTIONARY = {
         "tool_use": ["tool use", "tool calling", "function calling"],
         "function_calling": ["function calling"],
         "agent_framework": ["agent framework"],
-        "reasoning": ["reasoning", "agentic reasoning"],
-        "planning": ["planning", "plan generation"],
+        "reasoning": ["agentic reasoning"],
+        "planning": ["plan generation"],
         "memory": ["memory management", "memory systems"],
     },
     
@@ -191,7 +191,7 @@ SKILLS_DICTIONARY = {
     
     # API & WEB STANDARDS
     "api_web": {
-        "rest_api": ["rest api", "restful", "rest"],
+        "rest_api": ["rest api", "restful"],
         "graphql": ["graphql"],
         "soap": ["soap"],
         "http": ["http", "https"],
@@ -268,7 +268,7 @@ SKILLS_DICTIONARY = {
     
     # BUSINESS & PRODUCT
     "business": {
-        "product_management": ["product management", "product manager", "pm"],
+        "product_management": ["product management", "product manager"],
         "business_analysis": ["business analysis", "business analyst"],
         "business_intelligence": ["business intelligence", "bi"],
         "requirements_gathering": ["requirements gathering"],
