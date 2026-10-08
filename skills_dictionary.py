@@ -81,8 +81,7 @@ SKILLS_DICTIONARY = {
         "llm": ["llm", "large language model", "large language models"],
         "generative_ai": ["generative ai", "generative artificial intelligence", "gen ai"],
         "nlp": ["nlp", "natural language processing"],
-        "computer_vision": ["computer vision", "cv", "image processing"],
-        "computer_vision_cv": ["computer vision"],
+        "computer_vision": ["computer vision", "image processing"],
         "transformers": ["transformers"],
     },
     
