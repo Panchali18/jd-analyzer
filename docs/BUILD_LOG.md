@@ -2,13 +2,17 @@
 
 Every change to the JD Analyzer, with the problem, the fix, the result, and what I learned. It combines a changelog (what changed) and a decision log (why). Newest first in each table.
 
+## Stage 2: AI matching (started 10 October 2026)
+
+The AI spec is agreed (`docs/AI_SPEC.md`): Claude reads the JD and CV together, labels each requirement, quotes CV evidence, and the app calculates a weighted score (3 required, 3 qualification, 1 nice to have). A missing must-have gives "Not a fit". Building is waiting on AWS quota approval.
+
 ## Getting ready for Stage 2 (10 October 2026)
 
 I stopped the keyword fixes here. Clean names, grouping and ranking will be replaced by the AI version, so polishing them would be wasted effort. Before starting Stage 2, I did the three things it depends on.
 
 | # | Change | Why | Result | What I learned |
 | --- | --- | --- | --- | --- |
-| 9 | Set up AWS for Bedrock: new personal account on the free plan ($100 credits, no card), region eu-north-1 (Stockholm), Bedrock API key stored in `.env`, Anthropic use-case form submitted, `test_bedrock.py` written | The AI version will run on Claude through Amazon Bedrock, matching my AWS AI Practitioner and Bedrock specialisations | Blocked for now: every model shows 0 tokens per minute, Amazon Nova included. Claude Haiku 5.5 isn't available to the account; Haiku 4.5 is, once quotas rise | Read errors closely, because each one narrows the cause: AccessDenied (model not available), ResourceNotFound (form not submitted), Throttling (quota is 0). New accounts start with zero quotas. EU inference profiles keep the CV inside the EU. |
+| 9 | Set up AWS for Bedrock: new personal account on the free plan ($100 credits, no card), region eu-north-1 (Stockholm), Bedrock API key stored in `.env`, Anthropic use-case form submitted, `test_bedrock.py` written (commit 24e4a89). Requested quota increases for Haiku 4.5 cross-region: 5,000,000 tokens and 10,000 requests per minute (the AWS defaults); pending | The AI version will run on Claude through Amazon Bedrock, matching my AWS AI Practitioner and Bedrock specialisations | Blocked for now: every model shows 0 tokens per minute, Amazon Nova included. Claude Haiku 5.5 isn't available to the account; Haiku 4.5 is, once quotas rise | Read errors closely, because each one narrows the cause: AccessDenied (model not available), ResourceNotFound (form not submitted), Throttling (quota is 0). New accounts start with zero quotas. EU inference profiles keep the CV inside the EU. |
 | 8 | Added boto3 1.43.111 to requirements.txt. Commit c451f58 | boto3 is Amazon's Python library for reaching Bedrock | Installed and pinned | Each new library goes into requirements.txt the moment it's installed. |
 | 7 | Pinned pypdf to 6.19.0 in requirements.txt. Commit 1014400 | The file asked for pypdf 3.17.1, but the app runs on 6.19.0. Nobody could install the app from GitHub as it was | requirements.txt now matches what I tested | `==` pins an exact version so everyone gets the same setup. Streamlit 1.28.1 is from 2023 and needs upgrading before the app goes online. |
 | 6 | Added a test set: 2 real JDs in `test_data/`, each with an answer key (required, nice to have, qualifications). Commit 8b7c285 | I couldn't rerun earlier tests because I didn't keep the JD. Without fixed inputs, I can't show a change helped | Keyword version finds 10 skills in jd_01 and 7 in jd_02, and misses most of what each role is about: workshops, AI adoption, pilots to production, epics and user stories, vendor procurement | Keywords catch tool names, but roles are described in sentences. That's the case for Stage 2. A test set also needs a poor-fit JD (a negative control) to check the app can say no. My CV stays out of the repo. |
@@ -62,7 +66,7 @@ Saving a change:
 - [x] Start a test set (Change 6: 2 JDs with answer keys)
 - [x] Choose the AI service for Stage 2: Amazon Bedrock, Claude Haiku 4.5, EU profile
 - [x] Write the AI matching spec (`docs/AI_SPEC.md`)
-- [ ] Wait for AWS quotas to rise above 0; check Bedrock → Quotas daily and request an increase for Haiku 4.5 (Geo cross-region)
+- [ ] Wait for the two Haiku 4.5 quota requests to be approved (Service Quotas → Quota request history), then run `python test_bedrock.py`
 - [ ] If quotas are still 0 after a few days: build on Gemini's free tier first, with an `AI_PROVIDER` setting so switching to Bedrock is one word
 - [ ] Stage 2: AI reads the JD, picks out skills, and marks each as required, nice-to-have or qualification
 - [ ] Stage 2: treat missing qualifications (like a CPA) as deal-breakers that override the percentage
