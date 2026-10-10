@@ -2,9 +2,19 @@
 
 Every change to the JD Analyzer, with the problem, the fix, the result, and what I learned. It combines a changelog (what changed) and a decision log (why). Newest first in each table.
 
+## Getting ready for Stage 2 (10 October 2026)
+
+I stopped the keyword fixes here. Clean names, grouping and ranking will be replaced by the AI version, so polishing them would be wasted effort. Before starting Stage 2, I did the three things it depends on.
+
+| # | Change | Why | Result | What I learned |
+| --- | --- | --- | --- | --- |
+| 7 | Pinned pypdf to 6.19.0 in requirements.txt. Commit 1014400 | The file asked for pypdf 3.17.1, but the app runs on 6.19.0. Nobody could install the app from GitHub as it was | requirements.txt now matches what I tested | `==` pins an exact version so everyone gets the same setup. Streamlit 1.28.1 is from 2023 and needs upgrading before the app goes online. |
+| 6 | Added a test set: 2 real JDs in `test_data/`, each with an answer key (required, nice to have, qualifications). Commit 8b7c285 | I couldn't rerun earlier tests because I didn't keep the JD. Without fixed inputs, I can't show a change helped | Keyword version finds 10 skills in jd_01 and 7 in jd_02, and misses most of what each role is about: workshops, AI adoption, pilots to production, epics and user stories, vendor procurement | Keywords catch tool names, but roles are described in sentences. That's the case for Stage 2. A test set also needs a poor-fit JD (a negative control) to check the app can say no. My CV stays out of the repo. |
+| 5 | In app.py line 37, cleaned each dictionary phrase with `normalize_text` before searching. Removed "c#". Commit 82c0785 | The app stripped punctuation from the JD and CV but not from the dictionary, so 14 phrases like "node.js" and "scikit-learn" could never match | Punctuated skills now match. "c#" removed because it would become the single letter "c" | Python uses indentation to understand structure. Lines in the same block must start at the same position, or the app fails with IndentationError. |
+
 ## Stage 1: honest scores
 
-Four changes so far, all saved on GitHub. On my test JD and CV, RAG no longer shows as missing and the match score is 44%, up from 39%.
+Four changes, all saved on GitHub. On my test JD and CV, RAG no longer shows as missing and the match score is 44%, up from 39%.
 
 | # | Change | Why | Result | What I learned |
 | --- | --- | --- | --- | --- |
@@ -45,14 +55,14 @@ Saving a change:
 - [x] Protect `.env` with a `.gitignore` and save changes to GitHub
 - [x] Remove ambiguous short words ("cv", "go", "rest", "pm", "planning", "reasoning"). "ai" and "react" kept on purpose
 - [x] Add my tools: Dynamics 365, Copilot Studio, Power Automate, Azure DevOps, Fabric
-- [ ] Add Sage, once I confirm which product
-- [ ] "bi" still counts inside "Power BI"
-- [ ] Stop generic words inflating the Matched list: "development" counts as coding, "architecture" as a skill
-- [ ] Fix the 14 phrases with punctuation that can never match, such as "c#", "node.js" and "scikit-learn" (needs a change in app.py)
-- [ ] Merge the other duplicate skills, such as tool_use and function_calling
-- [ ] Show clean skill names, split technical from soft skills, and list the most important missing skills first
-- [ ] Update requirements.txt so it installs cleanly on the Codespace's Python 3.14
-- [ ] Build a test set of 5 to 10 real JDs to check each change against
+- [x] Fix the 14 phrases with punctuation that can never match (Change 5)
+- [x] Update requirements.txt to the tested pypdf version (Change 7)
+- [x] Start a test set (Change 6: 2 JDs with answer keys)
+- [ ] Choose the AI service for Stage 2 (AWS Bedrock recommended; Claude API as fallback)
+- [ ] Stage 2: AI reads the JD, picks out skills, and marks each as required, nice-to-have or qualification
+- [ ] Stage 2: treat missing qualifications (like a CPA) as deal-breakers that override the percentage
+- [ ] Add a poor-fit JD to the test set: an AI job title with an accounting or finance body (CPA, CFA)
+- [ ] Upgrade Streamlit from 1.28.1 and retest before putting the app online
 - [ ] Idea: a third list, "Your strengths this JD didn't ask for"
-- [ ] Stage 2: AI reads the JD, picks out skills, and marks each as required or nice-to-have
+- [ ] Parked (the AI version replaces these): clean skill names, technical vs soft grouping, ranking missing skills, plurals like "pipelines", generic words like "development", duplicate skills, Sage
 - [ ] Stage 3: remove unsourced claims from the PRD and narrow the target user
