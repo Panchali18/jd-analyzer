@@ -1,9 +1,9 @@
 # Technical Design Document (TDD)
 ## JD Analyzer & CV Matcher
 
-**Document Version:** 1.0  
-**Last Updated:** October 2026  
-**Status:** MVP Technical Blueprint
+**Document Version:** 1.1  
+**Last Updated:** 10 October 2026  
+**Status:** Version 1 (keyword matching) built. Version 2 (AI matching on Amazon Bedrock) specified in [AI_SPEC.md](AI_SPEC.md)
 
 ---
 
@@ -16,7 +16,7 @@ Build a lightweight web app that allows a user to:
 - Display a match score and missing skills
 - Offer a clear, beginner-friendly output for job tailoring
 
-This will be built as an MVP in Python using Streamlit, with a simple keyword-based matching engine first. We will upgrade to smarter AI-based extraction later if needed.
+Version 1 is built in Python using Streamlit, with a keyword-based matching engine. Version 2 replaces the keyword engine with Claude Haiku 4.5 on Amazon Bedrock, which reads the JD and CV together. See section 18.
 
 ---
 
@@ -47,12 +47,12 @@ This will be built as an MVP in Python using Streamlit, with a simple keyword-ba
 
 ## 3. Target Environment
 
-The project is currently being built in **GitHub Codespaces** using:
-- Python 3.11
-- Streamlit
-- pypdf
-- python-dotenv
-- optional Hugging Face models later
+The project is built in **GitHub Codespaces** using:
+- Python 3.14
+- Streamlit 1.28.1
+- pypdf 6.19.0
+- python-dotenv 1.0.0
+- boto3 1.43.111 (for Amazon Bedrock, version 2)
 
 This environment is suitable for MVP development and is the fastest path to a working prototype.
 
@@ -138,17 +138,13 @@ Why:
 ### python-dotenv
 Why:
 - Helps load environment variables safely
-- Useful for future Hugging Face or API keys
+- Loads the Bedrock API key from `.env`, which `.gitignore` keeps off GitHub
 
-### Optional Future Tools
-- **Hugging Face Transformers / sentence-transformers**
-  - For AI-based skill extraction
-  - Better synonym handling
-  - Better semantic matching
-- **Pandas**
-  - For processing structured comparison output
-- **scikit-learn**
-  - For vector similarity or simple classification later
+### boto3
+Why:
+- Amazon's official Python library for AWS services
+- Sends the JD and CV to Claude on Amazon Bedrock and returns the result
+- Picks up the Bedrock API key automatically from the `AWS_BEARER_TOKEN_BEDROCK` setting
 
 ---
 
@@ -168,11 +164,11 @@ Responsibilities:
 ### 6.2 `requirements.txt`
 List of Python dependencies required for the app.
 
-Contains:
+Contains exact pinned versions of:
 - streamlit
 - python-dotenv
 - pypdf
-- optionally future AI-related libraries
+- boto3
 
 ### 6.3 `docs/PRD.md`
 The product-level definition.
@@ -183,7 +179,19 @@ Contains:
 - Success criteria
 - Roadmap
 
-### 6.4 `.venv/`
+### 6.4 `skills_dictionary.py`
+The version 1 skill dictionary: about 240 skills grouped by category, each with its synonyms.
+
+### 6.5 `test_data/`
+Real job descriptions, each with an answer key (required, nice to have, qualifications). Used to measure both versions.
+
+### 6.6 `test_bedrock.py`
+A short script that checks the Bedrock connection by sending one message to Claude.
+
+### 6.7 `docs/AI_SPEC.md` and `docs/BUILD_LOG.md`
+The version 2 specification, and a record of every change and why it was made.
+
+### 6.8 `.venv/`
 Isolated Python environment for project dependencies.
 
 This prevents:
@@ -407,7 +415,7 @@ Current assumptions:
 ### Yes — very feasible in the current environment.
 
 Why:
-- Python 3.11 is available in Codespaces
+- Python 3.14 is available in Codespaces
 - Streamlit is easy to install and run
 - `pypdf` works well for reading PDFs
 - A simple keyword-matching app is easy to build and test
@@ -449,9 +457,8 @@ Why:
 - If JD or CV is empty, show actionable error message
 - If PDF read fails, show guidance
 
-### Step 5: Optional AI Upgrade
-- Add Hugging Face integration later for skill extraction
-- Use a semantic model to improve match quality
+### Step 5: AI Upgrade
+- Replaced by version 2 on Amazon Bedrock. See section 18 and [AI_SPEC.md](AI_SPEC.md)
 
 ---
 
@@ -473,3 +480,39 @@ This is the most practical and realistic setup for a project like this in a MVP 
 This project is feasible, fast to build, and a strong portfolio piece. The current setup is enough to validate the concept, gather user feedback, and refine the matching logic before moving to more advanced AI or production-grade architecture.
 
 This is the right phase to keep building because the product is simple, useful, and clearly solves a real pain point for job applicants.
+
+---
+
+## 18. Version 2: AI Matching on Amazon Bedrock
+
+Keyword matching catches tool names but misses capabilities written as sentences. On the two test JDs it missed most of what each role was about. Version 2 replaces the keyword engine with an AI model.
+
+### Architecture
+```
+User pastes JD + uploads CV (Streamlit)
+         ↓
+pypdf extracts CV text
+         ↓
+boto3 sends JD + CV + instructions to Amazon Bedrock
+         ↓
+Claude Haiku 4.5 (EU inference profile) returns JSON:
+requirements, types, CV evidence, deal-breakers, rewrite tips
+         ↓
+App checks the JSON and calculates the weighted score in code
+         ↓
+Streamlit shows verdict, score, evidence and suggestions
+```
+
+### Key choices
+| Choice | Decision | Reason |
+| --- | --- | --- |
+| Model | Claude Haiku 4.5 | Fast and low-cost, and strong enough for reading JDs and CVs. Haiku 5.5 isn't available to the account yet |
+| Service | Amazon Bedrock | Managed access to Claude with AWS security and billing |
+| Region | eu-north-1 (Stockholm), EU inference profile `eu.anthropic.claude-haiku-4-5-20251001-v1:0` | CV data is processed inside the EU |
+| API | Bedrock Converse API | One standard format across models, so switching models is a one-line change |
+| Authentication | Bedrock API key in `.env`, 30-day expiry | Simple to set up, and limited damage if leaked |
+| Scoring | Calculated in code from the AI's labels | The same labels always give the same score |
+| Output | Structured JSON, checked by the app | The app can verify every quoted CV line actually appears in the CV |
+
+### Status
+AWS account, region, API key, model access and the connection test script are set up. Building is waiting on Bedrock quota approval: new accounts start at 0 tokens per minute.
