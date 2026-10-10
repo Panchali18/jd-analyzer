@@ -1,6 +1,6 @@
 # AI Matching Spec (Stage 2)
 
-**Status:** Draft, decisions agreed 10 October 2026 (deal-breaker rule updated the same day)
+**Status:** Agreed 10 October 2026
 **Owner:** Panchali Das
 
 The AI version reads the job description and the CV together and returns a weighted match score, a verdict, deal-breakers, and evidence from the CV for every matched skill. It replaces the keyword matcher, which catches tool names but misses capabilities described in sentences (see `test_data/`).
@@ -108,4 +108,4 @@ Target from the PRD: 75% or better on recall and precision. Each result goes in 
 
 ## Open questions
 
-- Are 3 / 3 / 1 the right weights? Revisit after testing.
+None. Weights of 3 (required), 3 (qualification) and 1 (nice to have) confirmed on 10 October 2026. Revisit only if testing shows scores that don't match my judgement.
