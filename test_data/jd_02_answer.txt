@@ -1,0 +1,23 @@
+Role: Senior Business Analyst, GenAI governance (banking)
+
+Required:
+- Business analysis
+- Stakeholder coordination across locations
+- Writing epics and user stories from requirements
+- Vendor assessment and procurement of third-party tools
+- Governance, regulatory compliance and controls
+- Documentation
+- Workshop facilitation
+- Technical fluency with APIs and integrations
+- Product management practices
+- Interest in generative AI and agentic systems
+- Working through ambiguity
+
+Nice to have:
+- Problem discovery
+- LLM tooling
+- Financial sector experience
+
+Qualifications:
+- 2-3 years as a Business Analyst
+- University degree in IT, Business, Product Management or related

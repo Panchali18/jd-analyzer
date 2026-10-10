@@ -1,0 +1,21 @@
+Role: AI Adoption / AI Solutions Specialist
+
+Required:
+- AI adoption and change management
+- Workshop facilitation
+- Designing and delivering AI training
+- Taking AI pilots (PoC/MVP) into production
+- AI/ML solution delivery
+- Use-case backlog ownership
+- Data pipelines and data management
+- Solution architecture and documentation
+- Working with data engineering and IT teams
+- Mentoring technical teams
+- Evaluating emerging AI technologies
+- Communication, problem solving, collaboration
+
+Nice to have:
+- French
+
+Qualifications:
+- Master's degree in IT or similar

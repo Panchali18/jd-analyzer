@@ -1,0 +1,21 @@
+Are you ready to shape how a major bank builds and governs AI? Danske Bank's GenAI Foundation team is seeking a Senior Business Analyst to analyse, coordinate and lead standards and shared products that power agentic AI systems across the organisation. You will work directly with senior stakeholders and technical teams to reshape how we deliver AI solutions in a regulated environment.
+
+What You Will Be Doing
+
+As our Senior Business Analyst, you will be responsible for the standards and shared products that GenAI teams across the bank build on, including the Agent Delivery Standard, skills library, and high-visibility agentic systems used at senior levels. You will collaborate closely with developers, data scientists, and stakeholders across Copenhagen and Vilnius to keep these products well-defined and moving forward.
+
+Lead comprehensive business analysis and stakeholder coordination across Danske Bank group
+Translate business and technical requirements into actionable epics and user stories
+Run procurement and onboarding processes for third-party GenAI tooling and solutions
+Maintain documentation and controls ensuring compliance with governance and regulation
+Facilitate workshops and alignment sessions across multiple locations and teams 
+About You
+
+2-3 years of experience as a Business Analyst, with exposure to product management practices, and a university degree in IT, Business, Product Management or a related field
+Experience running vendor assessments or procurement processes, preferably in regulated industries
+Technical fluency to collaborate with engineers and data scientists on APIs and integrations
+Strong written and spoken English with ability to create clear documentation
+Structured approach with ability to navigate ambiguous situations
+Interest in generative AI and agentic systems
+Experience with problem discovery is beneficial
+Experience with LLM tooling or the financial sector would be valuable additions to your background 

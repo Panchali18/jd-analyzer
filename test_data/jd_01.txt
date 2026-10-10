@@ -1,0 +1,17 @@
+
+Your tasks
+ 
+•    You are responsible for AI business solutions adoption and you deliver relevant actions (facilitate workshops to enhance internal AI capabilities across business teams, design, develop and deliver customized training programs on AI advancements and tooling…)
+•    You support the evolution of AI pilots (MVPs and PoCs) into scalable, enterprise-ready solutions 
+•    You assist in the architecture and development of robust data pipelines and data management frameworks 
+•    You provide hands-on technical expertise to project teams implementing AI and ML solutions
+•    You maintain an AI usecases backlog and you are responsible for their delivery
+•    You advise on best practices for the industrialization and scalability of AI systems
+•    You support technical troubleshooting and solution optimization of AI models in production
+•    You collaborate closely with data engineers and IT teams to integrate AI solutions into existing platforms
+•    You document procedures, solution architectures, in line with guidelines for AI tools and frameworks  Your profile 
+•    You hold a master’s degree in IT or similar
+•    Ability to evaluate and adopt emerging AI/ML technologies and trends
+•    Proven experience enabling and mentoring technical teams
+•    You have strong problem-solving, communication and collaboration skills
+•    You have excellent verbal and written communication skills in English. A good knowledge of French will be considered a plus. 
