@@ -8,7 +8,7 @@ SKILLS_DICTIONARY = {
         "python": ["python", "py", "python3", "python2"],
         "javascript": ["javascript", "js", "node", "nodejs", "node.js"],
         "java": ["java", "j2ee"],
-        "csharp": ["c#", "csharp", "c sharp"],
+        "csharp": ["csharp", "c sharp"],
         "go": ["golang"],
         "rust": ["rust"],
         "php": ["php"],

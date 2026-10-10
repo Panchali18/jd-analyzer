@@ -34,7 +34,7 @@ def extract_skills_from_text(text: str):
     from skills_dictionary import SKILL_SYNONYMS
 
     for synonym, canonical_skill in SKILL_SYNONYMS.items():
-        pattern = r"\b" + re.escape(synonym) + r"\b"
+        pattern = r"\b" + re.escape(normalize_text(synonym)) + r"\b"
         if re.search(pattern, cleaned_text):
             found_skills.add(canonical_skill)
 
