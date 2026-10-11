@@ -87,11 +87,24 @@ with st.sidebar:
     sample = st.button("Try a sample", width="stretch")
     st.caption("See an example result for a fictional CV, with no upload needed.")
 
-# ---------- Call Claude only when the button is pressed ----------
-if run:
+# ---------- Sample result: no AI call, no cost ----------
+if sample:
+    with open(SAMPLE_RESULT) as f:
+        st.session_state["result"] = json.load(f)
+    st.session_state["is_sample"] = True
+
+# ---------- Call Claude only when the button is pressed, within the limits ----------
+analyses_used = st.session_state.get("analyses_used", 0)
+if run and analyses_used >= MAX_ANALYSES:
+    st.warning(f"This demo allows {MAX_ANALYSES} analyses per visit. Try the sample, or come back later.")
+elif run and (len(jd_text) > MAX_CHARACTERS or len(cv_text) > MAX_CHARACTERS):
+    st.warning("That document is too long for this demo. Please use a job description and CV under about 8 pages each.")
+elif run:
     with st.spinner("Claude is reading the job description and your CV..."):
         try:
             st.session_state["result"] = analyse(jd_text, cv_text)
+            st.session_state["is_sample"] = False
+            st.session_state["analyses_used"] = analyses_used + 1
         except Exception as error:
             st.session_state.pop("result", None)
             st.error(f"The analysis failed: {error}")
