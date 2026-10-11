@@ -3,3 +3,4 @@
 __pycache__/
 backup/
 private/
+test_data/*_ai_result.json
