@@ -49,10 +49,14 @@ The app calculates the score in code from the AI's labels, rather than asking th
 
 When a must-have is missing but the CV shows something related, the app says so, e.g. "Requires Google Cloud. You have AWS and Azure, so check whether they'd accept equivalent experience." I make the final call.
 
+### Deal-breaker check (added 11 October 2026)
+
+A deal-breaker only counts if Claude quotes the JD's own wording, the code finds that wording in the JD, and the wording contains a must-word: "must", "required", "essential", "mandatory", "minimum" or "at least". Years of experience stated without one of these words (e.g. "2-3 years as a Business Analyst") lower the score but don't block the role. "Or similar" and "or equivalent" are flexible.
+
 ## Rules the AI must follow
 
 - Only use what is written in the CV. Never assume experience that isn't stated.
-- Every "evidenced" or "partly evidenced" item must quote CV text word for word. No quote means "missing".
+- Every "evidenced" or "partly evidenced" item gives a list of exact CV quotes, never joined with "|" or "..." and never with explanation mixed in. The app checks each quote against the CV. No quote means "missing".
 - Rewrite suggestions may rephrase existing experience but must not add tools, numbers or responsibilities that aren't in the CV.
 - Return only the structured output below, with no extra commentary.
 
