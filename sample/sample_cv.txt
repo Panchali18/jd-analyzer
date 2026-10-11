@@ -1,0 +1,29 @@
+Jordan Ellis
+Sample CV (fictional person, created to demonstrate FitProof)
+
+PROFILE
+AI Solutions Consultant with 6 years' experience helping mid-sized companies move from AI ideas to working tools. Combines business analysis with hands-on prototyping, and works closely with engineering teams to take pilots into production.
+
+EXPERIENCE
+
+AI Solutions Consultant, Northbridge Analytics (2022 to present)
+- Led discovery workshops with operations and finance teams to identify AI use cases, producing a prioritised backlog of 14 use cases.
+- Took a document-classification pilot from proof of concept to production, cutting manual sorting time by 60% across 3 departments.
+- Worked with data engineers to connect a retrieval-augmented generation (RAG) assistant to the company's SharePoint knowledge base.
+- Wrote user stories and acceptance criteria in Jira for 2 AI products and ran fortnightly backlog reviews with stakeholders.
+- Mentored 2 junior analysts on requirements gathering and prompt design.
+
+Business Analyst, Corvane Logistics (2019 to 2022)
+- Mapped order-to-delivery processes and data flows across ERP and warehouse systems.
+- Built Power BI dashboards used weekly by 40 managers to track delivery performance.
+- Gathered requirements for a route-optimisation tool and supported user acceptance testing.
+
+SKILLS
+Business analysis, requirements gathering, process mapping, Jira, Power BI, SQL (basic), Python (basic), prompt engineering, RAG concepts, stakeholder workshops
+
+EDUCATION
+MSc Information Systems, University of Leeds
+BSc Business Management, University of Bristol
+
+CERTIFICATIONS
+AWS Certified AI Practitioner
