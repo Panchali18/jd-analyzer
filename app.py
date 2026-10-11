@@ -5,7 +5,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from pypdf import PdfReader
 
-from ai_matcher import analyse
+from ai_matcher import analyse, calculate_score
 
 load_dotenv()
 
@@ -14,6 +14,8 @@ st.set_page_config(page_title="FitProof", page_icon="📄", layout="wide")
 STATUS_ICON = {"evidenced": "✅", "partly evidenced": "🟡", "missing": "❌"}
 VERDICT_COLOUR = {"Strong fit": "green", "Possible fit": "orange", "Weak fit": "red"}
 GROUPS = [("required", "Required"), ("qualification", "Qualifications"), ("nice to have", "Nice to have")]
+STATUS_ORDER = {"missing": 0, "partly evidenced": 1, "evidenced": 2}
+BAR_COLOURS = {"evidenced": "#1F7A4D", "partly evidenced": "#E0A100", "missing": "#B42318"}
 
 
 def read_file(uploaded_file):
@@ -42,6 +44,18 @@ def highlight_additions(current, suggested):
         else:
             parts.append(chunk)
     return " ".join(parts)
+
+
+def breakdown_bar(counts):
+    """A thin bar split into green, amber and red by the share of each status."""
+    total = sum(counts.values()) or 1
+    segments = "".join(
+        f'<div style="width:{counts[status] / total * 100}%;background:{colour}"></div>'
+        for status, colour in BAR_COLOURS.items()
+        if counts[status]
+    )
+    return f'<div style="display:flex;height:10px;border-radius:5px;overflow:hidden;margin:4px 0 8px">{segments}</div>'
+
 
 # ---------- Sidebar: inputs ----------
 with st.sidebar:
@@ -99,10 +113,19 @@ with st.container(border=True):
     st.subheader(result.get("role_title") or "Job description")
     left, right = st.columns([3, 1])
     left.markdown(f"### :{VERDICT_COLOUR.get(verdict, 'red')}[{verdict}]")
-    left.caption(
-        f"{counts['evidenced']} evidenced · {counts['partly evidenced']} partly evidenced · {counts['missing']} missing"
-    )
     right.metric("Match score", f"{result['score']}%")
+    st.html(breakdown_bar(counts))
+    st.caption(
+        f":green[■] {counts['evidenced']} evidenced  ·  :orange[■] {counts['partly evidenced']} partly evidenced  ·  "
+        f":red[■] {counts['missing']} missing"
+    )
+    group_columns = st.columns(len(GROUPS))
+    for column, (type_key, label) in zip(group_columns, GROUPS):
+        group = [r for r in requirements if r["type"] == type_key]
+        if group:
+            column.metric(label, f"{calculate_score({'requirements': group})}%", help=f"{len(group)} requirements")
+        else:
+            column.metric(label, "None", help="The job description doesn't list any")
 
 if result["deal_breakers"]:
     with st.container(border=True):
@@ -121,12 +144,22 @@ tab_requirements, tab_rewrites, tab_extras = st.tabs(
 )
 
 with tab_requirements:
+    show = st.segmented_control("Show", ["All", "Gaps only", "Evidenced only"], default="All")
+    if show == "Gaps only":
+        visible = [r for r in requirements if r["status"] != "evidenced"]
+    elif show == "Evidenced only":
+        visible = [r for r in requirements if r["status"] == "evidenced"]
+    else:
+        visible = requirements
+    visible = sorted(visible, key=lambda r: STATUS_ORDER.get(r["status"], 0))
+    if not visible:
+        st.write("Nothing to show for this filter.")
     known_types = [key for key, _ in GROUPS]
     for type_key, label in GROUPS + [("other", "Other")]:
         if type_key == "other":
-            group = [r for r in requirements if r["type"] not in known_types]
+            group = [r for r in visible if r["type"] not in known_types]
         else:
-            group = [r for r in requirements if r["type"] == type_key]
+            group = [r for r in visible if r["type"] == type_key]
         if not group:
             continue
         st.markdown(f"#### {label}")
