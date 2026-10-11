@@ -4,7 +4,7 @@ Every change to the JD Analyzer, with the problem, the fix, the result, and what
 
 ## Stage 2: AI matching (started 10 October 2026)
 
-The AI matcher works from the command line: Claude Haiku 4.5 on Amazon Bedrock reads a JD and my CV, labels each requirement, quotes CV evidence, and the code calculates the score and verdict from the spec (`docs/AI_SPEC.md`). Next: connect it to the Streamlit screen.
+The app is now **FitProof**: paste a JD, upload a CV, and Claude Haiku 4.5 on Amazon Bedrock labels each requirement and quotes CV evidence. The code calculates the score and verdict from the spec (`docs/AI_SPEC.md`) and checks every quote. The keyword version is kept as `app_keyword.py`.
 
 ### Results on the test set (11 October 2026)
 
@@ -15,6 +15,10 @@ The AI matcher works from the command line: Claude Haiku 4.5 on Amazon Bedrock r
 
 | # | Change | Why | Result | What I learned |
 | --- | --- | --- | --- | --- |
+| 18 | CV rewrites: stricter prompt (keep every number and named system, keep who did what for whom), code drops rewrites that lose or add a number or whose "Now" line isn't in the CV, and the screen highlights every word the AI added. Commit a7377ef | Rewrites turned "drove AWS partner programme delivery" into "ran vendor assessments", added governance work I didn't do, and dropped my 70% and €500K results | Numbers now survive. Overclaims still appear, but stand out instantly in orange | For rewriting, the AI's goal (cover the requirement) conflicts with the user's need (stay truthful). Code can't judge meaning, so the design makes changes visible and leaves the decision to me. Next idea: turn rewrites into "how to talk about this gap". |
+| 17 | Named the app FitProof ("See your fit. Prove it with your CV."). Custom theme in `.streamlit/config.toml`: blue accent, Inter font, warm background. Clearer wording: numbered inputs, "Analyse my fit" button, "How it works" box, tab counts. Commits b7b545e and earlier | Default Streamlit looked generic and the red button read like an error | Looks like a product rather than a demo | Theme settings only load when the app starts, and Streamlit only finds them in a folder named `.streamlit` (with the dot). RoleFit and JobFit were already taken. |
+| 16 | New AI results screen in `app.py`: summary card (verdict, score, counts), deal-breaker box, tabs for requirements (with quoted evidence), CV rewrites and extra strengths. Analyse button, result kept between clicks. Keyword version renamed `app_keyword.py` | The AI output (verdict, evidence, deal-breakers) didn't fit the old bullet-list screen | Working on real JDs | Streamlit reruns the whole script on every click, so the AI call sits behind a button and the result is stored in `st.session_state`, otherwise every click would cost credits. |
+| 15 | Upgraded Streamlit from 1.28.1 to 1.65.0. Commit 57c71c6 | Needed bordered cards and other newer layout features, and an upgrade before going online anyway | Old app still worked after the upgrade | Test that nothing broke before building on an upgrade. |
 | 14 | Deal-breakers must quote JD wording that contains a must-word ("must", "required", "essential", "mandatory", "minimum", "at least"), checked in code. Commit 4af2e26 | On jd_02, Claude made "2-3 years of experience as a Business Analyst" a deal-breaker although the JD never says it's mandatory, and I'd marked it only partly evidenced | jd_02 went from "Not a fit" (83%) to "Strong fit" (81%) | My product rule: years of experience only block a role if the JD says "minimum", "at least" or "must". Rules that matter go in code, not just the prompt, because the model doesn't always follow instructions. |
 | 13 | Evidence is a list of exact quotes, each checked separately. Deal-breakers must quote the JD's own wording, checked against the JD. "Or similar" counts as flexible. Commit e886992 | On jd_01, Claude glued separate CV parts together with "\|", changed words, and wrote opinions as quotes (6 failed the check). It also flagged 3 ordinary duties and "Master's degree or similar" as deal-breakers | Failed quotes fell from 6 to 2. Deal-breakers fell from 3-4 to none. jd_01 went from "Not a fit" to 55%, Possible fit | Make the AI prove its claims, then check the proof in code. Output varies a little between runs even at temperature 0, so judge it on a test set, not one run. |
 | 12 | Added `ai_matcher.py` (prompt from the spec, Bedrock call, scoring, verdict, quote check) and `try_ai.py` (runs one JD from the terminal). CV kept in `private/`; AI results ignored by Git. Commits 66427a3, 4ed2ebf | First working version of the AI matcher | Ran end to end on jd_01 | A test result can contain personal data too: CV quotes went into `.gitignore` before the first commit. |
@@ -82,12 +86,15 @@ Saving a change:
 - [x] Write the AI matching spec (`docs/AI_SPEC.md`)
 - [x] Bedrock quotas approved, Claude Haiku 4.5 working
 - [x] AI matcher working from the terminal on both test JDs
-- [ ] Connect the AI matcher to the Streamlit screen
+- [x] Connect the AI matcher to the Streamlit screen (FitProof)
+- [ ] Rewrites, next iteration: "how to talk about this gap" instead of rewriting CV lines
+- [ ] UI next: coloured breakdown bar and per-group scores in the summary card; filter requirements by status, gaps first
+- [ ] Deploy FitProof online with a shareable link
 - [ ] 2 quotes per run still fail the evidence check: find out whether it's PDF text or Claude rewording
 - [x] Stage 2: AI reads the JD, picks out requirements, and marks each as required, nice-to-have or qualification
 - [x] Stage 2: missing must-haves give "Not a fit", only when the JD uses must-words
 - [ ] Add a poor-fit JD to the test set: an AI job title with an accounting or finance body (CPA, CFA)
-- [ ] Upgrade Streamlit from 1.28.1 and retest before putting the app online
+- [x] Upgrade Streamlit (1.65.0)
 - [ ] Idea: a third list, "Your strengths this JD didn't ask for"
 - [ ] Parked (the AI version replaces these): clean skill names, technical vs soft grouping, ranking missing skills, plurals like "pipelines", generic words like "development", duplicate skills, Sage
 - [ ] Stage 3: remove unsourced claims from the PRD and narrow the target user
