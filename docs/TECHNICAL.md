@@ -1,9 +1,9 @@
 # Technical Design Document (TDD)
 ## JD Analyzer & CV Matcher
 
-**Document Version:** 1.1  
-**Last Updated:** 10 October 2026  
-**Status:** Version 1 (keyword matching) built. Version 2 (AI matching on Amazon Bedrock) specified in [AI_SPEC.md](AI_SPEC.md)
+**Document Version:** 1.2  
+**Last Updated:** 11 October 2026  
+**Status:** Version 2 (FitProof, AI matching on Amazon Bedrock) live at https://fitproof-panchali.streamlit.app/. Version 1 (keyword matching) kept as `app_keyword.py`. Spec in [AI_SPEC.md](AI_SPEC.md)
 
 ---
 
@@ -514,5 +514,19 @@ Streamlit shows verdict, score, evidence and suggestions
 | Scoring | Calculated in code from the AI's labels | The same labels always give the same score |
 | Output | Structured JSON, checked by the app | The app can verify every quoted CV line actually appears in the CV |
 
+### Checks done in code, not by the AI
+| Check | Function | What it does |
+| --- | --- | --- |
+| CV evidence | `check_evidence` | Every quote Claude gives must appear in the CV word for word; otherwise the screen shows a warning |
+| Deal-breakers | `check_deal_breakers` | Kept only if Claude quotes JD wording that appears in the JD and contains a must-word (must, required, essential, mandatory, minimum, at least) |
+| CV rewrites | `check_rewrites` | Dropped if the "Now" line isn't in the CV, or if the suggestion loses or adds any number |
+| Overclaims | `highlight_additions` (app.py) | Highlights every word a rewrite adds, so the user can reject overclaims |
+
+### Deployment
+- Hosted on Streamlit Community Cloud from the `main` branch; every push redeploys.
+- The Bedrock API key is stored in the app's Secrets as `AWS_BEARER_TOKEN_BEDROCK` (root-level secrets become environment variables, which boto3 reads). It expires 30 days after creation and must be replaced.
+- Public-demo safeguards: a saved sample result (`sample/`) costs nothing to show; 3 analyses per visit (resets on refresh); 20,000 characters per document. On the AWS free plan, service stops rather than bills when credits run out.
+- Theme in `.streamlit/config.toml`.
+
 ### Status
-AWS account, region, API key, model access and the connection test script are set up. Building is waiting on Bedrock quota approval: new accounts start at 0 tokens per minute.
+Live and working. Both test JDs: every answer-key requirement found.

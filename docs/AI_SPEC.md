@@ -57,7 +57,8 @@ A deal-breaker only counts if Claude quotes the JD's own wording, the code finds
 
 - Only use what is written in the CV. Never assume experience that isn't stated.
 - Every "evidenced" or "partly evidenced" item gives a list of exact CV quotes, never joined with "|" or "..." and never with explanation mixed in. The app checks each quote against the CV. No quote means "missing".
-- Rewrite suggestions may rephrase existing experience but must not add tools, numbers or responsibilities that aren't in the CV.
+- Rewrite suggestions must copy the current CV line exactly, keep every number, result and named employer, client, tool or system, and keep who did what for whom. They may only add the job description's wording where the CV line already shows that activity.
+- The app drops any rewrite that loses or adds a number, or whose current line isn't in the CV, and highlights every word a rewrite adds. Testing showed the AI still inserts JD phrases (e.g. turning "drove AWS partner programme delivery" into "ran vendor assessments"), so the user makes the final call. Planned next: replace rewrites with "how to talk about this gap".
 - Return only the structured output below, with no extra commentary.
 
 ## Output format
