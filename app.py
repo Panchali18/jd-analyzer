@@ -1,152 +1,129 @@
 import io
-import re
 
 import streamlit as st
 from dotenv import load_dotenv
 from pypdf import PdfReader
 
-from skills_dictionary import CATEGORY_DISPLAY_NAMES, get_skill_category, normalize_skill_name
+from ai_matcher import analyse
 
 load_dotenv()
 
-st.set_page_config(page_title="JD Analyzer & CV Matcher", layout="wide")
+st.set_page_config(page_title="JD Analyzer & CV Matcher", page_icon="📄", layout="wide")
+
+STATUS_ICON = {"evidenced": "✅", "partly evidenced": "🟡", "missing": "❌"}
+VERDICT_COLOUR = {"Strong fit": "green", "Possible fit": "orange", "Weak fit": "red"}
+GROUPS = [("required", "Required"), ("qualification", "Qualifications"), ("nice to have", "Nice to have")]
 
 
-def normalize_text(text: str) -> str:
-    if not text:
-        return ""
-    text = text.lower()
-    text = text.replace("/", " ")
-    text = text.replace("-", " ")
-    text = re.sub(r"[^a-z0-9\s]", " ", text)
-    text = re.sub(r"\s+", " ", text).strip()
-    return text
-
-
-def extract_skills_from_text(text: str):
-    if not text:
-        return set()
-
-    cleaned_text = normalize_text(text)
-    found_skills = set()
-
-    # Import the skill synonym map from the dictionary file
-    from skills_dictionary import SKILL_SYNONYMS
-
-    for synonym, canonical_skill in SKILL_SYNONYMS.items():
-        pattern = r"\b" + re.escape(normalize_text(synonym)) + r"\b"
-        if re.search(pattern, cleaned_text):
-            found_skills.add(canonical_skill)
-
-    return found_skills
-
-
-def read_pdf_file(uploaded_file) -> str:
+def read_file(uploaded_file):
+    """Turn an uploaded PDF or text file into plain text."""
     if uploaded_file is None:
         return ""
-    pdf_reader = PdfReader(io.BytesIO(uploaded_file.read()))
-    text = ""
-    for page in pdf_reader.pages:
-        page_text = page.extract_text()
-        if page_text:
-            text += page_text + "\n"
-    return text
+    if uploaded_file.type == "application/pdf":
+        reader = PdfReader(io.BytesIO(uploaded_file.getvalue()))
+        return "\n".join(page.extract_text() or "" for page in reader.pages)
+    return uploaded_file.getvalue().decode("utf-8", errors="ignore")
 
 
-def read_text_file(uploaded_file) -> str:
-    if uploaded_file is None:
-        return ""
-    return uploaded_file.read().decode("utf-8", errors="ignore")
+# ---------- Sidebar: inputs ----------
+with st.sidebar:
+    st.header("Your inputs")
+    jd_method = st.radio("Job description", ["Paste text", "Upload file"], horizontal=True)
+    if jd_method == "Paste text":
+        jd_text = st.text_area("Paste the job description", height=250)
+    else:
+        jd_text = read_file(st.file_uploader("Upload the job description", type=["pdf", "txt"]))
+    cv_text = read_file(st.file_uploader("Upload your CV", type=["pdf", "txt"]))
+    run = st.button("Analyse", type="primary", width="stretch", disabled=not (jd_text and cv_text))
+    st.caption("Your CV is sent to Claude on Amazon Bedrock (EU) for this analysis. Nothing is stored.")
 
+# ---------- Call Claude only when the button is pressed ----------
+if run:
+    with st.spinner("Claude is reading the job description and your CV..."):
+        try:
+            st.session_state["result"] = analyse(jd_text, cv_text)
+        except Exception as error:
+            st.session_state.pop("result", None)
+            st.error(f"The analysis failed: {error}")
 
-st.title("📄 JD Analyzer & CV Matcher")
-st.write("Analyze job descriptions and match them against your CV")
+st.title("JD Analyzer & CV Matcher")
 
-st.sidebar.header("📋 Input Your Information")
-st.sidebar.subheader("Job Description")
+result = st.session_state.get("result")
+if not result:
+    st.info("Paste a job description and upload your CV in the sidebar, then press **Analyse**.")
+    st.stop()
 
-jd_input_method = st.sidebar.radio("Choose JD input method:", ["📝 Paste Text", "📁 Upload File"])
+# ---------- Summary card ----------
+requirements = result["requirements"]
+counts = {status: sum(1 for r in requirements if r["status"] == status) for status in STATUS_ICON}
+verdict = result["verdict"]
 
-jd_text = ""
-if jd_input_method == "📝 Paste Text":
-    jd_text = st.sidebar.text_area(
-        "Paste your Job Description here:",
-        height=220,
-        placeholder="Paste the full JD text from LinkedIn, job boards, or emails.",
+with st.container(border=True):
+    st.subheader(result.get("role_title") or "Job description")
+    left, right = st.columns([3, 1])
+    left.markdown(f"### :{VERDICT_COLOUR.get(verdict, 'red')}[{verdict}]")
+    left.caption(
+        f"{counts['evidenced']} evidenced · {counts['partly evidenced']} partly evidenced · {counts['missing']} missing"
     )
-elif jd_input_method == "📁 Upload File":
-    jd_file = st.sidebar.file_uploader("Upload Job Description (PDF or TXT)", type=["pdf", "txt"])
-    if jd_file:
-        if jd_file.type == "application/pdf":
-            jd_text = read_pdf_file(jd_file)
+    right.metric("Match score", f"{result['score']}%")
+
+if result["deal_breakers"]:
+    with st.container(border=True):
+        st.error("**Deal-breakers:** the job description says these are mandatory, and your CV doesn't show them.")
+        for item in result["deal_breakers"]:
+            st.markdown(f"**{item['requirement']}**")
+            st.caption(f"Job description says: \"{item.get('jd_evidence', '')}\"")
+            if item.get("related_cv_evidence"):
+                st.caption(f"Related in your CV: \"{item['related_cv_evidence']}\"")
+
+# ---------- Tabs ----------
+tab_requirements, tab_rewrites, tab_extras = st.tabs(["Requirements", "CV rewrites", "Extra strengths"])
+
+with tab_requirements:
+    known_types = [key for key, _ in GROUPS]
+    for type_key, label in GROUPS + [("other", "Other")]:
+        if type_key == "other":
+            group = [r for r in requirements if r["type"] not in known_types]
         else:
-            jd_text = read_text_file(jd_file)
+            group = [r for r in requirements if r["type"] == type_key]
+        if not group:
+            continue
+        st.markdown(f"#### {label}")
+        for req in group:
+            icon = STATUS_ICON.get(req["status"], "❔")
+            quotes = req.get("cv_evidence") or []
+            if isinstance(quotes, str):
+                quotes = [quotes]
+            if req["status"] == "missing" or not quotes:
+                st.markdown(f"{icon} {req['skill']}")
+                if req.get("note"):
+                    st.caption(req["note"])
+                continue
+            with st.expander(f"{icon} {req['skill']}"):
+                for quote in quotes:
+                    st.markdown(f"> {quote}")
+                if req.get("note"):
+                    st.caption(req["note"])
+                if not req.get("evidence_verified"):
+                    st.warning("This quote wasn't found word for word in your CV. Check it before relying on it.")
 
-st.sidebar.subheader("Your CV")
-cv_file = st.sidebar.file_uploader("Upload Your CV (PDF or TXT)", type=["pdf", "txt"])
+with tab_rewrites:
+    rewrites = result.get("rewrite_suggestions") or []
+    if not rewrites:
+        st.write("No rewrite suggestions for this role.")
+    for item in rewrites:
+        with st.container(border=True):
+            st.caption(f"Covers: {item.get('covers', '')}")
+            st.markdown(f"**Now:** {item.get('current_cv_line', '')}")
+            st.markdown(f"**Suggested:** {item.get('suggested_line', '')}")
 
-cv_text = ""
-if cv_file:
-    if cv_file.type == "application/pdf":
-        cv_text = read_pdf_file(cv_file)
+with tab_extras:
+    extras = [e for e in (result.get("extra_strengths") or []) if e]
+    if extras:
+        st.write("Relevant strengths from your CV that this job description didn't ask for:")
+        for strength in extras:
+            st.markdown(f"- {strength}")
     else:
-        cv_text = read_text_file(cv_file)
+        st.write("No extra strengths listed.")
 
-
-if jd_text and cv_text:
-    jd_skills = extract_skills_from_text(jd_text)
-    cv_skills = extract_skills_from_text(cv_text)
-
-    matched_skills = sorted(jd_skills.intersection(cv_skills), key=str.lower)
-    missing_skills = sorted(jd_skills - cv_skills, key=str.lower)
-
-    score = 0
-    if jd_skills:
-        score = round((len(matched_skills) / len(jd_skills)) * 100)
-
-    st.success("✅ Both JD and CV loaded successfully!")
-
-    with st.expander("📄 View Uploaded Content"):
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.write("**Job Description:**")
-            st.write(jd_text[:800] + "..." if len(jd_text) > 800 else jd_text)
-
-        with col2:
-            st.write("**Your CV:**")
-            st.write(cv_text[:800] + "..." if len(cv_text) > 800 else cv_text)
-
-    st.subheader("📊 Match Result")
-    st.metric("Match Score", f"{score}%")
-
-    st.subheader("✅ Matched Skills")
-    if matched_skills:
-        for skill in matched_skills:
-            st.write(f"• {skill}")
-    else:
-        st.write("No direct matches found.")
-
-    st.subheader("❌ Missing Skills")
-    if missing_skills:
-        for skill in missing_skills:
-            st.write(f"• {skill}")
-    else:
-        st.write("No missing skills found.")
-
-    st.subheader("💡 Suggested CV Tailoring")
-    if missing_skills:
-        top_missing = missing_skills[:5]
-        for skill in top_missing:
-            st.write(f"- Add more evidence of '{skill}' in your CV, such as a project, responsibility, or achievement.")
-    else:
-        st.write("Your CV already covers most of the JD requirements.")
-
-else:
-    if not jd_text:
-        st.info("👈 Please paste or upload a Job Description")
-    if not cv_text:
-        st.info("👈 Please upload your CV")
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.caption("Made with Streamlit")
+st.caption("AI-generated analysis. Check the quoted evidence before relying on it.")
