@@ -21,9 +21,9 @@ Step 2. For each requirement, check the CV and give it a status:
 - "evidenced": the CV clearly shows it
 - "partly evidenced": the CV shows something close, but not the same
 - "missing": the CV doesn't show it
-For "evidenced" and "partly evidenced", copy the supporting CV text word for word into cv_evidence (under 30 words). If you can't quote the CV, the status is "missing". Never assume experience the CV doesn't state.
+For "evidenced" and "partly evidenced", put the supporting CV text into cv_evidence as a list of quotes. Copy each quote exactly from the CV, character for character, under 30 words, with no words changed and nothing added. Use a separate quote for each separate part of the CV, and never join parts with "|" or "...". Put any explanation in note, never in cv_evidence. If you can't quote the CV, the status is "missing". Never assume experience the CV doesn't state.
 
-Step 3. List deal-breakers: requirements of type "required" or "qualification" that are "missing" and that the job description states as essential (for example "must have", "required", "essential", a minimum number of years, a named certification or a language). For each, copy any related CV text word for word into related_cv_evidence, or leave it empty.
+Step 3. Step 3. List deal-breakers. Only include a missing requirement when the job description explicitly says it is mandatory, using words such as "must", "must have", "required", "essential", "mandatory", "minimum" or "at least". Being listed under a heading like "Your tasks" or "Your profile" does not make a requirement mandatory. Treat "or similar" and "or equivalent" as flexible: if the CV shows something comparable, it is not a deal-breaker. For each deal-breaker, copy the job description's exact words that make it mandatory into jd_evidence, and copy any related CV text exactly into related_cv_evidence, or leave it empty.
 
 Step 4. Suggest up to 5 rewrites of existing CV lines that would better cover "partly evidenced" or "missing" requirements. Only rephrase what the CV already says. Never add tools, numbers, employers or responsibilities that aren't in the CV.
 
@@ -33,10 +33,10 @@ Return only JSON in exactly this shape, with no other text:
 {
   "role_title": "",
   "requirements": [
-    {"skill": "", "type": "required", "status": "evidenced", "cv_evidence": "", "note": ""}
+   {"skill": "", "type": "required", "status": "evidenced", "cv_evidence": [""], "note": ""}
   ],
   "deal_breakers": [
-    {"requirement": "", "related_cv_evidence": ""}
+    {"requirement": "", "jd_evidence": "", "related_cv_evidence": ""}
   ],
   "rewrite_suggestions": [
     {"current_cv_line": "", "suggested_line": "", "covers": ""}
@@ -92,17 +92,31 @@ def simplify(text):
 
 
 def check_evidence(result, cv_text):
-    """Mark whether each quoted CV line really appears in the CV."""
+    """Mark whether every quoted CV line really appears in the CV."""
     cv = simplify(cv_text)
     for req in result["requirements"]:
-        quote = simplify(req.get("cv_evidence", ""))
-        req["evidence_verified"] = bool(quote) and quote in cv
+        quotes = req.get("cv_evidence") or []
+        if isinstance(quotes, str):
+            quotes = [quotes]
+        req["evidence_verified"] = bool(quotes) and all(simplify(q) in cv for q in quotes)
+    return result
+
+def check_deal_breakers(result, jd_text):
+    """Keep only deal-breakers whose must-have wording really appears in the JD."""
+    jd = simplify(jd_text)
+    confirmed = []
+    for item in result["deal_breakers"]:
+        wording = simplify(item.get("jd_evidence", ""))
+        if wording and wording in jd:
+            confirmed.append(item)
+    result["deal_breakers"] = confirmed
     return result
 
 
 def analyse(jd_text, cv_text):
     result = ask_claude(jd_text, cv_text)
     result = check_evidence(result, cv_text)
+    result = check_deal_breakers(result, jd_text)
     score = calculate_score(result)
     result["score"] = score
     result["verdict"] = get_verdict(result, score)
