@@ -4,7 +4,7 @@ Every change to the JD Analyzer, with the problem, the fix, the result, and what
 
 ## Stage 2: AI matching (started 10 October 2026)
 
-The app is now **FitProof**: paste a JD, upload a CV, and Claude Haiku 4.5 on Amazon Bedrock labels each requirement and quotes CV evidence. The code calculates the score and verdict from the spec (`docs/AI_SPEC.md`) and checks every quote. The keyword version is kept as `app_keyword.py`.
+The app is now **FitProof**, live at https://fitproof-panchali.streamlit.app/: paste a JD, upload a CV, and Claude Haiku 4.5 on Amazon Bedrock labels each requirement and quotes CV evidence. The code calculates the score and verdict from the spec (`docs/AI_SPEC.md`) and checks every quote. The keyword version is kept as `app_keyword.py`.
 
 ### Results on the test set (11 October 2026)
 
@@ -15,6 +15,9 @@ The app is now **FitProof**: paste a JD, upload a CV, and Claude Haiku 4.5 on Am
 
 | # | Change | Why | Result | What I learned |
 | --- | --- | --- | --- | --- |
+| 21 | Deployed to Streamlit Community Cloud at https://fitproof-panchali.streamlit.app/. Bedrock key added in the app's Secrets | Make FitProof something I can share and put on my CV | Live; sample and real analyses both work | Root-level secrets become environment variables, so boto3 finds the key exactly as it does from `.env`. Secrets must be valid TOML: `NAME = "value"` on one line with straight quotes. Every `git push` redeploys the app. |
+| 20 | Public-demo safeguards: "Try a sample" button showing a saved analysis of a fictional CV (`sample/`), 3 analyses per visit, 20,000-character limit per document. Commits 299ec6a, 43c7b37, 9fcc9f1 | I wanted no password or invite link, so the protection had to be invisible | A recruiter can see a full result in one click, at no cost | One analysis costs about 2 cents, and the AWS free plan stops rather than bills, so the real risks were abuse and personal data, not a big bill. The per-visit limit resets on refresh: enough for casual use, not a hard limit. Never put a real CV in a public sample. |
+| 19 | Summary card: green, amber and red breakdown bar, and a score per group (Required, Qualifications, Nice to have). Requirements tab: filter (All, Gaps only, Evidenced only), gaps listed first. Commit 029b094 | 17 identical rows hid why the score was what it was | You can see where the score comes from, and what to work on, at a glance | Group scores reuse the same `calculate_score` function, so they always agree with the main score. Very long pastes can get cut off; check the end of the file after pasting. |
 | 18 | CV rewrites: stricter prompt (keep every number and named system, keep who did what for whom), code drops rewrites that lose or add a number or whose "Now" line isn't in the CV, and the screen highlights every word the AI added. Commit a7377ef | Rewrites turned "drove AWS partner programme delivery" into "ran vendor assessments", added governance work I didn't do, and dropped my 70% and €500K results | Numbers now survive. Overclaims still appear, but stand out instantly in orange | For rewriting, the AI's goal (cover the requirement) conflicts with the user's need (stay truthful). Code can't judge meaning, so the design makes changes visible and leaves the decision to me. Next idea: turn rewrites into "how to talk about this gap". |
 | 17 | Named the app FitProof ("See your fit. Prove it with your CV."). Custom theme in `.streamlit/config.toml`: blue accent, Inter font, warm background. Clearer wording: numbered inputs, "Analyse my fit" button, "How it works" box, tab counts. Commits b7b545e and earlier | Default Streamlit looked generic and the red button read like an error | Looks like a product rather than a demo | Theme settings only load when the app starts, and Streamlit only finds them in a folder named `.streamlit` (with the dot). RoleFit and JobFit were already taken. |
 | 16 | New AI results screen in `app.py`: summary card (verdict, score, counts), deal-breaker box, tabs for requirements (with quoted evidence), CV rewrites and extra strengths. Analyse button, result kept between clicks. Keyword version renamed `app_keyword.py` | The AI output (verdict, evidence, deal-breakers) didn't fit the old bullet-list screen | Working on real JDs | Streamlit reruns the whole script on every click, so the AI call sits behind a button and the result is stored in `st.session_state`, otherwise every click would cost credits. |
@@ -88,8 +91,10 @@ Saving a change:
 - [x] AI matcher working from the terminal on both test JDs
 - [x] Connect the AI matcher to the Streamlit screen (FitProof)
 - [ ] Rewrites, next iteration: "how to talk about this gap" instead of rewriting CV lines
-- [ ] UI next: coloured breakdown bar and per-group scores in the summary card; filter requirements by status, gaps first
-- [ ] Deploy FitProof online with a shareable link
+- [x] UI: coloured breakdown bar, per-group scores, filter with gaps first
+- [x] Deploy FitProof online: https://fitproof-panchali.streamlit.app/
+- [ ] Bedrock API key expires 30 days after creation (early November): create a new one and update the app's Secrets
+- [ ] AWS free plan ends 10 April 2027 or when the $100 credits run out: decide then whether to upgrade or switch provider
 - [ ] 2 quotes per run still fail the evidence check: find out whether it's PDF text or Claude rewording
 - [x] Stage 2: AI reads the JD, picks out requirements, and marks each as required, nice-to-have or qualification
 - [x] Stage 2: missing must-haves give "Not a fit", only when the JD uses must-words

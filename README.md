@@ -2,6 +2,8 @@
 
 **See your fit. Prove it with your CV.**
 
+**Try it live: [fitproof-panchali.streamlit.app](https://fitproof-panchali.streamlit.app/)** (click *Try a sample* to see an example without uploading anything)
+
 Paste a job description, upload your CV, and see how well you fit: which requirements you meet, with the CV line that proves each one, where the gaps are, and any must-haves you're missing.
 
 I'm building it as a portfolio project for AI product roles, and I use it in my own job search.
@@ -34,6 +36,7 @@ The AI does the judging, and the code does the scoring, so the same labels alway
 | Amazon Bedrock | AWS's service for using AI models. Version 2 uses Claude Haiku 4.5 through the EU profile, so CV data stays in the EU |
 | boto3 | Amazon's Python library, used to send requests to Bedrock |
 | GitHub Codespaces | A browser-based workspace for running and testing the app |
+| Streamlit Community Cloud | Free hosting: runs the app from this GitHub repository and redeploys on every push. The Bedrock key is stored in its Secrets, never in the code |
 
 ## How I'm building it
 
@@ -68,4 +71,4 @@ AWS_BEARER_TOKEN_BEDROCK=your-key-here
 
 ## Status
 
-Version 2 (FitProof) works on Claude Haiku 4.5 via Amazon Bedrock. On both test JDs it found every requirement in my answer key, where keyword matching missed most of them. Next: a clearer summary card, filters for gaps, and putting it online.
+FitProof is live on Streamlit Community Cloud, running Claude Haiku 4.5 via Amazon Bedrock (EU). On both test JDs it found every requirement in my answer key, where keyword matching missed most of them. Public-demo safeguards: a free sample result, 3 analyses per visit, a document length limit, and no storage of uploaded CVs.
