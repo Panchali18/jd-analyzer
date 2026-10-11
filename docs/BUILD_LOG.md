@@ -4,7 +4,21 @@ Every change to the JD Analyzer, with the problem, the fix, the result, and what
 
 ## Stage 2: AI matching (started 10 October 2026)
 
-The AI spec is agreed (`docs/AI_SPEC.md`): Claude reads the JD and CV together, labels each requirement, quotes CV evidence, and the app calculates a weighted score (3 required, 3 qualification, 1 nice to have). A missing must-have gives "Not a fit". Building is waiting on AWS quota approval.
+The AI matcher works from the command line: Claude Haiku 4.5 on Amazon Bedrock reads a JD and my CV, labels each requirement, quotes CV evidence, and the code calculates the score and verdict from the spec (`docs/AI_SPEC.md`). Next: connect it to the Streamlit screen.
+
+### Results on the test set (11 October 2026)
+
+| JD | Keyword version | AI version | My view |
+| --- | --- | --- | --- |
+| jd_01: AI Solutions Adoption & Delivery Specialist | Found 10 skills; missed workshops, AI adoption, pilots to production, backlog | 55%, Possible fit. Found every answer-key item, no deal-breakers | Right: strong on AI delivery, gaps in training design and production troubleshooting |
+| jd_02: Senior Business Analyst, GenAI Foundation (Danske Bank) | Found 7 skills; missed epics and user stories, procurement, workshops, APIs | 81%, Strong fit. Found every answer-key item, no deal-breakers | Right |
+
+| # | Change | Why | Result | What I learned |
+| --- | --- | --- | --- | --- |
+| 14 | Deal-breakers must quote JD wording that contains a must-word ("must", "required", "essential", "mandatory", "minimum", "at least"), checked in code. Commit 4af2e26 | On jd_02, Claude made "2-3 years of experience as a Business Analyst" a deal-breaker although the JD never says it's mandatory, and I'd marked it only partly evidenced | jd_02 went from "Not a fit" (83%) to "Strong fit" (81%) | My product rule: years of experience only block a role if the JD says "minimum", "at least" or "must". Rules that matter go in code, not just the prompt, because the model doesn't always follow instructions. |
+| 13 | Evidence is a list of exact quotes, each checked separately. Deal-breakers must quote the JD's own wording, checked against the JD. "Or similar" counts as flexible. Commit e886992 | On jd_01, Claude glued separate CV parts together with "\|", changed words, and wrote opinions as quotes (6 failed the check). It also flagged 3 ordinary duties and "Master's degree or similar" as deal-breakers | Failed quotes fell from 6 to 2. Deal-breakers fell from 3-4 to none. jd_01 went from "Not a fit" to 55%, Possible fit | Make the AI prove its claims, then check the proof in code. Output varies a little between runs even at temperature 0, so judge it on a test set, not one run. |
+| 12 | Added `ai_matcher.py` (prompt from the spec, Bedrock call, scoring, verdict, quote check) and `try_ai.py` (runs one JD from the terminal). CV kept in `private/`; AI results ignored by Git. Commits 66427a3, 4ed2ebf | First working version of the AI matcher | Ran end to end on jd_01 | A test result can contain personal data too: CV quotes went into `.gitignore` before the first commit. |
+| 11 | Bedrock quotas approved; `test_bedrock.py` and the playground both get replies from Claude Haiku 4.5 | Needed before any AI code could run | Working | Quota requests for new accounts ask for the AWS default values. |
 
 ## Getting ready for Stage 2 (10 October 2026)
 
@@ -66,10 +80,12 @@ Saving a change:
 - [x] Start a test set (Change 6: 2 JDs with answer keys)
 - [x] Choose the AI service for Stage 2: Amazon Bedrock, Claude Haiku 4.5, EU profile
 - [x] Write the AI matching spec (`docs/AI_SPEC.md`)
-- [ ] Wait for the two Haiku 4.5 quota requests to be approved (Service Quotas → Quota request history), then run `python test_bedrock.py`
-- [ ] If quotas are still 0 after a few days: build on Gemini's free tier first, with an `AI_PROVIDER` setting so switching to Bedrock is one word
-- [ ] Stage 2: AI reads the JD, picks out skills, and marks each as required, nice-to-have or qualification
-- [ ] Stage 2: treat missing qualifications (like a CPA) as deal-breakers that override the percentage
+- [x] Bedrock quotas approved, Claude Haiku 4.5 working
+- [x] AI matcher working from the terminal on both test JDs
+- [ ] Connect the AI matcher to the Streamlit screen
+- [ ] 2 quotes per run still fail the evidence check: find out whether it's PDF text or Claude rewording
+- [x] Stage 2: AI reads the JD, picks out requirements, and marks each as required, nice-to-have or qualification
+- [x] Stage 2: missing must-haves give "Not a fit", only when the JD uses must-words
 - [ ] Add a poor-fit JD to the test set: an AI job title with an accounting or finance body (CPA, CFA)
 - [ ] Upgrade Streamlit from 1.28.1 and retest before putting the app online
 - [ ] Idea: a third list, "Your strengths this JD didn't ask for"
