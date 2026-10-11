@@ -25,7 +25,7 @@ For "evidenced" and "partly evidenced", put the supporting CV text into cv_evide
 
 Step 3. Step 3. List deal-breakers. Only include a missing requirement when the job description explicitly says it is mandatory, using words such as "must", "must have", "required", "essential", "mandatory", "minimum" or "at least". Being listed under a heading like "Your tasks" or "Your profile" does not make a requirement mandatory. Treat "or similar" and "or equivalent" as flexible: if the CV shows something comparable, it is not a deal-breaker. For each deal-breaker, copy the job description's exact words that make it mandatory into jd_evidence, and copy any related CV text exactly into related_cv_evidence, or leave it empty.
 
-Step 4. Suggest up to 5 rewrites of existing CV lines that would better cover "partly evidenced" or "missing" requirements. Only rephrase what the CV already says. Never add tools, numbers, employers or responsibilities that aren't in the CV.
+Step 4. Suggest up to 5 rewrites of existing CV lines that would better cover "partly evidenced" or "missing" requirements. Copy current_cv_line exactly from the CV. The suggested line must keep every number, result and named employer, client, tool or system from the current line. It must keep who did what for whom: for example, selling or listing a product must not become buying, assessing or evaluating products. Only add the job description's wording where the current line already shows that activity. Never add tools, numbers, employers, responsibilities or areas of ownership that aren't in the CV. If no honest rewrite covers a requirement, leave it out.
 
 Step 5. List up to 5 strengths from the CV that are relevant to this role but not asked for in the job description.
 
@@ -117,11 +117,30 @@ def check_deal_breakers(result, jd_text):
     result["deal_breakers"] = confirmed
     return result
 
+def find_numbers(text):
+    """All numbers in a line, like 70, 500, 11 or 2.5."""
+    return set(re.findall(r"\d+(?:\.\d+)?", text))
+
+
+def check_rewrites(result, cv_text):
+    """Keep only rewrites of real CV lines that keep every number and add none."""
+    cv = simplify(cv_text)
+    kept = []
+    for item in result.get("rewrite_suggestions") or []:
+        current = item.get("current_cv_line", "")
+        suggested = item.get("suggested_line", "")
+        real_line = bool(current) and simplify(current) in cv
+        same_numbers = find_numbers(current) == find_numbers(suggested)
+        if real_line and same_numbers:
+            kept.append(item)
+    result["rewrite_suggestions"] = kept
+    return result
 
 def analyse(jd_text, cv_text):
     result = ask_claude(jd_text, cv_text)
     result = check_evidence(result, cv_text)
     result = check_deal_breakers(result, jd_text)
+    result = check_rewrites(result, cv_text)
     score = calculate_score(result)
     result["score"] = score
     result["verdict"] = get_verdict(result, score)

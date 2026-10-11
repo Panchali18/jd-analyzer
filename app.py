@@ -1,3 +1,4 @@
+import difflib
 import io
 
 import streamlit as st
@@ -24,6 +25,23 @@ def read_file(uploaded_file):
         return "\n".join(page.extract_text() or "" for page in reader.pages)
     return uploaded_file.getvalue().decode("utf-8", errors="ignore")
 
+
+def highlight_additions(current, suggested):
+    """Mark the words a suggestion adds or changes, so overclaims stand out."""
+    old = current.split()
+    new = suggested.split()
+    tidy = lambda words: [w.lower().strip(".,;:()") for w in words]
+    matcher = difflib.SequenceMatcher(a=tidy(old), b=tidy(new), autojunk=False)
+    parts = []
+    for tag, _, _, start, end in matcher.get_opcodes():
+        chunk = " ".join(new[start:end]).replace("$", "\\$")
+        if not chunk:
+            continue
+        if tag in ("insert", "replace"):
+            parts.append(f":orange-background[**{chunk}**]")
+        else:
+            parts.append(chunk)
+    return " ".join(parts)
 
 # ---------- Sidebar: inputs ----------
 with st.sidebar:
@@ -132,14 +150,18 @@ with tab_requirements:
 
 with tab_rewrites:
     if rewrites:
-        st.warning("These are drafts. Check each one is true before you use it, and keep your numbers and results.")
+        st.warning(
+            "These are drafts. Words the AI added are highlighted. Only use a suggestion if every highlighted word is true."
+        )
     else:
         st.write("No rewrite suggestions for this role.")
     for item in rewrites:
         with st.container(border=True):
             st.caption(f"Covers: {item.get('covers', '')}")
             st.markdown(f"**Now:** {item.get('current_cv_line', '')}")
-            st.markdown(f"**Suggested:** {item.get('suggested_line', '')}")
+            st.markdown(
+                "**Suggested:** " + highlight_additions(item.get("current_cv_line", ""), item.get("suggested_line", ""))
+            )
 
 with tab_extras:
     if extras:
