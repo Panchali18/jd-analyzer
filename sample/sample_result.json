@@ -1,0 +1,197 @@
+{
+  "role_title": "AI Business Solutions Adoption & Delivery Role",
+  "requirements": [
+    {
+      "skill": "Facilitate workshops to enhance internal AI capabilities across business teams",
+      "type": "required",
+      "status": "evidenced",
+      "cv_evidence": [
+        "Led discovery workshops with operations and finance teams to identify AI use cases"
+      ],
+      "note": "",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Design, develop and deliver customized training programs on AI advancements and tooling",
+      "type": "required",
+      "status": "partly evidenced",
+      "cv_evidence": [
+        "Mentored 2 junior analysts on requirements gathering and prompt design"
+      ],
+      "note": "CV shows mentoring but not formal training program design or delivery at scale",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Support evolution of AI pilots (MVPs and PoCs) into scalable, enterprise-ready solutions",
+      "type": "required",
+      "status": "evidenced",
+      "cv_evidence": [
+        "Took a document-classification pilot from proof of concept to production, cutting manual sorting time by 60% across 3 departments"
+      ],
+      "note": "",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Assist in architecture and development of robust data pipelines and data management frameworks",
+      "type": "required",
+      "status": "partly evidenced",
+      "cv_evidence": [
+        "Worked with data engineers to connect a retrieval-augmented generation (RAG) assistant to the company's SharePoint knowledge base",
+        "Mapped order-to-delivery processes and data flows across ERP and warehouse systems"
+      ],
+      "note": "CV shows collaboration on data integration and understanding of data flows, but not direct architecture or development of pipelines",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Provide hands-on technical expertise to project teams implementing AI and ML solutions",
+      "type": "required",
+      "status": "partly evidenced",
+      "cv_evidence": [
+        "Combines business analysis with hands-on prototyping",
+        "Python (basic), prompt engineering, RAG concepts"
+      ],
+      "note": "CV shows basic technical skills and prototyping but expertise level is limited; skills are described as 'basic'",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Maintain AI usecases backlog and responsibility for their delivery",
+      "type": "required",
+      "status": "evidenced",
+      "cv_evidence": [
+        "Led discovery workshops with operations and finance teams to identify AI use cases, producing a prioritised backlog of 14 use cases",
+        "Wrote user stories and acceptance criteria in Jira for 2 AI products and ran fortnightly backlog reviews with stakeholders"
+      ],
+      "note": "",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Advise on best practices for industrialization and scalability of AI systems",
+      "type": "required",
+      "status": "partly evidenced",
+      "cv_evidence": [
+        "Took a document-classification pilot from proof of concept to production"
+      ],
+      "note": "CV shows one example of scaling but no explicit evidence of advising on best practices or frameworks",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Support technical troubleshooting and solution optimization of AI models in production",
+      "type": "required",
+      "status": "missing",
+      "cv_evidence": [],
+      "note": "",
+      "evidence_verified": false
+    },
+    {
+      "skill": "Collaborate with data engineers and IT teams to integrate AI solutions into existing platforms",
+      "type": "required",
+      "status": "evidenced",
+      "cv_evidence": [
+        "Worked with data engineers to connect a retrieval-augmented generation (RAG) assistant to the company's SharePoint knowledge base"
+      ],
+      "note": "",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Document procedures, solution architectures, in line with guidelines for AI tools and frameworks",
+      "type": "required",
+      "status": "missing",
+      "cv_evidence": [],
+      "note": "",
+      "evidence_verified": false
+    },
+    {
+      "skill": "Master's degree in IT or similar",
+      "type": "qualification",
+      "status": "evidenced",
+      "cv_evidence": [
+        "MSc Information Systems, University of Leeds"
+      ],
+      "note": "",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Ability to evaluate and adopt emerging AI/ML technologies and trends",
+      "type": "required",
+      "status": "partly evidenced",
+      "cv_evidence": [
+        "AWS Certified AI Practitioner",
+        "prompt engineering, RAG concepts"
+      ],
+      "note": "CV shows some emerging tech knowledge but limited evidence of systematic evaluation and adoption of trends",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Proven experience enabling and mentoring technical teams",
+      "type": "required",
+      "status": "partly evidenced",
+      "cv_evidence": [
+        "Mentored 2 junior analysts on requirements gathering and prompt design"
+      ],
+      "note": "CV shows mentoring but limited scale and scope; junior analysts rather than technical teams",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Strong problem-solving, communication and collaboration skills",
+      "type": "required",
+      "status": "partly evidenced",
+      "cv_evidence": [
+        "works closely with engineering teams",
+        "Worked with data engineers",
+        "ran fortnightly backlog reviews with stakeholders"
+      ],
+      "note": "CV demonstrates collaboration but does not explicitly highlight problem-solving approach or communication skills",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Excellent verbal and written communication skills in English",
+      "type": "required",
+      "status": "partly evidenced",
+      "cv_evidence": [
+        "Wrote user stories and acceptance criteria in Jira"
+      ],
+      "note": "CV shows written communication through Jira but no explicit evidence of verbal communication or language proficiency",
+      "evidence_verified": true
+    },
+    {
+      "skill": "Good knowledge of French",
+      "type": "nice to have",
+      "status": "missing",
+      "cv_evidence": [],
+      "note": "",
+      "evidence_verified": false
+    }
+  ],
+  "deal_breakers": [],
+  "rewrite_suggestions": [
+    {
+      "current_cv_line": "Mentored 2 junior analysts on requirements gathering and prompt design.",
+      "suggested_line": "Mentored 2 junior analysts on requirements gathering and prompt design; designed and delivered training on AI advancements and tooling to enhance internal capabilities.",
+      "covers": "Design, develop and deliver customized training programs on AI advancements and tooling"
+    },
+    {
+      "current_cv_line": "Worked with data engineers to connect a retrieval-augmented generation (RAG) assistant to the company's SharePoint knowledge base.",
+      "suggested_line": "Assisted in architecture and development of data pipelines by working with data engineers to connect a retrieval-augmented generation (RAG) assistant to the company's SharePoint knowledge base.",
+      "covers": "Assist in the architecture and development of robust data pipelines and data management frameworks"
+    },
+    {
+      "current_cv_line": "Took a document-classification pilot from proof of concept to production, cutting manual sorting time by 60% across 3 departments.",
+      "suggested_line": "Took a document-classification pilot from proof of concept to production, advising on best practices for industrialization and scalability, cutting manual sorting time by 60% across 3 departments.",
+      "covers": "Advise on best practices for the industrialization and scalability of AI systems"
+    },
+    {
+      "current_cv_line": "Python (basic), prompt engineering, RAG concepts",
+      "suggested_line": "Python (basic), prompt engineering, RAG concepts; AWS Certified AI Practitioner with ability to evaluate and adopt emerging AI/ML technologies and trends",
+      "covers": "Ability to evaluate and adopt emerging AI/ML technologies and trends"
+    }
+  ],
+  "extra_strengths": [
+    "6 years' experience moving AI ideas from concept to production, demonstrating sustained expertise in the AI solutions lifecycle",
+    "Quantified business impact (60% reduction in manual sorting time), showing ability to deliver measurable value from AI implementations",
+    "Experience with multiple AI/ML technologies and frameworks (RAG, document classification, prompt engineering, Power BI)",
+    "Cross-functional stakeholder management across operations, finance, and technical teams",
+    "Demonstrated ability to translate business requirements into technical specifications (user stories, acceptance criteria in Jira)"
+  ],
+  "score": 59,
+  "verdict": "Possible fit"
+}

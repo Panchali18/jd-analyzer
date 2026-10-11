@@ -1,5 +1,6 @@
 import difflib
 import io
+import json
 
 import streamlit as st
 from dotenv import load_dotenv
@@ -16,6 +17,9 @@ VERDICT_COLOUR = {"Strong fit": "green", "Possible fit": "orange", "Weak fit": "
 GROUPS = [("required", "Required"), ("qualification", "Qualifications"), ("nice to have", "Nice to have")]
 STATUS_ORDER = {"missing": 0, "partly evidenced": 1, "evidenced": 2}
 BAR_COLOURS = {"evidenced": "#1F7A4D", "partly evidenced": "#E0A100", "missing": "#B42318"}
+MAX_ANALYSES = 3  # per visit, to protect the AI credits
+MAX_CHARACTERS = 20000  # per document, roughly 8 pages
+SAMPLE_RESULT = "sample/sample_result.json"
 
 
 def read_file(uploaded_file):
@@ -79,6 +83,9 @@ with st.sidebar:
     cv_text = read_file(st.file_uploader("CV file", type=["pdf", "txt"], label_visibility="collapsed"))
     run = st.button("Analyse my fit", type="primary", width="stretch", disabled=not (jd_text and cv_text))
     st.caption("Your CV is analysed by Claude on Amazon Bedrock in the EU. Nothing is stored.")
+    st.divider()
+    sample = st.button("Try a sample", width="stretch")
+    st.caption("See an example result for a fictional CV, with no upload needed.")
 
 # ---------- Call Claude only when the button is pressed ----------
 if run:
@@ -105,6 +112,8 @@ if not result:
     st.stop()
 
 # ---------- Summary card ----------
+if st.session_state.get("is_sample"):
+    st.info("**Sample result.** A fictional CV (Jordan Ellis) analysed against a real job advert.")
 requirements = result["requirements"]
 counts = {status: sum(1 for r in requirements if r["status"] == status) for status in STATUS_ICON}
 verdict = result["verdict"]
