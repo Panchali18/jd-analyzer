@@ -101,13 +101,18 @@ def check_evidence(result, cv_text):
         req["evidence_verified"] = bool(quotes) and all(simplify(q) in cv for q in quotes)
     return result
 
+MUST_WORDS = ["must", "required", "essential", "mandatory", "minimum", "at least"]
+
+
 def check_deal_breakers(result, jd_text):
-    """Keep only deal-breakers whose must-have wording really appears in the JD."""
+    """Keep only deal-breakers whose JD wording is real and says the requirement is mandatory."""
     jd = simplify(jd_text)
     confirmed = []
     for item in result["deal_breakers"]:
         wording = simplify(item.get("jd_evidence", ""))
-        if wording and wording in jd:
+        in_jd = bool(wording) and wording in jd
+        mandatory = any(word in wording for word in MUST_WORDS)
+        if in_jd and mandatory:
             confirmed.append(item)
     result["deal_breakers"] = confirmed
     return result
