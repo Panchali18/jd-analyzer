@@ -8,7 +8,7 @@ from ai_matcher import analyse
 
 load_dotenv()
 
-st.set_page_config(page_title="JD Analyzer & CV Matcher", page_icon="📄", layout="wide")
+st.set_page_config(page_title="FitProof", page_icon="📄", layout="wide")
 
 STATUS_ICON = {"evidenced": "✅", "partly evidenced": "🟡", "missing": "❌"}
 VERDICT_COLOUR = {"Strong fit": "green", "Possible fit": "orange", "Weak fit": "red"}
@@ -27,15 +27,26 @@ def read_file(uploaded_file):
 
 # ---------- Sidebar: inputs ----------
 with st.sidebar:
-    st.header("Your inputs")
-    jd_method = st.radio("Job description", ["Paste text", "Upload file"], horizontal=True)
+    st.header("Check your fit")
+    st.markdown("**1. The job**")
+    jd_method = st.radio(
+        "Job description", ["Paste text", "Upload file"], horizontal=True, label_visibility="collapsed"
+    )
     if jd_method == "Paste text":
-        jd_text = st.text_area("Paste the job description", height=250)
+        jd_text = st.text_area(
+            "Job description",
+            height=250,
+            placeholder="Paste the full job description here, then click outside the box.",
+            label_visibility="collapsed",
+        )
     else:
-        jd_text = read_file(st.file_uploader("Upload the job description", type=["pdf", "txt"]))
-    cv_text = read_file(st.file_uploader("Upload your CV", type=["pdf", "txt"]))
-    run = st.button("Analyse", type="primary", width="stretch", disabled=not (jd_text and cv_text))
-    st.caption("Your CV is sent to Claude on Amazon Bedrock (EU) for this analysis. Nothing is stored.")
+        jd_text = read_file(
+            st.file_uploader("Job description file", type=["pdf", "txt"], label_visibility="collapsed")
+        )
+    st.markdown("**2. Your CV**")
+    cv_text = read_file(st.file_uploader("CV file", type=["pdf", "txt"], label_visibility="collapsed"))
+    run = st.button("Analyse my fit", type="primary", width="stretch", disabled=not (jd_text and cv_text))
+    st.caption("Your CV is analysed by Claude on Amazon Bedrock in the EU. Nothing is stored.")
 
 # ---------- Call Claude only when the button is pressed ----------
 if run:
@@ -46,11 +57,19 @@ if run:
             st.session_state.pop("result", None)
             st.error(f"The analysis failed: {error}")
 
-st.title("JD Analyzer & CV Matcher")
+st.title("FitProof")
+st.caption("See your fit. Prove it with your CV.")
 
 result = st.session_state.get("result")
 if not result:
-    st.info("Paste a job description and upload your CV in the sidebar, then press **Analyse**.")
+    with st.container(border=True):
+        st.markdown("#### How it works")
+        st.markdown(
+            "1. Paste a job description and upload your CV on the left.\n"
+            "2. Press **Analyse my fit**. It takes about 15 seconds.\n"
+            "3. Get a verdict and score, the CV lines that prove each requirement, "
+            "any must-haves you're missing, and suggested rewrites."
+        )
     st.stop()
 
 # ---------- Summary card ----------
@@ -77,7 +96,11 @@ if result["deal_breakers"]:
                 st.caption(f"Related in your CV: \"{item['related_cv_evidence']}\"")
 
 # ---------- Tabs ----------
-tab_requirements, tab_rewrites, tab_extras = st.tabs(["Requirements", "CV rewrites", "Extra strengths"])
+rewrites = result.get("rewrite_suggestions") or []
+extras = [e for e in (result.get("extra_strengths") or []) if e]
+tab_requirements, tab_rewrites, tab_extras = st.tabs(
+    [f"Requirements ({len(requirements)})", f"CV rewrites ({len(rewrites)})", f"Extra strengths ({len(extras)})"]
+)
 
 with tab_requirements:
     known_types = [key for key, _ in GROUPS]
@@ -108,8 +131,9 @@ with tab_requirements:
                     st.warning("This quote wasn't found word for word in your CV. Check it before relying on it.")
 
 with tab_rewrites:
-    rewrites = result.get("rewrite_suggestions") or []
-    if not rewrites:
+    if rewrites:
+        st.warning("These are drafts. Check each one is true before you use it, and keep your numbers and results.")
+    else:
         st.write("No rewrite suggestions for this role.")
     for item in rewrites:
         with st.container(border=True):
@@ -118,7 +142,6 @@ with tab_rewrites:
             st.markdown(f"**Suggested:** {item.get('suggested_line', '')}")
 
 with tab_extras:
-    extras = [e for e in (result.get("extra_strengths") or []) if e]
     if extras:
         st.write("Relevant strengths from your CV that this job description didn't ask for:")
         for strength in extras:
