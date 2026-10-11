@@ -1,24 +1,26 @@
-# JD Analyzer & CV Matcher
+# FitProof
 
-Paste a job description, upload your CV, and see how well you fit: which requirements you meet, where the gaps are, and how to reword your CV for that role.
+**See your fit. Prove it with your CV.**
+
+Paste a job description, upload your CV, and see how well you fit: which requirements you meet, with the CV line that proves each one, where the gaps are, and any must-haves you're missing.
 
 I'm building it as a portfolio project for AI product roles, and I use it in my own job search.
 
 ## What it does
 
-**Today (version 1, keyword matching)**
+**Version 1: keyword matching** (kept as `app_keyword.py`)
 - Reads a job description (pasted or uploaded) and a CV (PDF or text)
 - Finds skills in both using a dictionary of about 240 skills and their synonyms
 - Shows a match score, matched skills, missing skills and tailoring tips
 
-**Next (version 2, AI matching)**
+**Version 2: AI matching** (`app.py`, live)
 
 Keywords catch tool names like Python or Power BI, but miss capabilities written as sentences, like "run workshops" or "take pilots into production". Version 2 uses Claude to read the JD and CV together. It:
 - labels each requirement as required, nice to have or a qualification
 - quotes the CV line that proves each match, so every claim can be checked
 - gives a weighted score and a verdict: Strong, Possible or Weak fit
 - says "Not a fit" when a must-have is missing, such as a certification, whatever the score
-- suggests CV rewrites based only on experience already in the CV
+- suggests CV rewrites and highlights every word the AI added, so overclaims are easy to spot
 
 The AI does the judging, and the code does the scoring, so the same labels always give the same score. Full details are in the [AI spec](docs/AI_SPEC.md).
 
@@ -66,4 +68,4 @@ AWS_BEARER_TOKEN_BEDROCK=your-key-here
 
 ## Status
 
-Version 1 works. Version 2 is specified, and AWS is set up. It's waiting on Bedrock quota approval before the build starts.
+Version 2 (FitProof) works on Claude Haiku 4.5 via Amazon Bedrock. On both test JDs it found every requirement in my answer key, where keyword matching missed most of them. Next: a clearer summary card, filters for gaps, and putting it online.
