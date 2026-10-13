@@ -2,6 +2,20 @@
 
 Every change to the JD Analyzer, with the problem, the fix, the result, and what I learned. It combines a changelog (what changed) and a decision log (why). Newest first in each table.
 
+## Recruiter mode (parallel track, started 13 October 2026)
+
+A recruiter-side mode that shows compliance-by-design for EU AI Act high-risk screening (Annex III 4(a), obligations from 2 December 2027). Synthetic CVs only. Plan: PRD section 9R. Increment scopes: `docs/recruiter_mode/`.
+
+### Time and cost tracker
+
+| Increment | Started | Finished | Active build time | Build cost | Run cost per use | Eval |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1. Blind screening | 13 Oct 2026, 14:22 | | | | | |
+
+| # | Change | Why | Result | What I learned |
+| --- | --- | --- | --- | --- |
+| R1 | Added recruiter mode to the PRD (section 9R) and scoped increment 1 as user stories with acceptance criteria (`docs/recruiter_mode/increment_1_blind_screening.md`) | Plan before building; each increment becomes one LinkedIn post | Decisions: one CV at a time plus an eval; direct identifiers only, proxies kept and measured later; synthetic CVs drafted by Claude and reviewed by me; blind mode in recruiter mode only | A quick probe showed spaCy's small model missed 2 of 12 names (Indian and South African), the large model caught all 12. Blinding removes identifiers, not bias. |
+
 ## Stage 2: AI matching (started 10 October 2026)
 
 The app is now **FitProof**, live at https://fitproof-panchali.streamlit.app/: paste a JD, upload a CV, and Claude Haiku 4.5 on Amazon Bedrock labels each requirement and quotes CV evidence. The code calculates the score and verdict from the spec (`docs/AI_SPEC.md`) and checks every quote. The keyword version is kept as `app_keyword.py`.
@@ -93,6 +107,7 @@ Saving a change:
 - [ ] Rewrites, next iteration: "how to talk about this gap" instead of rewriting CV lines
 - [x] UI: coloured breakdown bar, per-group scores, filter with gaps first
 - [x] Deploy FitProof online: https://fitproof-panchali.streamlit.app/
+- [ ] Recruiter mode increment 1: blind screening (in progress)
 - [ ] Bedrock API key expires 30 days after creation (early November): create a new one and update the app's Secrets
 - [ ] AWS free plan ends 10 April 2027 or when the $100 credits run out: decide then whether to upgrade or switch provider
 - [ ] 2 quotes per run still fail the evidence check: find out whether it's PDF text or Claude rewording

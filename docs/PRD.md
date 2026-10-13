@@ -309,6 +309,49 @@ This is a **universal problem** — whether you're a fresh graduate or a 20-year
 
 ---
 
+## 9R. Parallel Track: Recruiter Mode, Compliant by Design
+
+**Added:** 13 October 2026 · **Status:** Increment 1 in scope · **Relationship to other phases:** runs alongside the job-board and dashboard phases; it does not replace them.
+
+### Why
+Employer-side CV screening is a high-risk use under the EU AI Act (Annex III, point 4(a): systems used to analyse and filter job applications and evaluate candidates). Following the Digital Omnibus on AI (Regulation (EU) 2026/1744, in force 27 July 2026), the Annex III obligations apply from **2 December 2027**. Small recruitment agencies and SMEs hiring without HR teams will need to understand what compliance looks like in practice. Recruiter mode shows what compliance-by-design looks like in a small, working tool.
+
+**This is a portfolio demonstration, not a compliant product and not legal advice.**
+
+### Product shape
+| Mode | Question it answers | Risk view (to be documented in increment 4) |
+| --- | --- | --- |
+| Candidate mode (existing) | "How well do I fit this JD?" | Likely minimal risk: a person assessing their own CV; no decision is made about anyone else |
+| Recruiter mode (new) | "Rank these CVs against this JD, with evidence, without making the decision." | High risk if used for real hiring (Annex III 4(a)) |
+
+Both modes share the existing extraction and matching layer (`ai_matcher.py`).
+
+### Increments (one increment = one LinkedIn post)
+| # | Increment | What it shows | Main references | Tools |
+| --- | --- | --- | --- | --- |
+| 1 | **Blind screening mode** | Direct identifiers (name, contact details, address, date of birth, age, gender markers, nationality, marital status) are redacted before the model sees the CV | GDPR Art. 5(1)(c) data minimisation | Microsoft Presidio, spaCy |
+| 2 | Bias test suite | Identical synthetic CVs that differ only in name, gender or nationality should get the same score | AI Act Art. 10, 15 | promptfoo |
+| 3 | Recruiter decision step + audit log | No automatic rejection. The recruiter records advance or decline with a reason. The log keeps inputs, model and prompt version, scores, decision and overrides | AI Act Art. 12, 14; GDPR Art. 22 | SQLite or Supabase, Langfuse |
+| 4 | Model card + classification note | Intended purpose, limits, bias results, and why candidate mode is likely minimal risk while recruiter mode is high risk | AI Act Art. 11 (lite) | Markdown |
+| Later | Evidence-linked scoring; candidate notice generator | Explanations a candidate can understand; notices deployers must give | AI Act Art. 13, 26, 86 | |
+
+### Explicitly out of scope
+- Video or voice analysis. Emotion recognition in the workplace is prohibited (AI Act Art. 5(1)(f)).
+- Inferring personality, health or other sensitive traits.
+- Automatic rejection of any candidate.
+
+### Constraints
+- **No real CV uploads in recruiter mode.** FitProof is public, so recruiter mode works only on a preloaded set of synthetic CVs. Otherwise real recruiters could process real candidates' data through it.
+- Recruiter mode is labelled on screen as a demonstration, not legal advice and not for production hiring.
+- Blinding removes direct identifiers; it does not remove bias. Proxies (university, employers, graduation years, locations, career gaps) stay in the CV because they matter for the match, and their effect is measured in increment 2.
+
+### Delivery and reporting
+- Each increment has user stories and acceptance criteria in `docs/recruiter_mode/`, and is logged in the build log.
+- Build time and build cost are tracked from the first minute of each increment, alongside run cost per use and an eval result.
+- Each increment is published as a LinkedIn post: *SME AI Build #n*, with tools, build time, build cost, run cost per use, eval score, a compliance note, one lesson, the GitHub link and a 10 to 20 second screen recording.
+
+---
+
 ## 10. Competitive Landscape
 
 ### Existing Solutions
