@@ -5,7 +5,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from ai_matcher import analyse
+from ai_matcher import analyse, extract_requirements
 from blind import blind
 from results_view import show_result
 
@@ -20,6 +20,12 @@ JOB_DESCRIPTIONS = {
 def blind_cv(text):
     """Blind a CV once and remember the answer, so switching back is instant."""
     return blind(text)
+
+
+    @st.cache_data(show_spinner=False)
+def job_requirements(jd_text):
+    """Read each job description once; every candidate is judged against the same list."""
+    return extract_requirements(jd_text)
 
 
 def render(max_analyses):
@@ -66,7 +72,7 @@ def render(max_analyses):
         with st.spinner("Claude is reading the job description and the blind CV..."):
             try:
                 jd_text = Path(JOB_DESCRIPTIONS[job]).read_text()
-                st.session_state["recruiter_result"] = (selection, analyse(jd_text, blind_text))
+                st.session_state["recruiter_result"] = (selection, analyse(jd_text, blind_text, job_requirements(jd_text)))
                 st.session_state["analyses_used"] = analyses_used + 1
             except Exception as error:
                 st.session_state.pop("recruiter_result", None)
