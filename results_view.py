@@ -43,8 +43,10 @@ def breakdown_bar(counts):
 
 
 
-def show_result(result, key="candidate"):
-    """Draw the result. `key` keeps the filter buttons separate for each mode."""
+def show_result(result, key="candidate", recruiter=False):
+    """Draw the result. `key` keeps the filter buttons separate for each mode.
+    recruiter=True speaks about "the CV" and hides the CV rewrites, which are for candidates."""
+    whose = "the CV" if recruiter else "your CV"
     # ---------- Summary card ----------
     requirements = result["requirements"]
     counts = {status: sum(1 for r in requirements if r["status"] == status) for status in STATUS_ICON}
@@ -70,19 +72,21 @@ def show_result(result, key="candidate"):
 
     if result["deal_breakers"]:
         with st.container(border=True):
-            st.error("**Deal-breakers:** the job description says these are mandatory, and your CV doesn't show them.")
+            st.error(f"**Deal-breakers:** the job description says these are mandatory, and {whose} doesn't show them.")
             for item in result["deal_breakers"]:
                 st.markdown(f"**{item['requirement']}**")
                 st.caption(f"Job description says: \"{item.get('jd_evidence', '')}\"")
                 if item.get("related_cv_evidence"):
-                    st.caption(f"Related in your CV: \"{item['related_cv_evidence']}\"")
+                    st.caption(f"Related in {whose}: \"{item['related_cv_evidence']}\"")
 
     # ---------- Tabs ----------
     rewrites = result.get("rewrite_suggestions") or []
     extras = [e for e in (result.get("extra_strengths") or []) if e]
-    tab_requirements, tab_rewrites, tab_extras = st.tabs(
-        [f"Requirements ({len(requirements)})", f"CV rewrites ({len(rewrites)})", f"Extra strengths ({len(extras)})"]
-    )
+    names = [f"Requirements ({len(requirements)})", f"Extra strengths ({len(extras)})"]
+    if not recruiter:
+        names.insert(1, f"CV rewrites ({len(rewrites)})")
+    tabs = st.tabs(names)
+    tab_requirements, tab_extras = tabs[0], tabs[-1]
 
     with tab_requirements:
         show = st.segmented_control("Show", ["All", "Gaps only", "Evidenced only"], default="All", key=f"{key}_show")
@@ -120,26 +124,27 @@ def show_result(result, key="candidate"):
                     if req.get("note"):
                         st.caption(req["note"])
                     if not req.get("evidence_verified"):
-                        st.warning("This quote wasn't found word for word in your CV. Check it before relying on it.")
+                        st.warning(f"This quote wasn't found word for word in {whose}. Check it before relying on it.")
 
-    with tab_rewrites:
-        if rewrites:
-            st.warning(
-                "These are drafts. Words the AI added are highlighted. Only use a suggestion if every highlighted word is true."
-            )
-        else:
-            st.write("No rewrite suggestions for this role.")
-        for item in rewrites:
-            with st.container(border=True):
-                st.caption(f"Covers: {item.get('covers', '')}")
-                st.markdown(f"**Now:** {item.get('current_cv_line', '')}")
-                st.markdown(
-                    "**Suggested:** " + highlight_additions(item.get("current_cv_line", ""), item.get("suggested_line", ""))
+    if not recruiter:
+        with tabs[1]:
+            if rewrites:
+                st.warning(
+                    "These are drafts. Words the AI added are highlighted. Only use a suggestion if every highlighted word is true."
                 )
+            else:
+                st.write("No rewrite suggestions for this role.")
+            for item in rewrites:
+                with st.container(border=True):
+                    st.caption(f"Covers: {item.get('covers', '')}")
+                    st.markdown(f"**Now:** {item.get('current_cv_line', '')}")
+                    st.markdown(
+                        "**Suggested:** " + highlight_additions(item.get("current_cv_line", ""), item.get("suggested_line", ""))
+                    )
 
     with tab_extras:
         if extras:
-            st.write("Relevant strengths from your CV that this job description didn't ask for:")
+            st.write(f"Relevant strengths from {whose} that this job description didn't ask for:")
             for strength in extras:
                 st.markdown(f"- {strength}")
         else:

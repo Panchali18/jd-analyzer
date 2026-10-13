@@ -1,6 +1,6 @@
 # Increment 1: Blind Screening Mode
 
-**Status:** Scoped 13 October 2026 · **Build started:** 13 October 2026, 14:22 · **Progress:** US1–US3 built and live (commit 1984c21) · **Owner:** Panchali Das
+**Status:** Scoped 13 October 2026 · **Build started:** 13 October 2026, 14:22 · **Status:** Done 13 October 2026 · **Owner:** Panchali Das
 **Part of:** [Recruiter mode, compliant by design](../PRD.md) (PRD section 9R)
 
 ## Goal
@@ -88,3 +88,10 @@ Acceptance criteria:
 
 ## Out of scope for increment 1
 Ranking several CVs, bias tests, the decision step, the audit log and the model card (increments 2 to 4).
+
+
+## Known gaps (decided 13 October 2026)
+
+- Family status ("2 children", "Dependants") and a "Religion:" line aren't redacted. Both are protected grounds under Ireland's Employment Equality Acts, but rare on the CVs this demo targets; they appear mainly in traditional personal-details blocks (some Indian, Gulf and older German formats).
+- Indirect mentions (a religious society, union role, health-related career break, LGBTQ+ network) are kept on purpose: removing them would also remove real evidence. Their effect on the score is for increment 2.
+- The requirement list is fixed per app start, not yet saved and approved by a person (increment 3).
