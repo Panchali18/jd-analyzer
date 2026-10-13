@@ -1,0 +1,210 @@
+{
+  "ho_01": {
+    "name_region": "North America",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Daniel Brooks",
+        "region": "North America"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "2148 Example Street, Columbus, OH 43215"
+      },
+      {
+        "type": "PHONE",
+        "text": "(614) 555-0138"
+      },
+      {
+        "type": "EMAIL",
+        "text": "daniel.brooks@example.com"
+      },
+      {
+        "type": "IMMIGRATION_STATUS",
+        "text": "US permanent resident"
+      },
+      {
+        "type": "REFEREE",
+        "text": "Marcus Hill"
+      },
+      {
+        "type": "REFEREE",
+        "text": "marcus.hill@example.com"
+      }
+    ],
+    "keep": [
+      "authorized to work without sponsorship",
+      "Midwest Fulfilment Group",
+      "Columbus, Ohio",
+      "03/2021 – Present",
+      "94% to 98.5%",
+      "Red Oak Retail Distribution",
+      "SAP",
+      "Columbus State Community College",
+      "8 years of experience",
+      "Valid Ohio driver's license"
+    ]
+  },
+  "ho_02": {
+    "name_region": "South Asia",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Ananya Rao",
+        "region": "South Asia"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "Flat 302, 17 Lakeview Road, Bengaluru, Karnataka 560038"
+      },
+      {
+        "type": "PHONE",
+        "text": "+91 80 5550 1426"
+      },
+      {
+        "type": "PHONE",
+        "text": "+91 90000 12345"
+      },
+      {
+        "type": "EMAIL",
+        "text": "ananya.rao@example.com"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "17 August 1995"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Indian",
+        "whole_word": true
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Single",
+        "whole_word": true
+      },
+      {
+        "type": "ORIGIN",
+        "text": "Mysuru, Karnataka"
+      }
+    ],
+    "keep": [
+      "BlueOrbit Technology Services Pvt. Ltd., Bengaluru",
+      "Aug 2021 – Present",
+      "Power BI",
+      "Crestline Business Solutions",
+      "Eastfield Institute of Management",
+      "5 years of experience",
+      "Kannada",
+      "Current Location: Bengaluru",
+      "SQL (intermediate)"
+    ]
+  },
+  "ho_03": {
+    "name_region": "Oceania",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Chloe Martin",
+        "region": "Oceania"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "7 Sample Lane, South Brisbane QLD 4101"
+      },
+      {
+        "type": "PHONE",
+        "text": "0400 555 014"
+      },
+      {
+        "type": "EMAIL",
+        "text": "chloe.martin@example.com"
+      },
+      {
+        "type": "URL",
+        "text": "linkedin.com/in/chloe-martin-customer-success"
+      },
+      {
+        "type": "IMMIGRATION_STATUS",
+        "text": "Australian citizen"
+      },
+      {
+        "type": "REFEREE",
+        "text": "Melissa Grant"
+      },
+      {
+        "type": "REFEREE",
+        "text": "melissa.grant@example.com"
+      },
+      {
+        "type": "REFEREE",
+        "text": "Adrian Cole"
+      }
+    ],
+    "keep": [
+      "Southern Cross Cloud Pty Ltd",
+      "Brisbane, QLD",
+      "approximately 85",
+      "20%",
+      "CloudHarbour Software",
+      "Queensland Metropolitan University",
+      "Salesforce",
+      "Full driver's licence",
+      "relocation to Melbourne"
+    ]
+  },
+  "ho_04": {
+    "name_region": "Middle East",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Omar Al-Hassan",
+        "region": "Middle East"
+      },
+      {
+        "type": "PHONE",
+        "text": "+971 50 555 0142"
+      },
+      {
+        "type": "EMAIL",
+        "text": "omar.alhassan@example.com"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Jordanian"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "22/11/1987"
+      },
+      {
+        "type": "IMMIGRATION_STATUS",
+        "text": "UAE residence visa"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Married",
+        "whole_word": true
+      },
+      {
+        "type": "REFEREE",
+        "text": "Mr Khalid Mansour"
+      },
+      {
+        "type": "REFEREE",
+        "text": "Ms Reem Haddad"
+      }
+    ],
+    "keep": [
+      "Dubai, United Arab Emirates",
+      "sponsored by current employer",
+      "Desert Gate Facilities Management LLC",
+      "AED 8 million",
+      "Crescent Bay Trading FZE",
+      "Jordan Valley University",
+      "SAP MM",
+      "Arabic (native)",
+      "Amman, Jordan"
+    ]
+  }
+}
