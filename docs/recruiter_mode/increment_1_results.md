@@ -40,3 +40,26 @@ Held-out results by type:
 
 ### Lesson
 The failures came from assumptions in our own rules about CV layout (labels, line positions, name lengths), not from the name detection itself. A 100% score on a test set written alongside the rules said nothing about real CVs.
+
+## Run 2 (13 October 2026) — after fixing what run 1 exposed
+
+| Test set | Identifiers caught | Job details kept |
+| --- | --- | --- |
+| Development (15 CVs) | 131/131 (100%) | 89/89 (100%) |
+| Held-out (4 CVs) | 34/34 (100%) | 37/37 (100%) |
+
+**This held-out score is no longer independent:** the rules were fixed using these 4 CVs. Run 1 (62%) remains the official result. A fresh held-out set is needed for a new independent score.
+
+Fixes made:
+| Fix | Addresses which miss |
+| --- | --- |
+| Street-address pattern (house number + street word + rest of that part of the line, with optional Flat/Apt/Unit) | Addresses without an "Address:" label |
+| Immigration-status rules ("permanent resident", "[Country] citizen", "residence/work visa or permit", "Stamp 4"); right-to-work statements kept | Immigration status |
+| Origin rule ("Native Place", "Place of birth", "Hometown") | Birthplace |
+| Names under a References/Referees heading become `[REFEREE]` | Referee names |
+| A detected name is cut at the line break | "Ananya Rao" swallowing "Business Analyst" |
+| Repeated-name search also uses the full name and whole hyphenated words | "Al-Hassan" |
+| Nationality-like words on a "Languages" line are ignored | "Arabic", "French" |
+| Degree-shaped text ("B.Com", "M.Sc") is not a web address | "B.Com" |
+
+Two of these fixes first caused regressions on the development set (a personal website stopped being caught; "de" in "Universidad de los Andes" was removed). Both were caught by rerunning the development set and corrected before this run.
