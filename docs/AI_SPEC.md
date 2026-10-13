@@ -9,7 +9,7 @@ The AI version reads the job description and the CV together and returns a weigh
 
 | Decision | Choice | Why |
 | --- | --- | --- |
-| Inputs | JD and CV together, in one call | The AI can see that "GenAI" in the CV matches "generative AI" in the JD |
+| Inputs | Two calls (changed 13 October 2026): call 1 reads the JD alone and fixes the requirement list; call 2 judges the CV against that list, with the JD for context | Every candidate for a job is measured against the same list. With one call, the list changed whenever the CV text changed, moving scores by up to 12 points |
 | Score | Weighted: required skills count more than nice-to-haves | A missing must-have matters more than a missing bonus |
 | Deal-breakers | A missing must-have (a required tool or platform, certification, language, minimum years, degree) gives the verdict "Not a fit", whatever the score, with the reason shown at the top | "70% match, but requires a CPA" is a different message from "70% match" |
 | Evidence | Every matched skill quotes the CV line that proves it | I can check every claim, and it stops the AI inventing skills |
@@ -19,7 +19,7 @@ The AI version reads the job description and the CV together and returns a weigh
 
 ## What the AI does
 
-1. Reads the JD and lists every requirement, labelling each as **required**, **nice to have** or **qualification**.
+1. Reads the JD on its own (call 1) and lists every requirement, labelling each as **required**, **nice to have** or **qualification**. The code holds call 2 to this list (`apply_fixed_list`).
 2. Ignores boilerplate: company description, benefits, equal-opportunity statements.
 3. For each requirement, checks the CV and marks it **evidenced**, **partly evidenced** or **missing**, quoting the CV line for the first two.
 4. Flags any missing qualification or explicit must-have as a **deal-breaker**, and notes any related experience in the CV.

@@ -493,10 +493,11 @@ User pastes JD + uploads CV (Streamlit)
          ↓
 pypdf extracts CV text
          ↓
-boto3 sends JD + CV + instructions to Amazon Bedrock
+Call 1: boto3 sends the JD to Claude Haiku 4.5 on Amazon Bedrock (EU)
+→ fixed requirement list with types (extract_requirements)
          ↓
-Claude Haiku 4.5 (EU inference profile) returns JSON:
-requirements, types, CV evidence, deal-breakers, rewrite tips
+Call 2: JD + fixed list + CV → JSON: status and CV evidence per
+requirement, deal-breakers, rewrite tips, extra strengths
          ↓
 App checks the JSON and calculates the weighted score in code
          ↓
@@ -517,10 +518,11 @@ Streamlit shows verdict, score, evidence and suggestions
 ### Checks done in code, not by the AI
 | Check | Function | What it does |
 | --- | --- | --- |
+| Fixed list | `apply_fixed_list` | Puts the requirement list back exactly as call 1 fixed it: types from the list, anything the AI skipped counts as missing. Also accepts items where the AI used the wrong field name |
 | CV evidence | `check_evidence` | Every quote Claude gives must appear in the CV word for word; otherwise the screen shows a warning |
 | Deal-breakers | `check_deal_breakers` | Kept only if Claude quotes JD wording that appears in the JD and contains a must-word (must, required, essential, mandatory, minimum, at least) |
 | CV rewrites | `check_rewrites` | Dropped if the "Now" line isn't in the CV, or if the suggestion loses or adds any number |
-| Overclaims | `highlight_additions` (app.py) | Highlights every word a rewrite adds, so the user can reject overclaims |
+| Overclaims | `highlight_additions` (results_view.py) | Highlights every word a rewrite adds, so the user can reject overclaims |
 
 ### Deployment
 - Hosted on Streamlit Community Cloud from the `main` branch; every push redeploys.
@@ -530,3 +532,38 @@ Streamlit shows verdict, score, evidence and suggestions
 
 ### Status
 Live and working. Both test JDs: every answer-key requirement found.
+
+
+## 19. Recruiter Mode (demo, from 13 October 2026)
+
+A recruiter-side mode that shows compliance by design for CV screening, a high-risk use under the EU AI Act (Annex III 4(a)). Fictional CVs only; nothing can be uploaded. Plan: PRD section 9R and `docs/recruiter_mode/`.
+
+### Flow
+```
+Recruiter picks a fictional CV and a job (sidebar)
+         ↓
+blind.py removes direct identifiers (Presidio + spaCy en_core_web_lg + our own rules)
+         ↓
+Fixed requirement list for the job (call 1, cached per job)
+         ↓
+analyse() on the blind CV only (call 2) → same checks and scoring as candidate mode
+         ↓
+Result first, blind CV underneath (original behind a toggle, for the demo only)
+```
+
+### Files
+| File | Purpose |
+| --- | --- |
+| `app.py` | Mode switch; loads `recruiter.py` only when recruiter mode is chosen |
+| `recruiter.py` | Recruiter screen: candidate and job picker, blind CV view, screening steps |
+| `results_view.py` | Results screen shared by both modes; `recruiter=True` hides CV rewrites and says "the CV" |
+| `blind.py` | Finds and replaces identifiers with labels such as `[NAME]`, `[ADDRESS]` |
+| `eval_blind.py` | Scores `blind.py` against an answer key: caught only if every letter and digit is removed |
+| `compare_blind.py`, `compare_requirements.py` | Blind vs original comparison on the same job |
+| `test_data/recruiter/`, `test_data/recruiter_holdout/` | 15 development and 4 held-out fictional CVs with answer keys |
+
+### Results
+Held-out run 1 (official): 62% of identifiers caught, 95% of job details kept. After fixes: 100% and 100% on both sets (no longer independent). Blind vs original with a fixed list: −1, 0 and +3 points on 3 CVs. Details: `docs/recruiter_mode/increment_1_results.md`.
+
+### Deployment note
+The spaCy large model (about 400 MB) installs from `requirements.txt` and fits within Streamlit Community Cloud's memory. The first recruiter-mode load after a restart takes about 20 seconds.
