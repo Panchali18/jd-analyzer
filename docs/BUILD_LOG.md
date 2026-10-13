@@ -8,12 +8,13 @@ A recruiter-side mode that shows compliance-by-design for EU AI Act high-risk sc
 
 ### Time and cost tracker
 
-| Increment | Started | Finished | Active build time | Build cost | Run cost per use | Eval |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1. Blind screening | 13 Oct 2026, 14:22 | | | | | |
+| Increment | Started | Finished | Build cost | Run cost per use | Eval |
+| --- | --- | --- | --- | --- | --- |
+| 1. Blind screening | 13 Oct 2026 | | £0 so far (all open-source tools) | | Held-out run 1: 62% caught, 95% kept |
 
 | # | Change | Why | Result | What I learned |
 | --- | --- | --- | --- | --- |
+| R3 | Held-out test: 4 fictional CVs written by me without seeing the rules (US, India, Australia, UAE formats), answer key agreed before the run, and a stricter eval (an item only counts as caught if every letter and digit of it is removed, everywhere it appears) | Practice CVs written alongside the rules can't show how the rules do on real CVs | **First and official result: 21/34 identifiers caught (62%), 35/37 job details kept (95%).** Misses: all addresses (no "Address:" label), all immigration statuses (no rule), birthplace, 5 of 7 referee details, one Middle Eastern surname ("Al-Hassan"). Hidden damage: "Business Analyst" removed throughout one CV. Details: `docs/recruiter_mode/increment_1_results.md` | The failures came from our own assumptions about CV layout, not from name detection. Fix the marking before the test, never the rules; and never overwrite the first score. |
 | R2 | `blind.py`: Presidio (names, emails, phones, URLs, nationality) plus our own rules for addresses, date of birth, age, marital status, titles, pronouns and gender; names accepted only from the top 3 lines, then removed wherever they repeat. `eval_blind.py` scores it against `test_data/recruiter/answer_key.json` (15 synthetic CVs, names from 12 regions) | Out of the box, Presidio missed the street address, "Married" and "He", and wrongly flagged "6 years' experience" and the job city. A first version also hid "Alibaba Cloud", "Indra" and "Severn Trent" as people's names | Development set: 131/131 identifiers caught, 89/89 job details kept | An off-the-shelf privacy tool isn't a privacy feature until it's tuned to the job. 100% on a test set written alongside the rules is marking your own homework, so the headline number comes from a held-out set. |
 | R1 | Added recruiter mode to the PRD (section 9R) and scoped increment 1 as user stories with acceptance criteria (`docs/recruiter_mode/increment_1_blind_screening.md`) | Plan before building; each increment becomes one LinkedIn post | Decisions: one CV at a time plus an eval; direct identifiers only, proxies kept and measured later; synthetic CVs drafted by Claude and reviewed by me; blind mode in recruiter mode only | A quick probe showed spaCy's small model missed 2 of 12 names (Indian and South African), the large model caught all 12. Blinding removes identifiers, not bias. |
 
