@@ -1,0 +1,749 @@
+{
+  "cv_01": {
+    "name_region": "Ireland",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Siobhán O'Callaghan",
+        "region": "Ireland"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Ms"
+      },
+      {
+        "type": "EMAIL",
+        "text": "siobhan.ocallaghan@outlook.ie"
+      },
+      {
+        "type": "PHONE",
+        "text": "087 214 5590"
+      },
+      {
+        "type": "URL",
+        "text": "linkedin.com/in/siobhan-ocallaghan"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "22 Griffith Avenue, Drumcondra, Dublin 9, D09 K2W7"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "04/11/1990"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Irish"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Married"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "She",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Aer Lingus",
+      "Dublin",
+      "2020 to present",
+      "Bank of Ireland",
+      "2016 to 2020",
+      "Power BI",
+      "University College Cork"
+    ]
+  },
+  "cv_02": {
+    "name_region": "West Africa",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Chukwuemeka Okafor",
+        "region": "West Africa"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Mr"
+      },
+      {
+        "type": "EMAIL",
+        "text": "emeka.dev@gmail.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+353 89 401 7723"
+      },
+      {
+        "type": "URL",
+        "text": "github.com/emeka-okafor"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "14 Rathmines Road, Dublin 6"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "17 March 1988"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Nigerian"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Single"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "He",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Stripe",
+      "2021 to present",
+      "Python",
+      "SQL",
+      "2 million",
+      "Interswitch",
+      "Lagos",
+      "2015 to 2021",
+      "University of Lagos"
+    ]
+  },
+  "cv_03": {
+    "name_region": "South Asia",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Aarav Bhattacharya",
+        "region": "South Asia"
+      },
+      {
+        "type": "EMAIL",
+        "text": "a.bhatta91@yahoo.co.in"
+      },
+      {
+        "type": "PHONE",
+        "text": "+91 98300 11245"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "Flat 3B, 45 Lake Gardens, Kolkata 700045"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "1991"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Indian"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Married"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "His",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Tata Consultancy Services",
+      "Kolkata",
+      "2018 to present",
+      "RAG",
+      "3 banking clients",
+      "IIM Calcutta"
+    ]
+  },
+  "cv_04": {
+    "name_region": "East Asia",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Zhang Wei",
+        "region": "East Asia"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Mr"
+      },
+      {
+        "type": "EMAIL",
+        "text": "zw.analytics@163.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+86 138 0013 8000"
+      },
+      {
+        "type": "URL",
+        "text": "linkedin.com/in/zhangwei-data"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "Room 1203, 88 Century Avenue, Pudong, Shanghai"
+      },
+      {
+        "type": "AGE",
+        "text": "Age: 34"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Chinese"
+      }
+    ],
+    "keep": [
+      "Alibaba Cloud",
+      "Hangzhou",
+      "2019 to present",
+      "5 million",
+      "Fudan University"
+    ]
+  },
+  "cv_05": {
+    "name_region": "Southeast Asia",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Nguyễn Thị Hoa",
+        "region": "Southeast Asia"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Ms"
+      },
+      {
+        "type": "EMAIL",
+        "text": "hoa.nguyen.pm@gmail.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+84 90 123 4567"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "12 Le Loi Street, District 1, Ho Chi Minh City"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "22/08/1995"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Vietnamese"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Single"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Her",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "FPT Software",
+      "2019 to present",
+      "4 ERP rollouts",
+      "Scrum",
+      "RMIT Vietnam"
+    ]
+  },
+  "cv_06": {
+    "name_region": "Middle East",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Fatima Al-Rashid",
+        "region": "Middle East"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Mrs"
+      },
+      {
+        "type": "EMAIL",
+        "text": "fatima.alrashid@protonmail.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+971 50 123 4567"
+      },
+      {
+        "type": "URL",
+        "text": "linkedin.com/in/fatima-alrashid"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "Villa 7, Street 12, Al Barsha, Dubai"
+      },
+      {
+        "type": "AGE",
+        "text": "38 years old"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Emirati"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Married"
+      },
+      {
+        "type": "NAME",
+        "text": "Fatima",
+        "region": "Middle East",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Emirates NBD",
+      "Dubai",
+      "2014 to present",
+      "KYC",
+      "35%",
+      "University of Sharjah"
+    ]
+  },
+  "cv_07": {
+    "name_region": "Central Europe",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Katarzyna Wiśniewska",
+        "region": "Central Europe"
+      },
+      {
+        "type": "EMAIL",
+        "text": "kasia.w@wp.pl"
+      },
+      {
+        "type": "PHONE",
+        "text": "+48 601 234 567"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "ul. Marszałkowska 84/92, 00-514 Warszawa"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "1993-06-30"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Polish"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "She",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Allegro",
+      "Warsaw",
+      "2018 to present",
+      "600 regression tests",
+      "Selenium",
+      "Warsaw University of Technology"
+    ]
+  },
+  "cv_08": {
+    "name_region": "Southern Africa",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Thandiwe Nkosi",
+        "region": "Southern Africa"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Ms"
+      },
+      {
+        "type": "EMAIL",
+        "text": "thandi.nkosi@icloud.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+27 82 555 0199"
+      },
+      {
+        "type": "URL",
+        "text": "linkedin.com/in/thandiwenkosi"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "17 Vilakazi Street, Orlando West, Soweto, 1804"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "South African"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Divorced"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Her",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Takealot",
+      "Cape Town",
+      "2017 to present",
+      "112%",
+      "University of the Witwatersrand"
+    ]
+  },
+  "cv_09": {
+    "name_region": "Latin America",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Juan Pablo Fernández García",
+        "region": "Latin America"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Mr"
+      },
+      {
+        "type": "EMAIL",
+        "text": "jp.fernandez@hotmail.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+34 612 345 678"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "Calle de Alcalá 150, 28009 Madrid"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "9 January 1987"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Colombian"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Married"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "He",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Indra",
+      "Madrid",
+      "2016 to present",
+      "AWS",
+      "12 public-sector clients",
+      "Universidad de los Andes"
+    ]
+  },
+  "cv_10": {
+    "name_region": "South Asia",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Mohammed Iqbal Khan",
+        "region": "South Asia"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Mr"
+      },
+      {
+        "type": "EMAIL",
+        "text": "mi.khan@outlook.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "07700 900123"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "56 Stratford Road, Birmingham B11 1AR"
+      },
+      {
+        "type": "AGE",
+        "text": "Age 41"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "British Pakistani"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "He",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Severn Trent",
+      "Coventry",
+      "2012 to present",
+      "Sage 200",
+      "Dynamics 365",
+      "9 entities",
+      "Aston University"
+    ]
+  },
+  "cv_11": {
+    "name_region": "Northern Europe",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Lars Eriksson",
+        "region": "Northern Europe"
+      },
+      {
+        "type": "EMAIL",
+        "text": "lars@eriksson.se"
+      },
+      {
+        "type": "PHONE",
+        "text": "+46 70 123 45 67"
+      },
+      {
+        "type": "URL",
+        "text": "lars-eriksson.se"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "Sveavägen 44, 111 34 Stockholm"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "14.02.1984"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Swedish"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Married"
+      }
+    ],
+    "keep": [
+      "Klarna",
+      "Stockholm",
+      "2017 to present",
+      "4 to 25 people",
+      "KTH Royal Institute of Technology"
+    ]
+  },
+  "cv_12": {
+    "name_region": "West Africa",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Abena Owusu-Ansah",
+        "region": "West Africa"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Miss"
+      },
+      {
+        "type": "EMAIL",
+        "text": "abena.oa@gmail.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+233 24 123 4567"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "House 12, Ring Road East, Osu, Accra"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Female"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Ghanaian"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "She",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Hubtel",
+      "2020 to present",
+      "40 user interviews",
+      "University of Ghana"
+    ]
+  },
+  "cv_13": {
+    "name_region": "East Asia",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Kim Min-jun",
+        "region": "East Asia"
+      },
+      {
+        "type": "EMAIL",
+        "text": "minjun.kim@naver.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+82 10 1234 5678"
+      },
+      {
+        "type": "URL",
+        "text": "github.com/minjun-kim"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "Apt 502, 21 Teheran-ro, Gangnam-gu, Seoul"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "05/05/1992"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "South Korean"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Single"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "He",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Naver",
+      "2018 to present",
+      "Go",
+      "40%",
+      "KAIST"
+    ]
+  },
+  "cv_14": {
+    "name_region": "Southeast Asia",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Maria Clara Dela Cruz",
+        "region": "Southeast Asia"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Ms"
+      },
+      {
+        "type": "EMAIL",
+        "text": "mc.delacruz@yahoo.com"
+      },
+      {
+        "type": "PHONE",
+        "text": "+63 917 123 4567"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "Unit 8C, 25 Ayala Avenue, Makati City 1226"
+      },
+      {
+        "type": "AGE",
+        "text": "29 years old"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Filipino"
+      },
+      {
+        "type": "MARITAL_STATUS",
+        "text": "Married"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "She",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "Accenture",
+      "Manila",
+      "2019 to present",
+      "15 back-office processes",
+      "Power Automate",
+      "Ateneo de Manila University"
+    ]
+  },
+  "cv_15": {
+    "name_region": "Eastern Europe",
+    "pii": [
+      {
+        "type": "NAME",
+        "text": "Oleksandr Kovalenko",
+        "region": "Eastern Europe"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "Mr"
+      },
+      {
+        "type": "EMAIL",
+        "text": "o.kovalenko@ukr.net"
+      },
+      {
+        "type": "PHONE",
+        "text": "+380 67 123 4567"
+      },
+      {
+        "type": "URL",
+        "text": "linkedin.com/in/okovalenko"
+      },
+      {
+        "type": "ADDRESS",
+        "text": "vul. Khreshchatyk 22, Kyiv 01001"
+      },
+      {
+        "type": "DATE_OF_BIRTH",
+        "text": "30.09.1989"
+      },
+      {
+        "type": "NATIONALITY",
+        "text": "Ukrainian"
+      },
+      {
+        "type": "GENDER_MARKER",
+        "text": "He",
+        "whole_word": true
+      }
+    ],
+    "keep": [
+      "EPAM Systems",
+      "Kyiv",
+      "2015 to present",
+      "Kubernetes",
+      "AWS",
+      "40 services",
+      "Kyiv Polytechnic Institute"
+    ]
+  }
+}

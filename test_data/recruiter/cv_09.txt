@@ -1,0 +1,14 @@
+Mr Juan Pablo Fernández García
+jp.fernandez@hotmail.com | +34 612 345 678
+Address: Calle de Alcalá 150, 28009 Madrid
+Date of birth: 9 January 1987 | Nationality: Colombian | Married
+
+PROFILE
+Solutions Architect with experience across the roles below.
+
+EXPERIENCE
+Solutions Architect, Indra, Madrid (2016 to present)
+He designed AWS architectures for 12 public-sector clients.
+
+EDUCATION
+BSc Systems Engineering, Universidad de los Andes, 2009

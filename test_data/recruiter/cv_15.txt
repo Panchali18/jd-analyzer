@@ -1,0 +1,14 @@
+Mr Oleksandr Kovalenko
+o.kovalenko@ukr.net | +380 67 123 4567 | linkedin.com/in/okovalenko
+Address: vul. Khreshchatyk 22, Kyiv 01001
+Date of birth: 30.09.1989 | Nationality: Ukrainian
+
+PROFILE
+DevOps Engineer with experience across the roles below.
+
+EXPERIENCE
+DevOps Engineer, EPAM Systems, Kyiv (2015 to present)
+He moved 40 services to Kubernetes on AWS.
+
+EDUCATION
+BSc Computer Science, Kyiv Polytechnic Institute, 2011

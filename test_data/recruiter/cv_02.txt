@@ -1,0 +1,15 @@
+Mr Chukwuemeka Okafor
+emeka.dev@gmail.com | +353 89 401 7723 | github.com/emeka-okafor
+Address: 14 Rathmines Road, Dublin 6
+DOB: 17 March 1988 | Nationality: Nigerian | Marital status: Single
+
+PROFILE
+Data Engineer with experience across the roles below.
+
+EXPERIENCE
+Data Engineer, Stripe, Dublin (2021 to present)
+He built data pipelines in Python and SQL processing 2 million events a day.
+Software Engineer, Interswitch, Lagos (2015 to 2021)
+
+EDUCATION
+BEng Computer Engineering, University of Lagos, 2010

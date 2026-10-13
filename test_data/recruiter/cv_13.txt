@@ -1,0 +1,14 @@
+Kim Min-jun
+minjun.kim@naver.com | +82 10 1234 5678 | github.com/minjun-kim
+Address: Apt 502, 21 Teheran-ro, Gangnam-gu, Seoul
+DOB 05/05/1992 | Nationality: South Korean | Marital status: Single
+
+PROFILE
+Backend Developer with experience across the roles below.
+
+EXPERIENCE
+Backend Developer, Naver, Seongnam (2018 to present)
+He rebuilt the search API in Go, cutting latency by 40%.
+
+EDUCATION
+BSc Computer Science, KAIST, 2016

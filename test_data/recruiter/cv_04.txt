@@ -1,0 +1,14 @@
+Mr Zhang Wei
+zw.analytics@163.com | +86 138 0013 8000 | linkedin.com/in/zhangwei-data
+Address: Room 1203, 88 Century Avenue, Pudong, Shanghai
+Age: 34 | Nationality: Chinese
+
+PROFILE
+Machine Learning Engineer with experience across the roles below.
+
+EXPERIENCE
+Machine Learning Engineer, Alibaba Cloud, Hangzhou (2019 to present)
+Trained and deployed recommendation models used by 5 million users.
+
+EDUCATION
+MSc Computer Science, Fudan University, 2016
