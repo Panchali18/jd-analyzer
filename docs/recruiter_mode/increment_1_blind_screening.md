@@ -76,11 +76,15 @@ Acceptance criteria:
 - Presidio with spaCy `en_core_web_lg` is accurate enough to be worth reporting. An early probe on 12 CV headers caught 12/12 full names with the large model and 10/12 with the small model; the small model missed an Indian and a South African name.
 - Placeholders don't noticeably change the match score. This is checked by scoring a few CVs with blind mode on and off.
 
-## Open questions
-1. How should gendered pronouns be replaced: with `[GENDER_MARKER]`, or with "they", which reads better but can break grammar ("they is")?
-2. Does a city in a job entry ("Accenture, Dublin") count as an address? Proposed: no, only home addresses. Job locations are proxies.
-3. Should the eval also score blind and non-blind matches for every CV, to show the effect of blinding on the score? Proposed: yes for 3 CVs in increment 1, all of them in increment 2.
-4. If the large model doesn't fit on Streamlit Cloud, is the medium model acceptable for the live demo, with the large model's results reported from the Codespace?
+## Resolved questions (13 October 2026)
+| Question | Decision |
+| --- | --- |
+| How are gendered pronouns replaced? | With `[GENDER_MARKER]`, never "they": always grammatical-safe and obvious what was removed |
+| Is a city in a job entry an address? | No. Only home addresses are redacted; job locations are proxies |
+| Compare blind and non-blind scores? | Yes, for 3 CVs in this increment; all CVs in increment 2 |
+| What if the large spaCy model doesn't fit on Streamlit Cloud? | The live demo uses the medium model; results for both are reported |
+| Database for increment 3 | SQLite: free, no account, nothing to pause. The log resets when the app restarts, which the screen will say |
+| Langfuse | Optional, added in increment 3 only if time allows |
 
 ## Out of scope for increment 1
 Ranking several CVs, bias tests, the decision step, the audit log and the model card (increments 2 to 4).
