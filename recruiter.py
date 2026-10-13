@@ -22,7 +22,7 @@ def blind_cv(text):
     return blind(text)
 
 
-    @st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False)
 def job_requirements(jd_text):
     """Read each job description once; every candidate is judged against the same list."""
     return extract_requirements(jd_text)
