@@ -63,3 +63,26 @@ Fixes made:
 | Degree-shaped text ("B.Com", "M.Sc") is not a web address | "B.Com" |
 
 Two of these fixes first caused regressions on the development set (a personal website stopped being caught; "de" in "Universidad de los Andes" was removed). Both were caught by rerunning the development set and corrected before this run.
+
+
+## Blind vs original comparison (13 October 2026)
+
+**Question:** does blinding change the match? It shouldn't, because blinding removes identity, not evidence.
+
+**Run 1** (`compare_blind.py`, Senior BA GenAI job, 3 CVs, each version twice): blind scores were lower on every CV (cv_01 41→36, cv_02 21→15, cv_06 26–30→18). Repeat runs of the same input matched within 4 points, so this wasn't run-to-run noise.
+
+**Diagnosis** (`compare_requirements.py`): the AI built its requirement list from the JD on every call, and the list changed whenever the CV text changed (12 vs 14, 13 vs 16, 13 vs 12 items). The score moved because the yardstick moved.
+
+**Fix:** two calls. `extract_requirements` reads the JD once; `analyse` judges each CV against that fixed list, and `apply_fixed_list` holds the AI to it in code.
+
+**Run 2, fixed list (16 requirements):**
+
+| CV | Original | Blind | Change |
+| --- | --- | --- | --- |
+| cv_01 | 25% | 24% | −1 |
+| cv_02 | 11% | 11% | 0 |
+| cv_06 | 10% | 13% | +3 |
+
+The remaining changes are borderline calls (partly evidenced vs missing) on the same evidence lines, in both directions. No sign that blinding removes evidence or shifts scores one way.
+
+**Limits:** 3 CVs, one JD, one run each: a sanity check, not a bias test (increment 2). The list is fixed per app start, not yet saved and approved by a person; the fixed list still contains a near-duplicate (two vendor assessment items).
