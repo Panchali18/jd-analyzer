@@ -113,6 +113,15 @@ Saving a change:
 
 `.gitignore` lists files that are never uploaded: `.env` (private keys), `.venv/`, `__pycache__/` and `backup/`.
 
+Definition of done for every change (added 14 October 2026):
+
+1. Code pushed, and the live app checked once.
+2. A row in this log (GitHub) and in the Claude Doc build log: change, why, result, what I learned.
+3. If behaviour changed: README, `docs/TECHNICAL.md` and `docs/AI_SPEC.md` updated in the same session.
+4. The close plan ticked in both logs.
+
+End of each session: say "wrap up", and Claude checks every document against the day's commits before I stop the Codespace.
+
 ## Up next
 
 The current plan is the **Close plan** at the top of this log (FitProof closes 15 October 2026). This list is the history of earlier to-dos.
