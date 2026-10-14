@@ -56,6 +56,8 @@ def show_result(result, key="candidate", recruiter=False):
         st.subheader(result.get("role_title") or "Job description")
         left, right = st.columns([3, 1])
         left.markdown(f"### :{VERDICT_COLOUR.get(verdict, 'red')}[{verdict}]")
+        partly = f", partly for {counts['partly evidenced']} more" if counts["partly evidenced"] else ""
+        left.markdown(f"Evidence for **{counts['evidenced']} of {len(requirements)}** requirements{partly}")
         right.metric("Match score", f"{result['score']}%")
         st.html(breakdown_bar(counts))
         st.caption(
