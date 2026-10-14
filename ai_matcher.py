@@ -22,7 +22,10 @@ For "evidenced" and "partly evidenced", put the supporting CV text into cv_evide
 
 Step 3. List deal-breakers. Only include a missing requirement when the job description explicitly says it is mandatory, using words such as "must", "must have", "required", "essential", "mandatory", "minimum" or "at least". Being listed under a heading like "Your tasks" or "Your profile" does not make a requirement mandatory. Treat "or similar" and "or equivalent" as flexible: if the CV shows something comparable, it is not a deal-breaker. For each deal-breaker, copy the job description's exact words that make it mandatory into jd_evidence, and copy any related CV text exactly into related_cv_evidence, or leave it empty.
 
-Step 4. Suggest up to 5 rewrites of existing CV lines that would better cover "partly evidenced" or "missing" requirements. Copy current_cv_line exactly from the CV. The suggested line must keep every number, result and named employer, client, tool or system from the current line. It must keep who did what for whom: for example, selling or listing a product must not become buying, assessing or evaluating products. Only add the job description's wording where the current line already shows that activity. Never add tools, numbers, employers, responsibilities or areas of ownership that aren't in the CV. If no honest rewrite covers a requirement, leave it out.
+Step 4. Help the candidate talk honestly about their most important gaps. Pick up to 5 requirements of type "required" or "qualification" whose status is "missing" or "partly evidenced", most important first. For each one:
+- closest_cv_evidence: the CV text that comes closest to this requirement, copied exactly from the CV under the same quote rules as Step 2, or "" if nothing comes close.
+- how_to_say_it: one or two sentences in the first person that the candidate could use in a cover letter or interview. Name the gap plainly, then point to the closest real experience. Never claim the requirement is met, and never add tools, numbers, employers, clients or responsibilities that aren't in the CV.
+- how_to_close_it: one concrete step that would close the gap, such as a named certification, a short course topic or a small project. No prices or dates.
 
 Step 5. List up to 5 strengths from the CV that are relevant to this role but not asked for in the job description.
 
@@ -35,8 +38,8 @@ Return only JSON in exactly this shape, with no other text:
   "deal_breakers": [
     {"requirement": "", "jd_evidence": "", "related_cv_evidence": ""}
   ],
-  "rewrite_suggestions": [
-    {"current_cv_line": "", "suggested_line": "", "covers": ""}
+  "gap_talk": [
+    {"requirement": "", "closest_cv_evidence": "", "how_to_say_it": "", "how_to_close_it": ""}
   ],
   "extra_strengths": [""]
 }"""
@@ -187,19 +190,21 @@ def find_numbers(text):
     return set(re.findall(r"\d+(?:\.\d+)?", text))
 
 
-def check_rewrites(result, cv_text):
-    """Keep only rewrites of real CV lines that keep every number and add none."""
+def check_gap_talk(result, cv_text):
+    """Keep gap advice honest: the quoted CV line must be real, and the wording may add no number the CV doesn't have."""
     cv = simplify(cv_text)
+    cv_numbers = find_numbers(cv_text)
     kept = []
-    for item in result.get("rewrite_suggestions") or []:
-        current = item.get("current_cv_line", "")
-        suggested = item.get("suggested_line", "")
-        real_line = bool(current) and simplify(current) in cv
-        same_numbers = find_numbers(current) == find_numbers(suggested)
-        if real_line and same_numbers:
-            kept.append(item)
-    result["rewrite_suggestions"] = kept
+    for item in result.get("gap_talk") or []:
+        quote = item.get("closest_cv_evidence", "")
+        if quote and simplify(quote) not in cv:
+            item["closest_cv_evidence"] = ""  # not a real CV line, so don't show it as one
+        if find_numbers(item.get("how_to_say_it", "")) - cv_numbers:
+            continue  # a number the CV doesn't contain is an overclaim
+        kept.append(item)
+    result["gap_talk"] = kept
     return result
+
 
 def apply_fixed_list(result, requirements):
     """Hold the AI to the fixed list: same items, types from the list, anything it skipped counts as missing."""
@@ -229,7 +234,7 @@ def analyse(jd_text, cv_text, requirements=None):
     result = check_evidence(result, cv_text)
     result = check_deal_breakers(result, jd_text)
     result = separate_eligibility(result)
-    result = check_rewrites(result, cv_text)
+    result = check_gap_talk(result, cv_text)
     score = calculate_score(result)
     result["score"] = score
     result["verdict"] = get_verdict(result, score)

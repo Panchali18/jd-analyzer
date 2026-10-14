@@ -23,7 +23,7 @@ Keywords catch tool names like Python or Power BI, but miss capabilities written
 - gives a weighted score and a verdict: Strong, Possible or Weak fit
 - says "Not a fit" when a must-have is missing, such as a certification, whatever the score
 - lists right-to-work conditions separately as "Check yourself", because a CV can't show them, so they never block the verdict
-- suggests CV rewrites and highlights every word the AI added, so overclaims are easy to spot
+- for the most important gaps, suggests how to talk about them honestly in a cover letter or interview, pointing to the closest real experience, and one step to close each gap
 
 The AI does the judging, and the code does the scoring, so the same labels always give the same score. The job description is read once into a fixed list of requirements, so every CV is measured against the same list. Full details are in the [AI spec](docs/AI_SPEC.md).
 

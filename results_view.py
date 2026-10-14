@@ -1,7 +1,5 @@
 """Shows a FitProof analysis: summary card, deal-breakers and the three tabs.
 Used by both candidate mode (app.py) and recruiter mode (recruiter.py)."""
-import difflib
-
 import streamlit as st
 
 from ai_matcher import calculate_score
@@ -11,24 +9,6 @@ VERDICT_COLOUR = {"Strong fit": "green", "Possible fit": "orange", "Weak fit": "
 GROUPS = [("required", "Required"), ("qualification", "Qualifications"), ("nice to have", "Nice to have")]
 STATUS_ORDER = {"missing": 0, "partly evidenced": 1, "evidenced": 2}
 BAR_COLOURS = {"evidenced": "#1F7A4D", "partly evidenced": "#E0A100", "missing": "#B42318"}
-
-
-def highlight_additions(current, suggested):
-    """Mark the words a suggestion adds or changes, so overclaims stand out."""
-    old = current.split()
-    new = suggested.split()
-    tidy = lambda words: [w.lower().strip(".,;:()") for w in words]
-    matcher = difflib.SequenceMatcher(a=tidy(old), b=tidy(new), autojunk=False)
-    parts = []
-    for tag, _, _, start, end in matcher.get_opcodes():
-        chunk = " ".join(new[start:end]).replace("$", "\\$")
-        if not chunk:
-            continue
-        if tag in ("insert", "replace"):
-            parts.append(f":orange-background[**{chunk}**]")
-        else:
-            parts.append(chunk)
-    return " ".join(parts)
 
 
 def breakdown_bar(counts):
@@ -45,7 +25,7 @@ def breakdown_bar(counts):
 
 def show_result(result, key="candidate", recruiter=False):
     """Draw the result. `key` keeps the filter buttons separate for each mode.
-    recruiter=True speaks about "the CV" and hides the CV rewrites, which are for candidates."""
+    recruiter=True speaks about "the CV" and hides the gap advice, which is for candidates."""
     whose = "the CV" if recruiter else "your CV"
     # ---------- Summary card ----------
     # Eligibility (right to work) isn't scored, so it's shown separately below
@@ -93,11 +73,11 @@ def show_result(result, key="candidate", recruiter=False):
                     st.caption(f"Job description says: \"{item['jd_evidence']}\"")
 
     # ---------- Tabs ----------
-    rewrites = result.get("rewrite_suggestions") or []
+    gaps = result.get("gap_talk") or []
     extras = [e for e in (result.get("extra_strengths") or []) if e]
     names = [f"Requirements ({len(requirements)})", f"Extra strengths ({len(extras)})"]
     if not recruiter:
-        names.insert(1, f"CV rewrites ({len(rewrites)})")
+        names.insert(1, f"Talking about gaps ({len(gaps)})")
     tabs = st.tabs(names)
     tab_requirements, tab_extras = tabs[0], tabs[-1]
 
@@ -141,19 +121,21 @@ def show_result(result, key="candidate", recruiter=False):
 
     if not recruiter:
         with tabs[1]:
-            if rewrites:
-                st.warning(
-                    "These are drafts. Words the AI added are highlighted. Only use a suggestion if every highlighted word is true."
+            if gaps:
+                st.caption(
+                    "For your cover letter or interview. Each suggestion only uses experience your CV shows. "
+                    "Read it before you use it."
                 )
             else:
-                st.write("No rewrite suggestions for this role.")
-            for item in rewrites:
+                st.write("No important gaps for this role.")
+            for item in gaps:
                 with st.container(border=True):
-                    st.caption(f"Covers: {item.get('covers', '')}")
-                    st.markdown(f"**Now:** {item.get('current_cv_line', '')}")
-                    st.markdown(
-                        "**Suggested:** " + highlight_additions(item.get("current_cv_line", ""), item.get("suggested_line", ""))
-                    )
+                    st.markdown(f"**{item.get('requirement', '')}**")
+                    if item.get("closest_cv_evidence"):
+                        st.markdown(f"Closest experience in your CV:\n> {item['closest_cv_evidence']}")
+                    st.markdown(f"**How to say it:** {item.get('how_to_say_it', '')}")
+                    if item.get("how_to_close_it"):
+                        st.markdown(f"**How to close it:** {item['how_to_close_it']}")
 
     with tab_extras:
         if extras:
