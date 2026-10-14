@@ -24,7 +24,9 @@ Step 3. List deal-breakers. Only include a missing requirement when the job desc
 
 Step 4. Help the candidate talk honestly about their most important gaps. Pick up to 5 requirements of type "required" or "qualification" whose status is "missing" or "partly evidenced", most important first. For each one:
 - closest_cv_evidence: the CV text that comes closest to this requirement, copied exactly from the CV under the same quote rules as Step 2, or "" if nothing comes close.
-- how_to_say_it: one or two sentences in the first person that the candidate could use in a cover letter or interview. Name the gap plainly, then point to the closest real experience. Never claim the requirement is met, and never add tools, numbers, employers, clients or responsibilities that aren't in the CV.
+- how_to_say_it: one sentence of at most 30 words, in the first person, that the candidate could say in an interview or cover letter. Start with something specific they did, taken from the CV, then say in plain words how it connects to this requirement. Don't open with what's missing ("While I haven't", "Although I lack"), don't promise to learn on the job, and don't use stock phrases like "core strength", "passionate about" or "complex processes". Never claim the requirement is met, and never add tools, numbers, employers, clients or responsibilities that aren't in the CV. If nothing in the CV comes close, leave this requirement out.
+  Bad: "While I haven't worked in retail, my core strength is translating data into insights, though I'd need to learn retail specifics on the job."
+  Good: "I built demand forecasts for an FMCG distributor, so I know the stock and promotion questions retail teams ask."
 - how_to_close_it: one concrete step that would close the gap, such as a named certification, a short course topic or a small project. No prices or dates.
 
 Step 5. List up to 5 strengths from the CV that are relevant to this role but not asked for in the job description.

@@ -60,7 +60,7 @@ A deal-breaker only counts if Claude quotes the JD's own wording, the code finds
 
 - Only use what is written in the CV. Never assume experience that isn't stated.
 - Every "evidenced" or "partly evidenced" item gives a list of exact CV quotes, never joined with "|" or "..." and never with explanation mixed in. The app checks each quote against the CV. No quote means "missing".
-- Gap advice names the gap plainly, points only to experience in the CV, never claims the requirement is met, and adds no tools, numbers, employers, clients or responsibilities.
+- Gap advice is one sentence of at most 30 words that starts with something specific from the CV and connects it to the requirement in plain words. It doesn't open with what's missing, doesn't promise to learn on the job, avoids stock phrases, never claims the requirement is met and adds nothing that isn't in the CV. If nothing in the CV comes close, the gap is left out. The prompt includes one bad and one good example (changed 14 October 2026, after the first version produced defensive, padded sentences).
 - The app blanks a "closest experience" quote that isn't in the CV word for word, and drops any advice containing a number the CV doesn't have. (History: the earlier CV rewrites kept inserting JD phrases, e.g. turning "drove AWS partner programme delivery" into "ran vendor assessments", which is why they were replaced.)
 - Return only the structured output below, with no extra commentary.
 
