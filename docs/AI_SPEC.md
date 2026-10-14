@@ -16,6 +16,7 @@ The AI version reads the job description and the CV together and returns a weigh
 | Partial matches | Close but not exact counts as half, shown as "partly evidenced" | Tells me which CV lines to reword |
 | Suggestions | Rewrite tips based only on experience already in the CV | Never suggests claiming something I haven't done |
 | Extras | Up to 5 relevant strengths the JD didn't ask for | Useful for cover letters and interviews |
+| Right to work (added 14 October 2026) | Work eligibility, visa or sponsorship, citizenship or residency conditions are typed "eligibility": not scored, never a deal-breaker, shown as "Check yourself" (candidate) or "Check with the candidate" (recruiter) | A CV can't show right to work and usually doesn't mention it. Blocking a 60% match on it overrode the score with something the candidate already knows |
 
 ## What the AI does
 
@@ -50,6 +51,8 @@ The app calculates the score in code from the AI's labels, rather than asking th
 When a must-have is missing but the CV shows something related, the app says so, e.g. "Requires Google Cloud. You have AWS and Azure, so check whether they'd accept equivalent experience." I make the final call.
 
 ### Deal-breaker check (added 11 October 2026)
+
+Right-to-work conditions never count as deal-breakers (see Decisions); the code moves them to a separate list with `separate_eligibility`.
 
 A deal-breaker only counts if Claude quotes the JD's own wording, the code finds that wording in the JD, and the wording contains a must-word: "must", "required", "essential", "mandatory", "minimum" or "at least". Years of experience stated without one of these words (e.g. "2-3 years as a Business Analyst") lower the score but don't block the role. "Or similar" and "or equivalent" are flexible.
 

@@ -7,7 +7,7 @@ MODEL_ID = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
 REGION = "eu-north-1"
 
 # Points per requirement type, and how much of those points each status earns
-WEIGHTS = {"required": 3, "qualification": 3, "nice to have": 1}
+WEIGHTS = {"required": 3, "qualification": 3, "nice to have": 1, "eligibility": 0}  # eligibility is checked by a person, never scored
 CREDIT = {"evidenced": 1.0, "partly evidenced": 0.5, "missing": 0.0}
 
 INSTRUCTIONS = """You compare a job description with a candidate's CV.
@@ -47,6 +47,7 @@ Skip company background, benefits and equal-opportunity text. Merge duplicates. 
 - "required": skills and experience the role needs
 - "nice to have": described as a plus, preferred, beneficial, desirable or valuable
 - "qualification": degrees, certifications, languages and minimum years of experience
+- "eligibility": right to work, visa or sponsorship, citizenship or residency conditions
 
 Return only JSON in exactly this shape, with no other text:
 {"role_title": "", "requirements": [{"skill": "", "type": "required"}]}"""
@@ -131,6 +132,43 @@ def check_evidence(result, cv_text):
 MUST_WORDS = ["must", "required", "essential", "mandatory", "minimum", "at least"]
 
 
+# Right to work can't be judged from a CV, so these are listed for a person to check
+ELIGIBILITY_WORDS = [
+    "eligible to work", "eligibility to work", "right to work", "work permit", "work authori",
+    "authorised to work", "authorized to work", "visa", "sponsorship", "citizenship",
+    "permanent resident", "residency",
+]
+
+
+def is_eligibility(text):
+    text = simplify(text)
+    return any(word in text for word in ELIGIBILITY_WORDS)
+
+
+def separate_eligibility(result):
+    """Move right-to-work conditions out of the score and the deal-breakers, into a list to check."""
+    checks = []
+    for req in result["requirements"]:
+        if req["type"] == "eligibility" or is_eligibility(req["skill"]):
+            req["type"] = "eligibility"
+            checks.append({"requirement": req["skill"], "jd_evidence": ""})
+    kept = []
+    for item in result["deal_breakers"]:
+        if is_eligibility(item.get("requirement", "") + " " + item.get("jd_evidence", "")):
+            checks.append({"requirement": item.get("requirement", ""), "jd_evidence": item.get("jd_evidence", "")})
+        else:
+            kept.append(item)
+    result["deal_breakers"] = kept
+    # One entry per condition, keeping the job description's wording where we have it
+    unique = {}
+    for check in checks:
+        key = simplify(check["requirement"])
+        if key not in unique or check["jd_evidence"]:
+            unique[key] = check
+    result["eligibility_checks"] = list(unique.values())
+    return result
+
+
 def check_deal_breakers(result, jd_text):
     """Keep only deal-breakers whose JD wording is real and says the requirement is mandatory."""
     jd = simplify(jd_text)
@@ -190,6 +228,7 @@ def analyse(jd_text, cv_text, requirements=None):
     result = apply_fixed_list(result, requirements)
     result = check_evidence(result, cv_text)
     result = check_deal_breakers(result, jd_text)
+    result = separate_eligibility(result)
     result = check_rewrites(result, cv_text)
     score = calculate_score(result)
     result["score"] = score

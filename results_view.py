@@ -48,7 +48,8 @@ def show_result(result, key="candidate", recruiter=False):
     recruiter=True speaks about "the CV" and hides the CV rewrites, which are for candidates."""
     whose = "the CV" if recruiter else "your CV"
     # ---------- Summary card ----------
-    requirements = result["requirements"]
+    # Eligibility (right to work) isn't scored, so it's shown separately below
+    requirements = [r for r in result["requirements"] if r["type"] != "eligibility"]
     counts = {status: sum(1 for r in requirements if r["status"] == status) for status in STATUS_ICON}
     verdict = result["verdict"]
 
@@ -80,6 +81,16 @@ def show_result(result, key="candidate", recruiter=False):
                 st.caption(f"Job description says: \"{item.get('jd_evidence', '')}\"")
                 if item.get("related_cv_evidence"):
                     st.caption(f"Related in {whose}: \"{item['related_cv_evidence']}\"")
+
+    checks = result.get("eligibility_checks") or []
+    if checks:
+        with st.container(border=True):
+            who = "Check with the candidate" if recruiter else "Check yourself"
+            st.info(f"**{who}:** FitProof can't tell these from a CV, so they aren't in the score or the verdict.")
+            for item in checks:
+                st.markdown(f"**{item['requirement']}**")
+                if item.get("jd_evidence"):
+                    st.caption(f"Job description says: \"{item['jd_evidence']}\"")
 
     # ---------- Tabs ----------
     rewrites = result.get("rewrite_suggestions") or []

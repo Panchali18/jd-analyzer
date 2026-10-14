@@ -519,6 +519,7 @@ Streamlit shows verdict, score, evidence and suggestions
 | Check | Function | What it does |
 | --- | --- | --- |
 | Fixed list | `apply_fixed_list` | Puts the requirement list back exactly as call 1 fixed it: types from the list, anything the AI skipped counts as missing. Also accepts items where the AI used the wrong field name |
+| Right to work | `separate_eligibility` | Moves work-eligibility, visa, sponsorship, citizenship and residency conditions out of the score and the deal-breakers into `eligibility_checks`, matched on the AI's "eligibility" type or on phrases like "eligible to work" and "visa" (not "citizen" or "sponsor" alone, which appear in "citizen developer" and "executive sponsor") |
 | CV evidence | `check_evidence` | Every quote Claude gives must appear in the CV word for word; otherwise the screen shows a warning |
 | Deal-breakers | `check_deal_breakers` | Kept only if Claude quotes JD wording that appears in the JD and contains a must-word (must, required, essential, mandatory, minimum, at least) |
 | CV rewrites | `check_rewrites` | Dropped if the "Now" line isn't in the CV, or if the suggestion loses or adds any number |
