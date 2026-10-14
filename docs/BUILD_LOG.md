@@ -8,7 +8,7 @@ FitProof closes on **Thursday 15 October 2026**. After that: no new features, on
 
 | When | Item | What I learn | Cut rule |
 | --- | --- | --- | --- |
-| Wed 14 Oct, afternoon | 1. Candidate mode UI: button works without clicking outside the box, result leads with evidence count, visible analysis steps, tidier start screen | How Streamlit reruns, and how layout decides what people read first | Max 1.5 hours |
+| Wed 14 Oct, afternoon (done) | 1. Candidate mode UI: button works without clicking outside the box, result leads with evidence count, visible analysis steps, tidier start screen | How Streamlit reruns, and how layout decides what people read first | Max 1.5 hours |
 | Wed 14 Oct, afternoon | 2. "How to talk about this gap" instead of CV rewrites | Rewriting a prompt and checking it against an answer key | Max 1.5 hours |
 | Thu 15 Oct, morning | 3. Recruiter shortlist and decision: candidates grouped by evidence, a decision and reason per candidate, name revealed after the decision, audit log; results saved once so the demo costs nothing | Designing human oversight as a workflow, not a disclaimer | Max 4 hours |
 | Thu 15 Oct, afternoon | 4. Paste a job link (Greenhouse, Lever, Ashby) and FitProof fetches the description | How a public API works | Max 1.5 hours; dropped, not postponed, if time runs out |
@@ -115,6 +115,8 @@ Saving a change:
 
 ## Up next
 
+The current plan is the **Close plan** at the top of this log (FitProof closes 15 October 2026). This list is the history of earlier to-dos.
+
 - [x] Protect `.env` with a `.gitignore` and save changes to GitHub
 - [x] Remove ambiguous short words ("cv", "go", "rest", "pm", "planning", "reasoning"). "ai" and "react" kept on purpose
 - [x] Add my tools: Dynamics 365, Copilot Studio, Power Automate, Azure DevOps, Fabric
@@ -137,8 +139,8 @@ Saving a change:
 - [ ] 2 quotes per run still fail the evidence check: find out whether it's PDF text or Claude rewording
 - [x] Stage 2: AI reads the JD, picks out requirements, and marks each as required, nice-to-have or qualification
 - [x] Stage 2: missing must-haves give "Not a fit", only when the JD uses must-words
-- [ ] Add a poor-fit JD to the test set: an AI job title with an accounting or finance body (CPA, CFA)
+- [ ] Not doing: a poor-fit JD in the test set
 - [x] Upgrade Streamlit (1.65.0)
 - [ ] Idea: a third list, "Your strengths this JD didn't ask for"
 - [ ] Parked (the AI version replaces these): clean skill names, technical vs soft grouping, ranking missing skills, plurals like "pipelines", generic words like "development", duplicate skills, Sage
-- [ ] Stage 3: remove unsourced claims from the PRD and narrow the target user
+- [ ] Not doing: a full PRD rewrite (a short "closed" note instead)
