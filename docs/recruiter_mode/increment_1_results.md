@@ -98,3 +98,7 @@ Five fuller fictional CVs written for the recruiter shortlist (cv_16 to cv_20) e
 | "French (fluent)" and "German (native)" under a LANGUAGES heading were removed as nationalities | A language level in brackets marks the line as a language skill |
 
 Development and held-out sets still score 100% after the fixes.
+
+## Fix found in the recruiter screen (14 October 2026)
+
+"Ho Chi Minh City" in cv_05's address was detected as a person's name and then removed wherever it appeared, including the job line ("Project Manager, FPT Software, [NAME]"). The eval didn't catch it because the city wasn't on that CV's keep-list. Fix: anything inside an address is no longer accepted as a name. Development and held-out sets still score 100%, and a scan of all 24 CVs' experience sections shows no other damaged job line.

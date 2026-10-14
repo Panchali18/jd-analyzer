@@ -70,6 +70,14 @@ def find_identifiers(text):
     heading = re.search(REFERENCE_HEADING, text)
     references_start = heading.start() if heading else len(text)
 
+    # Places inside an address are not names ("Ho Chi Minh City" would otherwise be removed everywhere)
+    address_spans = []
+    for placeholder, pattern in CUSTOM_RULES:
+        if placeholder == "ADDRESS":
+            for match in re.finditer(pattern, text):
+                group = 1 if match.re.groups else 0
+                address_spans.append((match.start(group), match.end(group)))
+
     # 1. Presidio, limited to the types we trust
     for item in get_analyzer().analyze(text=text, language="en", entities=list(PRESIDIO_TYPES)):
         if item.score < MIN_SCORE:
@@ -85,6 +93,8 @@ def find_identifiers(text):
                 continue
             if start >= header_end:
                 continue  # names further down are usually employers or products ("Severn Trent")
+            if any(a <= start and end <= b for a, b in address_spans):
+                continue  # a place in the address, not the candidate's name
         if item.entity_type == "NRP" and ("language" in line.lower() or LANGUAGE_LEVEL.search(line)):
             continue  # "Arabic (native)" or "French (fluent)" is a language skill, not a nationality
         if item.entity_type == "URL" and re.fullmatch(r"[A-Z][a-z]?\.[A-Z][a-z]+", text[start:end]):

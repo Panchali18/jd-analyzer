@@ -115,7 +115,7 @@ def short_group(result):
 
 
 def show_shortlist(job, candidates):
-    """One compact table. Click a row to review that candidate."""
+    """One compact table. Tick a row to review that candidate."""
     decisions = st.session_state.get("decisions", {})
     order = {key: position for position, (key, _, _) in enumerate(GROUPS)}
     ids = sorted(candidates, key=lambda c: (order[group_of(candidates[c])], c))
@@ -134,8 +134,7 @@ def show_shortlist(job, candidates):
             }
         )
     st.caption(
-        "Grouped by evidence for the required items, then in number order. Not ranked by score. "
-        "Click a row to review the candidate."
+        "Grouped by evidence for the required items, then in number order. Not ranked by score."
     )
     event = st.dataframe(
         rows, hide_index=True, on_select="rerun", selection_mode="single-row", key=f"table_{job}", width="stretch"
@@ -235,21 +234,20 @@ def show_audit_log():
 
 def render(max_analyses):
     results = load_results()
-    with st.sidebar:
-        st.header("Screen candidates")
-        job = st.selectbox("Job", list(results))
-        st.caption(
-            f"{len(results[job]['candidates'])} fictional candidates, screened once by Claude on their blind CVs "
-            "against the same requirement list. No AI call happens on this screen."
-        )
-
     st.title("FitProof · Recruiter mode")
     st.info("Demo: all CVs and candidates are fictional.")
 
+    job = st.selectbox("Job", list(results))
     candidates = results[job]["candidates"]
+    st.caption(
+        f"{len(candidates)} candidates, screened once by Claude on their blind CVs against the same "
+        "requirement list. No AI call happens on this screen."
+    )
     show_shortlist(job, candidates)
     open_id = st.session_state.get("open_candidate")
     if open_id in candidates:
         show_review(job, open_id, candidates[open_id])
+    else:
+        st.info("Tick the box at the start of a candidate's row to see their evidence and record a decision.")
     st.divider()
     show_audit_log()
