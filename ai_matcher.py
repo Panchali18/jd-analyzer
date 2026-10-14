@@ -59,8 +59,10 @@ def call_claude(system, user_text):
         modelId=MODEL_ID,
         system=[{"text": system}],
         messages=[{"role": "user", "content": [{"text": user_text}]}],
-        inferenceConfig={"maxTokens": 4000, "temperature": 0},
+        inferenceConfig={"maxTokens": 10000, "temperature": 0},
     )
+    if response.get("stopReason") == "max_tokens":
+        raise ValueError("The AI's answer was too long and got cut off. Try a shorter job description.")
     reply = response["output"]["message"]["content"][0]["text"]
     # Keep only the JSON, in case Claude adds anything around it
     start = reply.find("{")

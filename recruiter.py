@@ -55,7 +55,11 @@ def screen(jd_text, blind_text):
         requirements = job_requirements(jd_text)
         st.write(f"✓ {len(requirements['requirements'])} requirements, the same for every candidate")
         st.write("Checking the blind CV against each requirement...")
-        result = analyse(jd_text, blind_text, requirements)
+        try:
+            result = analyse(jd_text, blind_text, requirements)
+        except Exception:
+            status.update(label="Something went wrong", state="error")
+            raise
         status.update(label="Screening done", state="complete", expanded=False)
     return result
 

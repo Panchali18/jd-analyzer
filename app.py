@@ -34,7 +34,11 @@ def check_fit(jd_text, cv_text):
         requirements = extract_requirements(jd_text)
         st.write(f"✓ Found {len(requirements['requirements'])} requirements")
         st.write("Looking for evidence of each one in your CV...")
-        result = analyse(jd_text, cv_text, requirements)
+        try:
+            result = analyse(jd_text, cv_text, requirements)
+        except Exception:
+            status.update(label="Something went wrong", state="error")
+            raise
         status.update(label="Done", state="complete", expanded=False)
     return result
 
