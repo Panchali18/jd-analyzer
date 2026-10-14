@@ -540,30 +540,38 @@ A recruiter-side mode that shows compliance by design for CV screening, a high-r
 
 ### Flow
 ```
-Recruiter picks a fictional CV and a job (sidebar)
+Offline, once: screen_all.py
+  for each job: fixed requirement list (call 1), saved
+  for each of 20 fictional CVs: blind.py removes identifiers, analyse() on the blind CV (call 2)
+  → test_data/recruiter/screening_results.json
          ↓
-blind.py removes direct identifiers (Presidio + spaCy en_core_web_lg + our own rules)
+Recruiter screen (no AI call): pick a job
          ↓
-Fixed requirement list for the job (call 1, cached per job)
+Candidates grouped by evidence for required items, not ranked:
+every requirement / gaps on a few (up to a third missing) / gaps on most
          ↓
-analyse() on the blind CV only (call 2) → same checks and scoring as candidate mode
+Review: evidence and blind CV → decision (Shortlist / Not now) + reason (required)
          ↓
-Result first, blind CV underneath (original behind a toggle, for the demo only)
+Name revealed only after the decision; audit log row added (append-only, CSV download)
 ```
 
 ### Files
 | File | Purpose |
 | --- | --- |
 | `app.py` | Mode switch; loads `recruiter.py` only when recruiter mode is chosen |
-| `recruiter.py` | Recruiter screen: candidate and job picker, blind CV view, screening steps |
+| `recruiter.py` | Recruiter screen: shortlist grouped by evidence, review, decision with reason, name revealed after the decision, audit log |
+| `screen_all.py` | Screens every fictional CV against each job once and saves `screening_results.json`, so the demo makes no AI calls |
 | `results_view.py` | Results screen shared by both modes; `recruiter=True` hides the gap advice and says "the CV" |
 | `blind.py` | Finds and replaces identifiers with labels such as `[NAME]`, `[ADDRESS]` |
 | `eval_blind.py` | Scores `blind.py` against an answer key: caught only if every letter and digit is removed |
 | `compare_blind.py`, `compare_requirements.py` | Blind vs original comparison on the same job |
-| `test_data/recruiter/`, `test_data/recruiter_holdout/` | 15 development and 4 held-out fictional CVs with answer keys |
+| `test_data/recruiter/`, `test_data/recruiter_holdout/` | 15 development and 4 held-out fictional CVs with answer keys, plus 5 fuller CVs (cv_16 to cv_20) at different fit levels for the shortlist |
 
 ### Results
 Held-out run 1 (official): 62% of identifiers caught, 95% of job details kept. After fixes: 100% and 100% on both sets (no longer independent). Blind vs original with a fixed list: −1, 0 and +3 points on 3 CVs. Details: `docs/recruiter_mode/increment_1_results.md`.
 
 ### Deployment note
 The spaCy large model (about 400 MB) installs from `requirements.txt` and fits within Streamlit Community Cloud's memory. The first recruiter-mode load after a restart takes about 20 seconds.
+
+### Audit log
+Each decision adds a row: time (UTC), job, candidate number, decision, reason, the evidence counts and AI score shown at that moment, and the name revealed. Rows are never edited; changing a decision adds a new row. In the public demo the log lives in the visit's session state and can be downloaded as CSV; a real product would write it to a database.

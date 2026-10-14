@@ -29,12 +29,14 @@ The AI does the judging, and the code does the scoring, so the same labels alway
 
 **Recruiter mode (demo)**
 
-Switch the mode in the sidebar to see the other side: screening a candidate with their personal details hidden. CV screening is a high-risk use under the EU AI Act, so this mode is built to show what compliance by design looks like. Fictional CVs only.
+Switch the mode in the sidebar to see the other side: a recruiter screening 20 fictional candidates with their personal details hidden. CV screening is a high-risk use under the EU AI Act, so this mode is built to show what compliance by design looks like. Fictional CVs only.
 - removes names, contact details, address, age, gender markers, nationality, marital status, immigration status and referees before the AI sees the CV
 - tested on 19 fictional CVs from 12 regions, with the first held-out score kept as the official result (62%, since fixed)
 - checked that blinding doesn't change the match (−1, 0 and +3 points on three CVs)
+- groups candidates by evidence instead of ranking them, so the AI's score doesn't decide who gets looked at first
+- the recruiter records every decision with a reason; the name appears only after the decision, and every decision goes into an audit log you can download
 
-Next: a bias test suite, a recruiter decision step with an audit log, and a model card. Plan and results: [docs/recruiter_mode](docs/recruiter_mode/).
+Plan and results: [docs/recruiter_mode](docs/recruiter_mode/).
 
 ## Tools
 
