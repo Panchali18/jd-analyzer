@@ -34,7 +34,8 @@ Switch the mode in the sidebar to see the other side: a recruiter screening 20 f
 - tested on 19 fictional CVs from 12 regions, with the first held-out score kept as the official result (62%, since fixed)
 - checked that blinding doesn't change the match (−1, 0 and +3 points on three CVs)
 - groups candidates by evidence instead of ranking them, so the AI's score doesn't decide who gets looked at first
-- the recruiter records every decision with a reason; the name appears only after the decision, and every decision goes into an audit log you can download
+- works like an applicant tracking system (current role, stage, a reason picked from a list) but without the ranking, bulk rejects or automatic advancing that make AI screening risky
+- the recruiter decides each candidate with a reason; the name appears only after the decision, and every decision goes into an audit log you can download
 
 Plan and results: [docs/recruiter_mode](docs/recruiter_mode/).
 

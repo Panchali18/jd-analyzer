@@ -547,10 +547,12 @@ Offline, once: screen_all.py
          ↓
 Recruiter screen (no AI call): pick a job
          ↓
-One table, candidates grouped by evidence for required items, not ranked:
-none missing / a few missing (up to a third) / most missing; no percentage shown
+One table like an applicant tracking system: candidate, current role (from the blind CV),
+evidence group (none missing / a few missing, up to a third / most missing), required met, missing, stage.
+Grouped, then in number order; never ranked; no percentage shown
          ↓
-Review: evidence and blind CV → decision (Shortlist / Not now) + reason (required)
+Review one candidate: evidence per requirement and blind CV → stage (Advance to phone screen /
+Hold / Reject) + reason picked from a list (required) + note (required for "Other")
          ↓
 Name revealed only after the decision; audit log row added (append-only, CSV download)
 ```
@@ -574,4 +576,15 @@ Held-out run 1 (official): 62% of identifiers caught, 95% of job details kept. A
 The spaCy large model (about 400 MB) installs from `requirements.txt` and fits within Streamlit Community Cloud's memory. The first recruiter-mode load after a restart takes about 20 seconds.
 
 ### Audit log
-Each decision adds a row: time (UTC), job, candidate number, decision, reason, the evidence counts and AI score shown at that moment, and the name revealed. Rows are never edited; changing a decision adds a new row. In the public demo the log lives in the visit's session state and can be downloaded as CSV; a real product would write it to a database.
+Each decision adds a row: time (UTC), job, candidate number, stage, reason, note, the AI evidence group and counts shown at that moment, and the name revealed. Logging the AI group next to the decision shows where the person overrode it. Rows are never edited; changing a decision adds a new row. In the public demo the log lives in the visit's session state and can be downloaded as CSV; a real product would write it to a database.
+
+### How the design maps to the EU AI Act (high-risk recruitment, Annex III 4(a))
+| Article | What it asks | In FitProof's recruiter demo |
+| --- | --- | --- |
+| 10, data and bias | Data checked for bias | Direct identifiers removed before the AI sees a CV; blinding tested on development and held-out sets |
+| 13, transparency | Users can interpret the output | Every group comes with the evidence per requirement and the CV quotes behind it; no unexplained score |
+| 14, human oversight | People can understand, override and not over-rely on the output | Candidates grouped, not ranked; no bulk reject and no automatic advancing; each decision is made by a person, one candidate at a time |
+| 12 and 26, logs | Events recorded; deployers keep logs | Append-only audit log with the reason and what the AI showed at that moment (demo: per visit, CSV download) |
+| 86, explanation | People affected can get an explanation of a decision | A reason from a fixed list is required for every decision |
+
+This is a portfolio demo, not a compliance assessment.

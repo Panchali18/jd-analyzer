@@ -21,7 +21,26 @@ GROUPS = [
     ("few", "A few missing", "Up to a third of required items missing."),
     ("most", "Most missing", "More than a third of required items missing."),
 ]
-DECISIONS = ["Shortlist", "Not now"]
+# Decisions work like a real applicant tracking system: a stage plus a reason picked from a list.
+# Every reason is logged, and "Other" needs a note.
+STAGES = {
+    "Advance to phone screen": [
+        "Meets the required items",
+        "Strong on most required items, gaps worth discussing",
+        "Other (see note)",
+    ],
+    "Hold": [
+        "Borderline: compare with other candidates first",
+        "Waiting for hiring manager input",
+        "Other (see note)",
+    ],
+    "Reject": [
+        "Missing required experience",
+        "Missing a required qualification",
+        "Better matched candidates for this role",
+        "Other (see note)",
+    ],
+}
 
 
 @st.cache_data(show_spinner=False)
@@ -50,6 +69,18 @@ def group_of(result):
     return "few" if missing <= total / 3 else "most"
 
 
+def current_role(candidate_id):
+    """The first job under EXPERIENCE, without dates: what recruiters look at first. Blinding keeps it."""
+    blind_text, _ = blind_cv((CV_FOLDER / f"{candidate_id}.txt").read_text())
+    lines = blind_text.splitlines()
+    for position, line in enumerate(lines):
+        if line.strip().upper() == "EXPERIENCE":
+            for following in lines[position + 1 :]:
+                if following.strip():
+                    return following.split(" | ")[0].split(" (")[0].strip()
+    return ""
+
+
 def label(candidate_id):
     return f"Candidate {candidate_id[-2:]}"
 
@@ -61,18 +92,19 @@ def real_name(candidate_id):
     return names[0] if names else "name not found"
 
 
-def record_decision(job, candidate_id, result, decision, reason):
+def record_decision(job, candidate_id, result, stage, reason, note):
     total, evidenced, partly, missing = evidence(result)
-    st.session_state.setdefault("decisions", {})[(job, candidate_id)] = decision
+    st.session_state.setdefault("decisions", {})[(job, candidate_id)] = stage
     st.session_state.setdefault("audit_log", []).append(
         {
             "time (UTC)": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
             "job": job,
             "candidate": label(candidate_id),
-            "decision": decision,
-            "reason": reason.strip(),
-            "evidence shown": f"{evidenced} of {total} required, {partly} partly, {missing} missing",
-            "AI score shown": f"{result['score']}%",
+            "decision": stage,
+            "reason": reason,
+            "note": note.strip(),
+            "AI evidence group shown": short_group(result),
+            "evidence shown": f"{evidenced} of {total} required met, {partly} partly, {missing} missing",
             "name revealed": real_name(candidate_id),
         }
     )
@@ -94,11 +126,11 @@ def show_shortlist(job, candidates):
         rows.append(
             {
                 "Candidate": label(candidate_id),
+                "Current role": current_role(candidate_id),
                 "Evidence": short_group(candidates[candidate_id]),
-                "Met": f"{evidenced} of {total}",
-                "Partly": partly,
+                "Required met": f"{evidenced} of {total}",
                 "Missing": missing,
-                "Decision": f"{decided} · {real_name(candidate_id)}" if decided else "Not reviewed",
+                "Stage": f"{decided} · {real_name(candidate_id)}" if decided else "New",
             }
         )
     st.caption(
@@ -149,6 +181,7 @@ def show_review(job, candidate_id, result):
         st.subheader(label(candidate_id))
         if decided:
             st.success(f"**Decision recorded: {decided}.** {label(candidate_id)} is {real_name(candidate_id)}.")
+        st.caption(current_role(candidate_id))
         met_column, partly_column, missing_column = st.columns(3)
         met_column.metric("Required items met", f"{evidenced} of {total}")
         partly_column.metric("Partly met", partly)
@@ -162,22 +195,23 @@ def show_review(job, candidate_id, result):
                 st.info(f"**Check with the candidate:** {item['requirement']}")
             show_requirements(result)
         with decision_column:
-            with st.form(key=f"decide_{job}_{candidate_id}"):
-                st.markdown("**Your decision**")
-                decision = st.radio("Decision", DECISIONS, horizontal=True, label_visibility="collapsed")
-                reason = st.text_area(
-                    "Reason",
-                    placeholder="What in the evidence led to this decision? It goes into the audit log.",
-                    height=100,
-                )
-                submitted = st.form_submit_button("Record decision", type="primary", width="stretch")
-            st.caption("The name is shown only after you record a decision. Changing your mind adds a new line to the log.")
-            if submitted:
-                if len(reason.strip()) < 10:
-                    st.warning("Please give a reason of at least a few words.")
+            st.markdown("**Your decision**")
+            prefix = f"{job}_{candidate_id}"
+            stage = st.radio("Stage", list(STAGES), key=f"stage_{prefix}", label_visibility="collapsed")
+            reason = st.selectbox("Reason", STAGES[stage], index=None, placeholder="Choose a reason", key=f"reason_{prefix}")
+            note = st.text_area("Note (optional, required for Other)", key=f"note_{prefix}", height=80)
+            if st.button("Record decision", type="primary", width="stretch", key=f"record_{prefix}"):
+                if reason is None:
+                    st.warning("Choose a reason.")
+                elif reason.startswith("Other") and len(note.strip()) < 10:
+                    st.warning("Add a short note to explain \"Other\".")
                 else:
-                    record_decision(job, candidate_id, result, decision, reason)
+                    record_decision(job, candidate_id, result, stage, reason, note)
                     st.rerun()
+            st.caption(
+                "You decide each candidate individually; there's no bulk reject and nothing moves forward "
+                "automatically. The name is shown after you record a decision. Changing your mind adds a new line to the log."
+            )
             original = (CV_FOLDER / f"{candidate_id}.txt").read_text()
             blind_text, removed = blind_cv(original)
             with st.expander(f"Blind CV ({len(removed)} personal details removed)"):
