@@ -524,6 +524,9 @@ Streamlit shows verdict, score, evidence and suggestions
 | Deal-breakers | `check_deal_breakers` | Kept only if Claude quotes JD wording that appears in the JD and contains a must-word (must, required, essential, mandatory, minimum, at least) |
 | Gap advice | `check_gap_talk` | Blanks a "closest experience" quote that isn't in the CV, and drops advice containing a number the CV doesn't have |
 
+### Job links (added 14 October 2026)
+`job_link.py` turns a job link into plain text using the free public job APIs of Greenhouse (`boards-api.greenhouse.io/v1/boards/{board}/jobs/{id}`, content arrives HTML-escaped twice), Lever (`api.lever.co/v0/postings/{site}/{id}`, EU host `api.eu.lever.co`) and Ashby (`api.ashbyhq.com/posting-api/job-board/{board}`, then the job by id). Only these hosts are ever called, with a 10-second timeout and a size cap; any other link gets a plain message asking the user to paste the text. Results are cached for an hour per link. No new package: Python's built-in `urllib`.
+
 ### Deployment
 - Hosted on Streamlit Community Cloud from the `main` branch; every push redeploys.
 - The Bedrock API key is stored in the app's Secrets as `AWS_BEARER_TOKEN_BEDROCK` (root-level secrets become environment variables, which boto3 reads). It expires 30 days after creation and must be replaced.

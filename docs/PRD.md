@@ -1,6 +1,8 @@
 # Product Requirements Document (PRD)
 ## JD Analyzer & CV Matcher
 
+> **Status: closed on 14 October 2026.** This PRD is kept as the starting point. Some early claims and personas weren't researched and are superseded by what was built; see the README, `docs/AI_SPEC.md`, section 9R and the build log's close plan for the final scope and the "not doing" list.
+
 **Document Version:** 1.0  
 **Last Updated:** October 2026  
 **Status:** MVP Definition

@@ -23,6 +23,7 @@ Keywords catch tool names like Python or Power BI, but miss capabilities written
 - gives a weighted score and a verdict: Strong, Possible or Weak fit
 - says "Not a fit" when a must-have is missing, such as a certification, whatever the score
 - lists right-to-work conditions separately as "Check yourself", because a CV can't show them, so they never block the verdict
+- reads the job description from a job link when the job is posted through Greenhouse, Lever or Ashby (or you paste or upload it)
 - for the most important gaps, suggests how to talk about them honestly in a cover letter or interview, pointing to the closest real experience, and one step to close each gap
 
 The AI does the judging, and the code does the scoring, so the same labels always give the same score. The job description is read once into a fixed list of requirements, so every CV is measured against the same list. Full details are in the [AI spec](docs/AI_SPEC.md).
@@ -84,6 +85,21 @@ AWS_BEARER_TOKEN_BEDROCK=your-key-here
 - [Build log](docs/BUILD_LOG.md)
 - [Recruiter mode plan and results](docs/recruiter_mode/)
 
+## Limits
+
+What FitProof doesn't do, on purpose or not yet:
+
+- **It's one AI reading, not a judgement.** The code checks that every quote is really in the CV, but not that the AI judged it well. Calls between "partly evidenced" and "missing" can change between runs when the evidence is thin.
+- **In candidate mode, the job description is read fresh each time,** so the requirement list can differ slightly between two analyses of the same job. Recruiter mode uses one saved list per job.
+- **Tested on 2 job descriptions, my own CV and fictional CVs.** It hasn't been checked against real hiring outcomes.
+- **Blinding removes direct identifiers only.** University, employers, career gaps and affiliations stay visible because they matter for the match, and their effect on scores hasn't been tested (the bias test suite is on the "not doing" list). Family status and religion lines aren't removed.
+- **Right to work isn't assessed.** It's shown as something to check, never scored.
+- **Job links work for Greenhouse, Lever and Ashby only.** LinkedIn and Indeed have no public job API, and scraping is against their terms.
+- **Recruiter mode is a demo:** fictional candidates, no accounts, and the audit log lasts one visit (a real product would keep it in a database).
+- **Not legal advice,** and not an EU AI Act compliance assessment. The design choices are mapped to the Act in the [technical design](docs/TECHNICAL.md).
+
 ## Status
+
+**Closed on 14 October 2026.** No new features from here; only the Bedrock key renewal and fixes if something breaks. The build log's close plan lists what was built and what I chose not to build.
 
 FitProof is live on Streamlit Community Cloud, running Claude Haiku 4.5 via Amazon Bedrock (EU). On both test JDs it found every requirement in my answer key, where keyword matching missed most of them. Recruiter mode (blind screening on fictional CVs) is live as a demo. Public-demo safeguards: a free sample result, 3 analyses per visit, a document length limit, and no storage of uploaded CVs.

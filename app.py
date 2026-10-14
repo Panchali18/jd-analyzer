@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from pypdf import PdfReader
 
 from ai_matcher import analyse, extract_requirements
+from job_link import JobLinkError, fetch_job
 from results_view import show_result
 
 load_dotenv()
@@ -25,6 +26,12 @@ def read_file(uploaded_file):
         reader = PdfReader(io.BytesIO(uploaded_file.getvalue()))
         return "\n".join(page.extract_text() or "" for page in reader.pages)
     return uploaded_file.getvalue().decode("utf-8", errors="ignore")
+
+
+@st.cache_data(show_spinner=False, ttl=3600)
+def job_from_link(url):
+    """Fetch each link once an hour at most."""
+    return fetch_job(url)
 
 
 def check_fit(jd_text, cv_text):
@@ -61,9 +68,31 @@ with st.expander("Job description and CV", expanded=not has_result):
     with job_column:
         st.markdown("**1. The job**")
         jd_method = st.radio(
-            "Job description", ["Paste text", "Upload file"], horizontal=True, label_visibility="collapsed", key="jd_method"
+            "Job description",
+            ["Paste text", "Job link", "Upload file"],
+            horizontal=True,
+            label_visibility="collapsed",
+            key="jd_method",
         )
-        if jd_method == "Paste text":
+        if jd_method == "Job link":
+            jd_text = ""
+            link = st.text_input(
+                "Job link",
+                placeholder="https://jobs.lever.co/company/...",
+                label_visibility="collapsed",
+                key="jd_link",
+            )
+            st.caption("Works for jobs posted through Greenhouse, Lever or Ashby. For other sites, paste the text.")
+            if link:
+                try:
+                    with st.spinner("Fetching the job..."):
+                        title, jd_text = job_from_link(link)
+                    st.success(f"Loaded: **{title or 'job description'}** ({len(jd_text):,} characters)")
+                    with st.expander("Check the text"):
+                        st.text(jd_text)
+                except JobLinkError as error:
+                    st.warning(str(error))
+        elif jd_method == "Paste text":
             jd_text = st.text_area(
                 "Job description",
                 height=220,
