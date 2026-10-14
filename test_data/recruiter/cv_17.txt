@@ -1,0 +1,27 @@
+Mr Kwame Asante-Boateng
+k.asanteboateng@outlook.com | +352 621 448 207 | github.com/kasanteb
+Address: 14 Rue de Hollerich, 1741 Luxembourg
+Age: 36 | Nationality: Ghanaian | Married
+
+PROFILE
+AI Adoption Lead who takes AI pilots into production and teaches business teams to use them.
+
+EXPERIENCE
+AI Adoption Lead, Meridian Logistics Group, Luxembourg (2021 to present)
+He designed and delivered an AI training programme for 300 staff across finance, operations and sales.
+Runs quarterly workshops with business teams to find AI use cases and owns a backlog of 25 use cases.
+Moved 4 proofs of concept into production, including a document classification model used daily by the claims team.
+Built data pipelines in Azure Data Factory feeding the company's AI models.
+Leads troubleshooting of AI models in production with the IT operations team and wrote the runbooks.
+Mentors 6 data engineers and analysts.
+Documents solution architectures in line with the group's AI guidelines.
+
+Data Scientist, Norvane Insurance, Brussels (2016 to 2021)
+Built churn and pricing models in Python and presented results to business stakeholders.
+
+EDUCATION
+MSc Information Technology, University of Luxembourg, 2016
+BSc Computer Science, KNUST, Kumasi, 2012
+
+LANGUAGES
+English (fluent), French (professional working proficiency)

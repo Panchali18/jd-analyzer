@@ -1,0 +1,22 @@
+Ms Larissa Moreira Santos
+larissa.msantos@gmail.com | +353 87 552 1904 | linkedin.com/in/larissa-moreira-santos
+Address: 9 Harold's Cross Road, Dublin 6W
+Date of birth: 12/02/1994 | Nationality: Brazilian | Married
+
+PROFILE
+Business Analyst with three years in a regulated bank, working on GenAI tooling and shared platforms.
+
+EXPERIENCE
+Business Analyst, Harbourline Bank, Dublin (2022 to present)
+She leads business analysis for the bank's internal GenAI platform, used by 14 product teams.
+Wrote epics and user stories for a shared prompt library and an agent approval workflow, working with developers and data scientists in Dublin and Lisbon.
+Ran vendor assessments for three LLM tooling suppliers, covering security, data residency and pricing, and onboarded the selected vendor.
+Maintains the platform's control documentation for internal audit and the bank's AI governance board.
+Facilitates monthly discovery workshops with product owners to find and size new GenAI use cases.
+Reviewed API specifications with engineers for the integration between the platform and the bank's document store.
+
+Junior Analyst, Clearpath Payments, Lisbon (2020 to 2022)
+Gathered requirements for a merchant onboarding portal and supported user acceptance testing with 40 users.
+
+EDUCATION
+BSc Information Systems, Federal University of Minas Gerais, 2016

@@ -26,6 +26,8 @@ CUSTOM_RULES = [
     ("AGE", r"(?i)\b(age:?\s*[0-9]{2}|[0-9]{2} years old)\b"),
     ("MARITAL_STATUS", r"(?i)\b(married|divorced|widowed|separated|in a civil partnership)\b"),
     ("MARITAL_STATUS", r"(?i)\bmarital status:\s*(\w+)"),
+    # "Single" only as a stand-alone personal detail ("| Single"), never in a sentence ("a single source of truth")
+    ("MARITAL_STATUS", r"(?im)(?:^|\|)[ \t]*(single)[ \t]*(?=\||$)"),
     ("GENDER_MARKER", r"\b(Mr|Mrs|Ms|Miss|Mx)\b\.?"),
     ("GENDER_MARKER", r"(?i)\b(he|she|him|her|his|hers|himself|herself)\b"),
     ("GENDER_MARKER", r"(?i)\bgender:\s*(\w+)"),
@@ -42,6 +44,8 @@ CUSTOM_RULES = [
         ("ORIGIN", r"(?im)^\s*(?:native place|place of birth|birthplace|home ?town)\s*:\s*(.+)$"),
 ]
 REFERENCE_HEADING = r"(?im)^\s*(?:references|referees)\b"
+# A language level in brackets marks a languages line even without the word "language"
+LANGUAGE_LEVEL = re.compile(r"(?i)\((?:native|mother tongue|fluent|basic|intermediate|advanced|conversational|professional[^)]*|[ABC][12])\)")
 
 _analyzer = None
 
@@ -81,8 +85,8 @@ def find_identifiers(text):
                 continue
             if start >= header_end:
                 continue  # names further down are usually employers or products ("Severn Trent")
-        if item.entity_type == "NRP" and "language" in line.lower():
-            continue  # "Arabic (native)" is a language skill, not a nationality
+        if item.entity_type == "NRP" and ("language" in line.lower() or LANGUAGE_LEVEL.search(line)):
+            continue  # "Arabic (native)" or "French (fluent)" is a language skill, not a nationality
         if item.entity_type == "URL" and re.fullmatch(r"[A-Z][a-z]?\.[A-Z][a-z]+", text[start:end]):
             continue  # "B.Com" or "M.Sc" is a degree, not a web address
         found.append((start, end, PRESIDIO_TYPES[item.entity_type]))

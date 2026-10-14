@@ -86,3 +86,15 @@ Two of these fixes first caused regressions on the development set (a personal w
 The remaining changes are borderline calls (partly evidenced vs missing) on the same evidence lines, in both directions. No sign that blinding removes evidence or shifts scores one way.
 
 **Limits:** 3 CVs, one JD, one run each: a sanity check, not a bias test (increment 2). The list is fixed per app start, not yet saved and approved by a person; the fixed list still contains a near-duplicate (two vendor assessment items).
+
+
+## Fixes found by new CVs (14 October 2026)
+
+Five fuller fictional CVs written for the recruiter shortlist (cv_16 to cv_20) exposed two bugs, both fixed:
+
+| Bug | Fix |
+| --- | --- |
+| "Single" as a stand-alone personal detail wasn't removed | Matched only between "\|" separators or alone on a line, so "a single source of truth" is untouched |
+| "French (fluent)" and "German (native)" under a LANGUAGES heading were removed as nationalities | A language level in brackets marks the line as a language skill |
+
+Development and held-out sets still score 100% after the fixes.

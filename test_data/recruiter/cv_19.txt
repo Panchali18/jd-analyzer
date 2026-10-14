@@ -1,0 +1,22 @@
+Mr Lukas Schneider
+lukas.schneider@posteo.de | +49 151 2234 8890 | github.com/lschneider-ml
+Address: Leopoldstraße 88, 80802 München
+Born: 1995 | Nationality: German
+
+PROFILE
+Machine Learning Engineer focused on data pipelines and model deployment.
+
+EXPERIENCE
+Machine Learning Engineer, Voltara Energy, Munich (2022 to present)
+He builds and maintains data pipelines in Python and Airflow for demand forecasting models.
+Deployed 2 forecasting models to production on AWS and monitors their performance.
+Works with the IT team to integrate model outputs into the planning system.
+
+Data Analyst, Kestrel Retail, Munich (2019 to 2022)
+Built sales dashboards and automated weekly reporting.
+
+EDUCATION
+BSc Business Informatics, Technical University of Munich, 2018
+
+LANGUAGES
+German (native), English (fluent)
