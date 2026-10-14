@@ -1,6 +1,6 @@
 # Increment 1: Blind Screening Mode
 
-**Status:** Scoped 13 October 2026 · **Build started:** 13 October 2026, 14:22 · **Status:** Done 13 October 2026 · **Owner:** Panchali Das
+Scoped 13 October 2026 · **Build started:** 13 October 2026, 14:22 · **Status:** Done 13 October 2026 · **Owner:** Panchali Das
 **Part of:** [Recruiter mode, compliant by design](../PRD.md) (PRD section 9R)
 
 ## Goal

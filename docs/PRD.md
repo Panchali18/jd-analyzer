@@ -313,7 +313,7 @@ This is a **universal problem** — whether you're a fresh graduate or a 20-year
 
 ## 9R. Parallel Track: Recruiter Mode, Compliant by Design
 
-**Added:** 13 October 2026 · **Status:** Increment 1 in scope · **Relationship to other phases:** runs alongside the job-board and dashboard phases; it does not replace them.
+**Added:** 13 October 2026 · **Status:** Closed 14 October 2026 (see "Final status" below) · **Relationship to other phases:** runs alongside the job-board and dashboard phases; it does not replace them.
 
 ### Why
 Employer-side CV screening is a high-risk use under the EU AI Act (Annex III, point 4(a): systems used to analyse and filter job applications and evaluate candidates). Following the Digital Omnibus on AI (Regulation (EU) 2026/1744, in force 27 July 2026), the Annex III obligations apply from **2 December 2027**. Small recruitment agencies and SMEs hiring without HR teams will need to understand what compliance looks like in practice. Recruiter mode shows what compliance-by-design looks like in a small, working tool.
@@ -336,6 +336,14 @@ Both modes share the existing extraction and matching layer (`ai_matcher.py`).
 | 3 | Recruiter decision step + audit log | No automatic rejection. The recruiter records advance or decline with a reason. The log keeps inputs, model and prompt version, scores, decision and overrides | AI Act Art. 12, 14; GDPR Art. 22 | SQLite or Supabase, Langfuse |
 | 4 | Model card + classification note | Intended purpose, limits, bias results, and why candidate mode is likely minimal risk while recruiter mode is high risk | AI Act Art. 11 (lite) | Markdown |
 | Later | Evidence-linked scoring; candidate notice generator | Explanations a candidate can understand; notices deployers must give | AI Act Art. 13, 26, 86 | |
+
+### Final status (14 October 2026)
+| # | Outcome |
+| --- | --- |
+| 1 | Done: blind screening, tested on development and held-out sets (`docs/recruiter_mode/increment_1_*.md`) |
+| 2 | Not doing: a small fictional set can't give a meaningful bias result; the effect of proxies is listed as a known limit instead |
+| 3 | Done, in a simpler form: shortlist grouped by evidence (not ranked), stage plus a listed reason, name revealed after the decision, append-only audit log per visit with CSV download (`docs/recruiter_mode/shortlist_and_decisions.md`). No database or Langfuse |
+| 4 | Replaced by the README's Limits section and the EU AI Act mapping in `docs/TECHNICAL.md` |
 
 ### Explicitly out of scope
 - Video or voice analysis. Emotion recognition in the workplace is prohibited (AI Act Art. 5(1)(f)).
