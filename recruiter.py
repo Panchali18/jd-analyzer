@@ -11,15 +11,15 @@ from pathlib import Path
 import streamlit as st
 
 from blind import blind
-from results_view import show_result
+from results_view import STATUS_ICON
 
 CV_FOLDER = Path("test_data/recruiter")
 RESULTS_FILE = CV_FOLDER / "screening_results.json"
 REQUIRED_TYPES = ("required", "qualification")
 GROUPS = [
-    ("all", "Evidence for every requirement", "No required item missing."),
-    ("few", "Gaps on a few", "Up to a third of required items missing."),
-    ("most", "Gaps on most", "More than a third of required items missing."),
+    ("all", "None missing", "No required item missing."),
+    ("few", "A few missing", "Up to a third of required items missing."),
+    ("most", "Most missing", "More than a third of required items missing."),
 ]
 DECISIONS = ["Shortlist", "Not now"]
 
@@ -78,62 +78,110 @@ def record_decision(job, candidate_id, result, decision, reason):
     )
 
 
-def show_shortlist(job, candidates):
-    decisions = st.session_state.get("decisions", {})
-    grouped = {key: [] for key, _, _ in GROUPS}
-    for candidate_id, result in candidates.items():
-        grouped[group_of(result)].append(candidate_id)
+def short_group(result):
+    return {"all": "None missing", "few": "A few missing", "most": "Most missing"}[group_of(result)]
 
-    st.subheader("Candidates")
-    st.caption("Grouped by evidence for the required items, not ranked. Candidates within a group are in number order.")
-    for key, title, help_text in GROUPS:
-        ids = grouped[key]
-        with st.expander(f"{title} ({len(ids)})", expanded=key != "most"):
-            st.caption(help_text)
-            if not ids:
-                st.write("No candidates in this group.")
-            for candidate_id in ids:
-                total, evidenced, partly, _ = evidence(candidates[candidate_id])
-                decided = decisions.get((job, candidate_id))
-                status = f" · **{decided}** · {real_name(candidate_id)}" if decided else ""
-                left, right = st.columns([4, 1])
-                left.markdown(
-                    f"**{label(candidate_id)}** · evidence for {evidenced} of {total} required, "
-                    f"partly for {partly}{status}"
-                )
-                if right.button("Review", key=f"review_{job}_{candidate_id}", width="stretch"):
-                    st.session_state["open_candidate"] = candidate_id
+
+def show_shortlist(job, candidates):
+    """One compact table. Click a row to review that candidate."""
+    decisions = st.session_state.get("decisions", {})
+    order = {key: position for position, (key, _, _) in enumerate(GROUPS)}
+    ids = sorted(candidates, key=lambda c: (order[group_of(candidates[c])], c))
+    rows = []
+    for candidate_id in ids:
+        total, evidenced, partly, missing = evidence(candidates[candidate_id])
+        decided = decisions.get((job, candidate_id))
+        rows.append(
+            {
+                "Candidate": label(candidate_id),
+                "Evidence": short_group(candidates[candidate_id]),
+                "Met": f"{evidenced} of {total}",
+                "Partly": partly,
+                "Missing": missing,
+                "Decision": f"{decided} · {real_name(candidate_id)}" if decided else "Not reviewed",
+            }
+        )
+    st.caption(
+        "Grouped by evidence for the required items, then in number order. Not ranked by score. "
+        "Click a row to review the candidate."
+    )
+    event = st.dataframe(
+        rows, hide_index=True, on_select="rerun", selection_mode="single-row", key=f"table_{job}", width="stretch"
+    )
+    if event.selection.rows:
+        st.session_state["open_candidate"] = ids[event.selection.rows[0]]
+
+
+def show_requirements(result):
+    """The evidence for each requirement, without a percentage: required items first."""
+    items = [r for r in result["requirements"] if r["type"] != "eligibility"]
+    required = [r for r in items if r["type"] in REQUIRED_TYPES]
+    extra = [r for r in items if r["type"] not in REQUIRED_TYPES]
+    order = {"evidenced": 0, "partly evidenced": 1, "missing": 2}
+
+    def show(item):
+        icon = STATUS_ICON.get(item["status"], "❔")
+        quotes = item.get("cv_evidence") or []
+        if isinstance(quotes, str):
+            quotes = [quotes]
+        if item["status"] == "missing" or not quotes:
+            st.markdown(f"{icon} {item['skill']}")
+            return
+        with st.expander(f"{icon} {item['skill']}"):
+            for quote in quotes:
+                st.markdown(f"> {quote}")
+            if item.get("note"):
+                st.caption(item["note"])
+
+    st.markdown("**Required**")
+    for item in sorted(required, key=lambda r: order.get(r["status"], 3)):
+        show(item)
+    if extra:
+        with st.expander(f"Nice to have ({len(extra)})"):
+            for item in extra:
+                show(item)
 
 
 def show_review(job, candidate_id, result):
-    st.subheader(f"Reviewing {label(candidate_id)}")
+    total, evidenced, partly, missing = evidence(result)
     decided = st.session_state.get("decisions", {}).get((job, candidate_id))
-    if decided:
-        st.success(f"**Decision recorded: {decided}.** {label(candidate_id)} is {real_name(candidate_id)}.")
+    with st.container(border=True):
+        st.subheader(label(candidate_id))
+        if decided:
+            st.success(f"**Decision recorded: {decided}.** {label(candidate_id)} is {real_name(candidate_id)}.")
+        met_column, partly_column, missing_column = st.columns(3)
+        met_column.metric("Required items met", f"{evidenced} of {total}")
+        partly_column.metric("Partly met", partly)
+        missing_column.metric("Missing", missing)
 
-    show_result(result, key="recruiter", recruiter=True)
-
-    original = (CV_FOLDER / f"{candidate_id}.txt").read_text()
-    blind_text, removed = blind_cv(original)
-    with st.expander(f"The blind CV ({len(removed)} personal details removed)"):
-        st.code(blind_text, language=None, wrap_lines=True)
-
-    with st.form(key=f"decide_{job}_{candidate_id}", border=True):
-        st.markdown("**Your decision**")
-        decision = st.radio("Decision", DECISIONS, horizontal=True, label_visibility="collapsed")
-        reason = st.text_area(
-            "Reason",
-            placeholder="What in the evidence led to this decision? This goes into the audit log.",
-            height=80,
-        )
-        submitted = st.form_submit_button("Record decision", type="primary")
-    st.caption("The name is shown only after you record a decision. Changing your mind adds a new line to the log.")
-    if submitted:
-        if len(reason.strip()) < 10:
-            st.warning("Please give a reason of at least a few words.")
-        else:
-            record_decision(job, candidate_id, result, decision, reason)
-            st.rerun()
+        evidence_column, decision_column = st.columns([3, 2], gap="large")
+        with evidence_column:
+            for item in result.get("deal_breakers") or []:
+                st.error(f"**Must-have missing:** {item['requirement']}")
+            for item in result.get("eligibility_checks") or []:
+                st.info(f"**Check with the candidate:** {item['requirement']}")
+            show_requirements(result)
+        with decision_column:
+            with st.form(key=f"decide_{job}_{candidate_id}"):
+                st.markdown("**Your decision**")
+                decision = st.radio("Decision", DECISIONS, horizontal=True, label_visibility="collapsed")
+                reason = st.text_area(
+                    "Reason",
+                    placeholder="What in the evidence led to this decision? It goes into the audit log.",
+                    height=100,
+                )
+                submitted = st.form_submit_button("Record decision", type="primary", width="stretch")
+            st.caption("The name is shown only after you record a decision. Changing your mind adds a new line to the log.")
+            if submitted:
+                if len(reason.strip()) < 10:
+                    st.warning("Please give a reason of at least a few words.")
+                else:
+                    record_decision(job, candidate_id, result, decision, reason)
+                    st.rerun()
+            original = (CV_FOLDER / f"{candidate_id}.txt").read_text()
+            blind_text, removed = blind_cv(original)
+            with st.expander(f"Blind CV ({len(removed)} personal details removed)"):
+                st.code(blind_text, language=None, wrap_lines=True)
 
 
 def show_audit_log():
@@ -165,18 +213,9 @@ def render(max_analyses):
     st.info("Demo: all CVs and candidates are fictional.")
 
     candidates = results[job]["candidates"]
+    show_shortlist(job, candidates)
     open_id = st.session_state.get("open_candidate")
-    list_column, review_column = st.columns([2, 3], gap="large")
-    with list_column:
-        show_shortlist(job, candidates)
-    with review_column:
-        open_id = st.session_state.get("open_candidate")
-        if open_id in candidates:
-            show_review(job, open_id, candidates[open_id])
-        else:
-            st.markdown(
-                "Choose **Review** next to a candidate to see the evidence from their blind CV. "
-                "Record a decision with a reason, and the candidate's name is shown."
-            )
+    if open_id in candidates:
+        show_review(job, open_id, candidates[open_id])
     st.divider()
     show_audit_log()

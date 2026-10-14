@@ -547,8 +547,8 @@ Offline, once: screen_all.py
          ↓
 Recruiter screen (no AI call): pick a job
          ↓
-Candidates grouped by evidence for required items, not ranked:
-every requirement / gaps on a few (up to a third missing) / gaps on most
+One table, candidates grouped by evidence for required items, not ranked:
+none missing / a few missing (up to a third) / most missing; no percentage shown
          ↓
 Review: evidence and blind CV → decision (Shortlist / Not now) + reason (required)
          ↓
@@ -559,7 +559,7 @@ Name revealed only after the decision; audit log row added (append-only, CSV dow
 | File | Purpose |
 | --- | --- |
 | `app.py` | Mode switch; loads `recruiter.py` only when recruiter mode is chosen |
-| `recruiter.py` | Recruiter screen: shortlist grouped by evidence, review, decision with reason, name revealed after the decision, audit log |
+| `recruiter.py` | Recruiter screen: one table grouped by evidence (click a row to review), evidence counts without a percentage, decision with reason, name revealed after the decision, audit log |
 | `screen_all.py` | Screens every fictional CV against each job once and saves `screening_results.json`, so the demo makes no AI calls |
 | `results_view.py` | Results screen shared by both modes; `recruiter=True` hides the gap advice and says "the CV" |
 | `blind.py` | Finds and replaces identifiers with labels such as `[NAME]`, `[ADDRESS]` |
