@@ -14,7 +14,7 @@ The AI version reads the job description and the CV together and returns a weigh
 | Deal-breakers | A missing must-have (a required tool or platform, certification, language, minimum years, degree) gives the verdict "Not a fit", whatever the score, with the reason shown at the top | "70% match, but requires a CPA" is a different message from "70% match" |
 | Evidence | Every matched skill quotes the CV line that proves it | I can check every claim, and it stops the AI inventing skills |
 | Partial matches | Close but not exact counts as half, shown as "partly evidenced" | Tells me which CV lines to reword |
-| Suggestions | Rewrite tips based only on experience already in the CV | Never suggests claiming something I haven't done |
+| Suggestions | "Talking about gaps" (changed 14 October 2026, replacing CV rewrites): for up to 5 important gaps, the closest CV line, one or two honest sentences for a cover letter or interview, and one step to close the gap | Rewriting CV lines pushed the AI to overclaim. Naming a gap openly and pointing to real experience is what interviewers want anyway |
 | Extras | Up to 5 relevant strengths the JD didn't ask for | Useful for cover letters and interviews |
 | Right to work (added 14 October 2026) | Work eligibility, visa or sponsorship, citizenship or residency conditions are typed "eligibility": not scored, never a deal-breaker, shown as "Check yourself" (candidate) or "Check with the candidate" (recruiter) | A CV can't show right to work and usually doesn't mention it. Blocking a 60% match on it overrode the score with something the candidate already knows |
 
@@ -24,7 +24,7 @@ The AI version reads the job description and the CV together and returns a weigh
 2. Ignores boilerplate: company description, benefits, equal-opportunity statements.
 3. For each requirement, checks the CV and marks it **evidenced**, **partly evidenced** or **missing**, quoting the CV line for the first two.
 4. Flags any missing qualification or explicit must-have as a **deal-breaker**, and notes any related experience in the CV.
-5. Suggests up to 5 rewrites of existing CV lines to cover partly evidenced or missing requirements.
+5. For up to 5 important gaps (required or qualification, missing or partly evidenced), suggests how to talk about each one honestly and one step to close it.
 6. Lists up to 5 CV strengths relevant to the role that the JD didn't ask for.
 
 ## Scoring
@@ -60,8 +60,8 @@ A deal-breaker only counts if Claude quotes the JD's own wording, the code finds
 
 - Only use what is written in the CV. Never assume experience that isn't stated.
 - Every "evidenced" or "partly evidenced" item gives a list of exact CV quotes, never joined with "|" or "..." and never with explanation mixed in. The app checks each quote against the CV. No quote means "missing".
-- Rewrite suggestions must copy the current CV line exactly, keep every number, result and named employer, client, tool or system, and keep who did what for whom. They may only add the job description's wording where the CV line already shows that activity.
-- The app drops any rewrite that loses or adds a number, or whose current line isn't in the CV, and highlights every word a rewrite adds. Testing showed the AI still inserts JD phrases (e.g. turning "drove AWS partner programme delivery" into "ran vendor assessments"), so the user makes the final call. Planned next: replace rewrites with "how to talk about this gap".
+- Gap advice names the gap plainly, points only to experience in the CV, never claims the requirement is met, and adds no tools, numbers, employers, clients or responsibilities.
+- The app blanks a "closest experience" quote that isn't in the CV word for word, and drops any advice containing a number the CV doesn't have. (History: the earlier CV rewrites kept inserting JD phrases, e.g. turning "drove AWS partner programme delivery" into "ran vendor assessments", which is why they were replaced.)
 - Return only the structured output below, with no extra commentary.
 
 ## Output format
@@ -86,11 +86,12 @@ The AI returns JSON, which the app reads and displays:
       "related_cv_evidence": "AWS Certified AI Practitioner; Azure DevOps"
     }
   ],
-  "rewrite_suggestions": [
+  "gap_talk": [
     {
-      "current_cv_line": "Worked with sales teams in 11 countries",
-      "suggested_line": "Coordinated requirements with stakeholders across 11 countries",
-      "covers": "Stakeholder coordination across locations"
+      "requirement": "Experience running vendor assessments or procurement",
+      "closest_cv_evidence": "Worked with sales teams in 11 countries",
+      "how_to_say_it": "I haven't run a formal vendor assessment, but I've worked closely with sales teams in 11 countries and know what a buyer needs to see.",
+      "how_to_close_it": "Run a small vendor comparison for an AI tool your team is considering, using a simple scoring sheet."
     }
   ],
   "extra_strengths": ["Power Automate agent live in 11 countries"]

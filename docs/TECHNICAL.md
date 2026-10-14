@@ -497,7 +497,7 @@ Call 1: boto3 sends the JD to Claude Haiku 4.5 on Amazon Bedrock (EU)
 → fixed requirement list with types (extract_requirements)
          ↓
 Call 2: JD + fixed list + CV → JSON: status and CV evidence per
-requirement, deal-breakers, rewrite tips, extra strengths
+requirement, deal-breakers, gap advice, extra strengths
          ↓
 App checks the JSON and calculates the weighted score in code
          ↓
@@ -522,8 +522,7 @@ Streamlit shows verdict, score, evidence and suggestions
 | Right to work | `separate_eligibility` | Moves work-eligibility, visa, sponsorship, citizenship and residency conditions out of the score and the deal-breakers into `eligibility_checks`, matched on the AI's "eligibility" type or on phrases like "eligible to work" and "visa" (not "citizen" or "sponsor" alone, which appear in "citizen developer" and "executive sponsor") |
 | CV evidence | `check_evidence` | Every quote Claude gives must appear in the CV word for word; otherwise the screen shows a warning |
 | Deal-breakers | `check_deal_breakers` | Kept only if Claude quotes JD wording that appears in the JD and contains a must-word (must, required, essential, mandatory, minimum, at least) |
-| CV rewrites | `check_rewrites` | Dropped if the "Now" line isn't in the CV, or if the suggestion loses or adds any number |
-| Overclaims | `highlight_additions` (results_view.py) | Highlights every word a rewrite adds, so the user can reject overclaims |
+| Gap advice | `check_gap_talk` | Blanks a "closest experience" quote that isn't in the CV, and drops advice containing a number the CV doesn't have |
 
 ### Deployment
 - Hosted on Streamlit Community Cloud from the `main` branch; every push redeploys.
@@ -557,7 +556,7 @@ Result first, blind CV underneath (original behind a toggle, for the demo only)
 | --- | --- |
 | `app.py` | Mode switch; loads `recruiter.py` only when recruiter mode is chosen |
 | `recruiter.py` | Recruiter screen: candidate and job picker, blind CV view, screening steps |
-| `results_view.py` | Results screen shared by both modes; `recruiter=True` hides CV rewrites and says "the CV" |
+| `results_view.py` | Results screen shared by both modes; `recruiter=True` hides the gap advice and says "the CV" |
 | `blind.py` | Finds and replaces identifiers with labels such as `[NAME]`, `[ADDRESS]` |
 | `eval_blind.py` | Scores `blind.py` against an answer key: caught only if every letter and digit is removed |
 | `compare_blind.py`, `compare_requirements.py` | Blind vs original comparison on the same job |
