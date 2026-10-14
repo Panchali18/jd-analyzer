@@ -1,22 +1,26 @@
-Ms Larissa Moreira Santos
+Larissa Moreira Santos
 larissa.msantos@gmail.com | +353 87 552 1904 | linkedin.com/in/larissa-moreira-santos
 Address: 9 Harold's Cross Road, Dublin 6W
 Date of birth: 12/02/1994 | Nationality: Brazilian | Married
 
 PROFILE
-Business Analyst with three years in a regulated bank, working on GenAI tooling and shared platforms.
+Business Analyst with three years in a regulated bank, focused on GenAI platforms and third-party AI tooling.
 
 EXPERIENCE
-Business Analyst, Harbourline Bank, Dublin (2022 to present)
-She leads business analysis for the bank's internal GenAI platform, used by 14 product teams.
-Wrote epics and user stories for a shared prompt library and an agent approval workflow, working with developers and data scientists in Dublin and Lisbon.
-Ran vendor assessments for three LLM tooling suppliers, covering security, data residency and pricing, and onboarded the selected vendor.
-Maintains the platform's control documentation for internal audit and the bank's AI governance board.
-Facilitates monthly discovery workshops with product owners to find and size new GenAI use cases.
-Reviewed API specifications with engineers for the integration between the platform and the bank's document store.
+Business Analyst, Harbourline Bank, Dublin | 2022 to present
+- Lead business analysis for the bank's internal GenAI platform, used by 14 product teams
+- Write epics and user stories for a shared prompt library and an agent approval workflow, with developers and data scientists in Dublin and Lisbon
+- Ran vendor assessments for three LLM tooling suppliers (security, data residency, pricing) and onboarded the selected vendor
+- Maintain control documentation for internal audit and the AI governance board
+- Run monthly discovery workshops with product owners to find and size new GenAI use cases
+- Review API specifications with engineers for the platform's integration with the document store
 
-Junior Analyst, Clearpath Payments, Lisbon (2020 to 2022)
-Gathered requirements for a merchant onboarding portal and supported user acceptance testing with 40 users.
+Junior Analyst, Clearpath Payments, Lisbon | 2020 to 2022
+- Gathered requirements for a merchant onboarding portal
+- Supported user acceptance testing with 40 users
+
+SKILLS
+Jira, Confluence, Miro, SQL, Postman, prompt design
 
 EDUCATION
 BSc Information Systems, Federal University of Minas Gerais, 2016
