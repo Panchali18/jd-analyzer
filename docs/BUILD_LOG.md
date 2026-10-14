@@ -2,6 +2,20 @@
 
 Every change to the JD Analyzer, with the problem, the fix, the result, and what I learned. It combines a changelog (what changed) and a decision log (why). Newest first in each table.
 
+## Close plan (set 14 October 2026)
+
+FitProof closes on **Thursday 15 October 2026**. After that: no new features, only the Bedrock key renewal (early November) and LinkedIn posts.
+
+| When | Item | What I learn | Cut rule |
+| --- | --- | --- | --- |
+| Wed 14 Oct, afternoon | 1. Candidate mode UI: button works without clicking outside the box, result leads with evidence count, visible analysis steps, tidier start screen | How Streamlit reruns, and how layout decides what people read first | Max 1.5 hours |
+| Wed 14 Oct, afternoon | 2. "How to talk about this gap" instead of CV rewrites | Rewriting a prompt and checking it against an answer key | Max 1.5 hours |
+| Thu 15 Oct, morning | 3. Recruiter shortlist and decision: candidates grouped by evidence, a decision and reason per candidate, name revealed after the decision, audit log; results saved once so the demo costs nothing | Designing human oversight as a workflow, not a disclaimer | Max 4 hours |
+| Thu 15 Oct, afternoon | 4. Paste a job link (Greenhouse, Lever, Ashby) and FitProof fetches the description | How a public API works | Max 1.5 hours; dropped, not postponed, if time runs out |
+| Thu 15 Oct, end of day | Close-out: README with a "Limits" section (replaces the model card), final build log entry | Writing down what a product doesn't do | 45 minutes |
+
+**Not doing:** full bias test suite (increment 2), separate model card, job feeds from LinkedIn or Indeed (no public API, scraping is against their terms), PRD rewrite beyond a short "closed" note.
+
 ## Recruiter mode (parallel track, started 13 October 2026)
 
 A recruiter-side mode that shows compliance-by-design for EU AI Act high-risk screening (Annex III 4(a), obligations from 2 December 2027). Synthetic CVs only. Plan: PRD section 9R. Increment scopes: `docs/recruiter_mode/`.
