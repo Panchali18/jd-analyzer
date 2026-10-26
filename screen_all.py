@@ -8,6 +8,7 @@ The recruiter demo reads this file, so a visit costs nothing.
 
 Run: python screen_all.py"""
 import json
+import time
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -25,6 +26,21 @@ JOB_DESCRIPTIONS = {
 }
 OUTPUT = CV_FOLDER / "screening_results.json"
 
+WAITS = [20, 60, 120]  # seconds to wait before trying again when Bedrock is busy
+
+
+def with_retries(step, *args):
+    """Bedrock is sometimes briefly unavailable. Wait and try again rather than stopping."""
+    for wait in WAITS + [None]:
+        try:
+            return step(*args)
+        except Exception as error:
+            if wait is None or "ServiceUnavailable" not in type(error).__name__ + str(error):
+                raise
+            print(f"    Bedrock is busy, trying again in {wait} seconds...")
+            time.sleep(wait)
+
+
 saved = json.loads(OUTPUT.read_text()) if OUTPUT.exists() else {}
 shortlist = [f for f in sorted(CV_FOLDER.glob("cv_*.txt")) if int(f.stem.split("_")[1]) >= FIRST_SHORTLIST_CV]
 
@@ -36,7 +52,7 @@ for job, jd_path in JOB_DESCRIPTIONS.items():
         requirements = saved[job]["requirements"]  # same yardstick as before
         print(f"\n{job}: reusing the saved list of {len(requirements['requirements'])} requirements")
     else:
-        requirements = extract_requirements(jd_text)
+        requirements = with_retries(extract_requirements, jd_text)
         calls += 1
         print(f"\n{job}: {len(requirements['requirements'])} requirements")
     previous = saved.get(job, {}).get("candidates", {})
@@ -47,10 +63,13 @@ for job, jd_path in JOB_DESCRIPTIONS.items():
             note = "(saved)"
         else:
             blind_text, _ = blind(cv_file.read_text())
-            result = analyse(jd_text, blind_text, requirements)
+            result = with_retries(analyse, jd_text, blind_text, requirements)
             calls += 1
             note = "(new)"
         results[job]["candidates"][cv_file.stem] = result
+        # Save after every candidate, keeping anything not reached yet, so a failure never loses finished work
+        progress = {**saved, **results}
+        OUTPUT.write_text(json.dumps(progress, indent=1))
         print(f"  {cv_file.stem}: {result['score']}% {result['verdict']} {note}")
 
 OUTPUT.write_text(json.dumps(results, indent=1))
