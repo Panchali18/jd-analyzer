@@ -11,6 +11,7 @@ from pathlib import Path
 import streamlit as st
 
 from blind import blind
+import style
 from results_view import STATUS_ICON
 
 CV_FOLDER = Path("test_data/recruiter")
@@ -126,11 +127,10 @@ def show_shortlist(job, candidates):
         rows.append(
             {
                 "Candidate": label(candidate_id),
-                "Current role": current_role(candidate_id),
                 "Evidence": short_group(candidates[candidate_id]),
                 "Required met": f"{evidenced} of {total}",
-                "Missing": missing,
                 "Stage": f"{decided} · {real_name(candidate_id)}" if decided else "New",
+                "Current role": current_role(candidate_id),
             }
         )
     st.caption(
@@ -139,8 +139,11 @@ def show_shortlist(job, candidates):
     event = st.dataframe(
         rows, hide_index=True, on_select="rerun", selection_mode="single-row", key=f"table_{job}", width="stretch"
     )
-    if event.selection.rows:
-        st.session_state["open_candidate"] = ids[event.selection.rows[0]]
+    # Only a new tick opens a candidate, so the dropdown can still switch to someone else
+    ticked = ids[event.selection.rows[0]] if event.selection.rows else None
+    if ticked and ticked != st.session_state.get(f"ticked_{job}"):
+        st.session_state["open_candidate"] = ticked
+    st.session_state[f"ticked_{job}"] = ticked
 
 
 def show_requirements(result):
@@ -160,7 +163,7 @@ def show_requirements(result):
             return
         with st.expander(f"{icon} {item['skill']}"):
             for quote in quotes:
-                st.markdown(f"> {quote}")
+                st.html(style.quote(quote))
             if item.get("note"):
                 st.caption(item["note"])
 
@@ -177,14 +180,14 @@ def show_review(job, candidate_id, result):
     total, evidenced, partly, missing = evidence(result)
     decided = st.session_state.get("decisions", {}).get((job, candidate_id))
     with st.container(border=True):
-        st.subheader(label(candidate_id))
+        st.subheader(label(candidate_id), anchor=False)
         if decided:
             st.success(f"**Decision recorded: {decided}.** {label(candidate_id)} is {real_name(candidate_id)}.")
         st.caption(current_role(candidate_id))
-        met_column, partly_column, missing_column = st.columns(3)
-        met_column.metric("Required items met", f"{evidenced} of {total}")
-        partly_column.metric("Partly met", partly)
-        missing_column.metric("Missing", missing)
+        st.html(
+            f'<p class="fp-count">Required items met: <strong>{evidenced} of {total}</strong></p>'
+            + style.bar({"evidenced": evidenced, "partly evidenced": partly, "missing": missing})
+        )
 
         evidence_column, decision_column = st.columns([3, 2], gap="large")
         with evidence_column:
@@ -219,7 +222,7 @@ def show_review(job, candidate_id, result):
 
 def show_audit_log():
     log = st.session_state.get("audit_log", [])
-    st.subheader(f"Audit log ({len(log)})")
+    st.subheader(f"Audit log ({len(log)})", anchor=False)
     if not log:
         st.caption("Every decision is recorded here with the time, the reason and the evidence shown at that moment.")
         return
@@ -234,8 +237,11 @@ def show_audit_log():
 
 def render(max_analyses):
     results = load_results()
-    st.title("FitProof · Recruiter mode")
-    st.info("Demo: all CVs and candidates are fictional.")
+    st.html(
+        '<p class="fp-promise">Screen candidates on evidence, with their identity hidden.</p>'
+        '<p class="fp-sub">A demo with 20 fictional candidates. The AI only sees blind CVs, candidates are grouped '
+        "by evidence rather than ranked, and you make every decision.</p>"
+    )
 
     job = st.selectbox("Job", list(results))
     candidates = results[job]["candidates"]
@@ -244,10 +250,28 @@ def render(max_analyses):
         "requirement list. No AI call happens on this screen."
     )
     show_shortlist(job, candidates)
+    order = {key: position for position, (key, _, _) in enumerate(GROUPS)}
+    ids = sorted(candidates, key=lambda c: (order[group_of(candidates[c])], c))
+    pick_key = f"pick_{job}"
+    st.session_state.setdefault(pick_key, None)
+    if st.session_state.get("open_candidate") in ids:
+        st.session_state[pick_key] = st.session_state["open_candidate"]  # keep the dropdown in step with a tick
+
+    def open_picked():
+        st.session_state["open_candidate"] = st.session_state[pick_key]
+
+    st.selectbox(
+        "Review a candidate",
+        ids,
+        format_func=lambda c: f"{label(c)} · {short_group(candidates[c])}",
+        placeholder="Choose a candidate",
+        key=pick_key,
+        on_change=open_picked,
+    )
     open_id = st.session_state.get("open_candidate")
     if open_id in candidates:
         show_review(job, open_id, candidates[open_id])
     else:
-        st.info("Tick the box at the start of a candidate's row to see their evidence and record a decision.")
+        st.caption("Choose a candidate above, or tick their row in the table, to see the evidence and record a decision.")
     st.divider()
     show_audit_log()

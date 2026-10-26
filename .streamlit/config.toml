@@ -1,18 +1,20 @@
 [theme]
 base = "light"
-primaryColor = "#2B4ACB"
-backgroundColor = "#FAFAF7"
-secondaryBackgroundColor = "#F0F2F7"
-textColor = "#1C2230"
-borderColor = "#E2E5EC"
-linkColor = "#2B4ACB"
-greenColor = "#1F7A4D"
-orangeColor = "#B85C00"
+primaryColor = "#1F2A44"
+backgroundColor = "#F6F7F9"
+secondaryBackgroundColor = "#ECEEF2"
+textColor = "#1E2433"
+borderColor = "#DDE1E8"
+linkColor = "#1F2A44"
+greenColor = "#0F766E"
+orangeColor = "#A16207"
 redColor = "#B42318"
-font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+font = "IBM Plex Sans:https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+# The serif is for CV text only: highlighted evidence quotes and the blind CV view
+codeFont = "IBM Plex Serif:https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400&display=swap"
 baseFontSize = 15
-baseRadius = "0.6rem"
+baseRadius = "0.5rem"
 showWidgetBorder = true
 
 [theme.sidebar]
-backgroundColor = "#F0F2F7"
+backgroundColor = "#ECEEF2"
