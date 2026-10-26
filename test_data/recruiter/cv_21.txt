@@ -1,0 +1,27 @@
+Aoife Brennan
+aoife.brennan@gmail.com | +353 86 214 7790 | linkedin.com/in/aoifebrennan
+Address: 41 Clontarf Road, Dublin 3
+Date of birth: 19/06/1992 | Nationality: Irish | Married
+
+PROFILE
+Business Analyst in insurance, specialising in third-party software selection and regulatory change.
+
+EXPERIENCE
+Senior Business Analyst, Lismore Insurance Group, Dublin | 2021 to present
+- Ran vendor assessments and RFPs for a claims platform and a document-management system, from long list to contract
+- Wrote epics and user stories for the claims platform rollout across 3 business units
+- Maintain requirements traceability and control evidence for Central Bank of Ireland audits
+- Facilitate requirements workshops with claims, finance and IT teams in Dublin and Cork
+- Reviewed integration specifications with the vendor's engineers for the policy system API
+
+Business Analyst, Fenwick Digital, Dublin | 2018 to 2021
+- Gathered requirements for client websites and CRM integrations
+
+SKILLS
+Jira, Confluence, Visio, SQL, Power BI
+
+TRAINING
+Prompt Engineering for Business Users (online course), 2025
+
+EDUCATION
+BA Business and Information Systems, University College Dublin, 2014

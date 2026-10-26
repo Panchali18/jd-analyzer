@@ -1,0 +1,24 @@
+Daniel Okonkwo-Reyes
+d.okonkwo.reyes@gmail.com | +353 83 902 1146 | linkedin.com/in/danielokonkworeyes
+Address: 7 Ranelagh Road, Dublin 6
+Age: 30 | Nationality: Spanish
+
+PROFILE
+Technical Business Analyst in banking, working between product teams and engineers on APIs and data.
+
+EXPERIENCE
+Technical Business Analyst, Corrib Bank, Dublin | 2022 to present
+- Translate business needs into epics and user stories for the payments API team
+- Write API and integration specifications with engineers for open banking connections
+- Maintain process and control documentation for the bank's operational risk reviews
+- Supported a 3-month pilot of an internal GenAI assistant for customer-service agents, writing its requirements and test cases
+- Run discovery sessions with operations teams to define problems before solutions
+
+Graduate Analyst, Meseta Software, Madrid | 2020 to 2022
+- Tested and documented REST APIs for a logistics platform
+
+SKILLS
+Jira, Confluence, Postman, SQL, Swagger, Python (basic)
+
+EDUCATION
+BSc Computer Engineering, Universidad Politécnica de Madrid, 2019

@@ -1,0 +1,28 @@
+Rohan Iyer
+rohan.iyer.ai@outlook.com | +32 470 55 21 98 | github.com/rohaniyer
+Address: Rue du Midi 120, 1000 Brussels
+DOB: 08/11/1990 | Nationality: Indian
+
+PROFILE
+Data and AI Consultant who runs AI pilots with business teams and trains them to use the results.
+
+EXPERIENCE
+Data & AI Consultant, Calderwood Consulting, Brussels | 2020 to present
+- Ran 6 AI proofs of concept for retail and logistics clients, 2 of which moved into production
+- Designed and delivered GenAI workshops for 120 client staff across 4 companies
+- Built data pipelines in Python and dbt to prepare training data for client models
+- Keep a backlog of AI use cases for each client and prioritise it with their product owners
+- Write solution design documents for each pilot
+
+Data Analyst, Brightway Retail, Bengaluru | 2016 to 2020
+- Built demand and pricing dashboards in Tableau
+
+SKILLS
+Python, dbt, Azure OpenAI, Snowflake, Tableau
+
+EDUCATION
+MSc Data Science, KU Leuven, 2016
+BTech Computer Science, VIT University, 2012
+
+LANGUAGES
+English (fluent), French (basic), Hindi (native)
