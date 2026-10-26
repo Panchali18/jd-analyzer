@@ -8,6 +8,7 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pandas as pd
 import streamlit as st
 
 from blind import blind
@@ -23,6 +24,8 @@ GROUPS = [
     ("few", "Evidence for most", "No evidence for up to a third of the required items."),
     ("most", "Evidence for few", "No evidence for more than a third of the required items."),
 ]
+# Text colour and a light tint per group: teal, amber, red, the same meanings as candidate mode
+GROUP_COLOURS = {"all": ("#0F766E", "#E3F3F1"), "few": ("#8A5300", "#FBF0DC"), "most": ("#B42318", "#FBE9E7")}
 JOB_FILES = {
     "AI Adoption & Delivery Specialist": "test_data/jd_01.txt",
     "Senior Business Analyst, GenAI": "test_data/jd_02.txt",
@@ -133,7 +136,7 @@ def show_job_brief(job, requirement_list):
     singular = {"required": "required", "qualification": "qualification", "nice to have": "nice to have"}
     plural = {"required": "required", "qualification": "qualifications", "nice to have": "nice to have"}
     parts = [f"{n} {(singular if n == 1 else plural)[t]}" for t, n in counts.items() if n]
-    with st.container(border=True):
+    with st.container(border=True, key="job_brief"):
         st.markdown(f"**{job}**")
         st.caption(
             f"{len(items)} requirements: {', '.join(parts)}. They were set once from the job description, "
@@ -173,8 +176,15 @@ def show_shortlist(job, candidates):
         "Grouped by how much evidence the CV shows for the required items, then in number order. Not ranked by "
         "score. \"No evidence\" means the CV doesn't show it, not that the candidate can't do it."
     )
+    colours = {title: GROUP_COLOURS[key] for key, title, _ in GROUPS}
+
+    def colour_group(value):
+        text, tint = colours.get(value, ("inherit", "transparent"))
+        return f"color: {text}; background-color: {tint}; font-weight: 500"
+
+    table = pd.DataFrame(rows).style.map(colour_group, subset=["Group"])
     event = st.dataframe(
-        rows, hide_index=True, on_select="rerun", selection_mode="single-row", key=f"table_{job}", width="stretch"
+        table, hide_index=True, on_select="rerun", selection_mode="single-row", key=f"table_{job}", width="stretch"
     )
     # Only a new tick opens a candidate, so the dropdown can still switch to someone else
     ticked = ids[event.selection.rows[0]] if event.selection.rows else None

@@ -31,6 +31,11 @@ h1, h2, h3 {{ color: {INK}; letter-spacing: -0.01em; }}
 .fp-dot {{ display: inline-block; width: 0.6em; height: 0.6em; border-radius: 50%; margin-right: 0.35em; }}
 .fp-gap-say {{ margin: 0.5rem 0 0.3rem; line-height: 1.5; }}
 .fp-gap-close {{ color: #4B5468; margin: 0; line-height: 1.5; }}
+/* The selected mode is filled in, so it's clear which side you're on */
+.st-key-mode button[aria-checked="true"] {{ background: {INK} !important; color: #FFFFFF !important; border-color: {INK} !important; }}
+.st-key-mode button[aria-checked="true"] p {{ color: #FFFFFF !important; }}
+/* The job brief: a light blue tint and an ink edge mark the thing every candidate is measured against */
+.st-key-job_brief {{ background: #EEF2FA; border-left: 4px solid {INK}; }}
 @media (max-width: 640px) {{
   .block-container {{ padding-top: 3.75rem; }}
   .fp-promise {{ font-size: 1.5rem; }}

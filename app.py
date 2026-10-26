@@ -65,9 +65,9 @@ style.apply()
 name_column, mode_column = st.columns([3, 2], vertical_alignment="center")
 name_column.html('<p class="fp-wordmark">FitProof</p>')
 mode = mode_column.segmented_control(
-    "Mode", ["Candidate", "Recruiter (demo)"], default="Candidate", label_visibility="collapsed", key="mode"
+    "Mode", ["Candidate", "Recruiter"], default="Candidate", label_visibility="collapsed", key="mode"
 )
-if mode == "Recruiter (demo)":
+if mode == "Recruiter":
     import recruiter  # loaded only when needed, so candidate mode stays light
 
     recruiter.render(MAX_ANALYSES)
