@@ -18,11 +18,11 @@ from results_view import STATUS_ICON
 CV_FOLDER = Path("test_data/recruiter")
 RESULTS_FILE = CV_FOLDER / "screening_results.json"
 REQUIRED_TYPES = ("required", "qualification")
-# Groups describe the CV, not the person: "no evidence" means the CV doesn't show it, not that they can't do it
+# Groups describe what the CV shows, not the person: "not shown" doesn't mean they can't do it
 GROUPS = [
-    ("all", "Evidence for all required", "The CV shows evidence for every required item."),
-    ("few", "Evidence for most", "No evidence for up to a third of the required items."),
-    ("most", "Evidence for few", "No evidence for more than a third of the required items."),
+    ("all", "Strong match", "The CV shows every required item, at least in part."),
+    ("few", "Partial match", "The CV doesn't show up to a third of the required items."),
+    ("most", "Low match", "The CV doesn't show more than a third of the required items."),
 ]
 # Text colour and a light tint per group: teal, amber, red, the same meanings as candidate mode
 GROUP_COLOURS = {"all": ("#0F766E", "#E3F3F1"), "few": ("#8A5300", "#FBF0DC"), "most": ("#B42318", "#FBE9E7")}
@@ -126,7 +126,7 @@ def short_group(result):
 
 def evidence_summary(result):
     total, evidenced, partly, missing = evidence(result)
-    return f"{evidenced} met, {partly} partly, {missing} no evidence"
+    return f"{evidenced} met, {partly} partly, {missing} not shown"
 
 
 def show_job_brief(job, requirement_list):
@@ -166,15 +166,15 @@ def show_shortlist(job, candidates):
         rows.append(
             {
                 "Candidate": label(candidate_id),
-                "Group": short_group(candidates[candidate_id]),
+                "Match": short_group(candidates[candidate_id]),
                 f"Required items ({total})": evidence_summary(candidates[candidate_id]),
                 "Stage": f"{decided} · {real_name(candidate_id)}" if decided else "New",
                 "Current role": current_role(candidate_id),
             }
         )
     st.caption(
-        "Grouped by how much evidence the CV shows for the required items, then in number order. Not ranked by "
-        "score. \"No evidence\" means the CV doesn't show it, not that the candidate can't do it."
+        "Grouped by match on the required items, then in number order. Not ranked by score. "
+        "\"Not shown\" means the CV doesn't show it, not that the candidate can't do it."
     )
     colours = {title: GROUP_COLOURS[key] for key, title, _ in GROUPS}
 
@@ -182,7 +182,7 @@ def show_shortlist(job, candidates):
         text, tint = colours.get(value, ("inherit", "transparent"))
         return f"color: {text}; background-color: {tint}; font-weight: 500"
 
-    table = pd.DataFrame(rows).style.map(colour_group, subset=["Group"])
+    table = pd.DataFrame(rows).style.map(colour_group, subset=["Match"])
     event = st.dataframe(
         table, hide_index=True, on_select="rerun", selection_mode="single-row", key=f"table_{job}", width="stretch"
     )
@@ -287,7 +287,7 @@ def render(max_analyses):
     st.html(
         '<p class="fp-promise">Screen candidates on evidence, with their identity hidden.</p>'
         '<p class="fp-sub">A demo with fictional candidates. The AI only sees blind CVs, candidates are grouped '
-        "by evidence rather than ranked, and you make every decision.</p>"
+        "by match rather than ranked, and you make every decision.</p>"
     )
 
     job = st.selectbox("Job you're screening for", list(results))
