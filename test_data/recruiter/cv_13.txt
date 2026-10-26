@@ -7,7 +7,7 @@ PROFILE
 Backend Developer with experience across the roles below.
 
 EXPERIENCE
-Backend Developer, Naver, Seongnam (2018 to present)
+Backend Developer, Hangang Search, Seongnam (2018 to present)
 He rebuilt the search API in Go, cutting latency by 40%.
 
 EDUCATION

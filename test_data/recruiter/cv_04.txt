@@ -7,7 +7,7 @@ PROFILE
 Machine Learning Engineer with experience across the roles below.
 
 EXPERIENCE
-Machine Learning Engineer, Alibaba Cloud, Hangzhou (2019 to present)
+Machine Learning Engineer, Yangtze Cloud, Hangzhou (2019 to present)
 Trained and deployed recommendation models used by 5 million users.
 
 EDUCATION

@@ -7,7 +7,7 @@ PROFILE
 QA Engineer with experience across the roles below.
 
 EXPERIENCE
-QA Engineer, Allegro, Warsaw (2018 to present)
+QA Engineer, Vistula Market, Warsaw (2018 to present)
 She automated 600 regression tests with Selenium and Python.
 
 EDUCATION

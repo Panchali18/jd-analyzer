@@ -7,7 +7,7 @@ PROFILE
 DevOps Engineer with experience across the roles below.
 
 EXPERIENCE
-DevOps Engineer, EPAM Systems, Kyiv (2015 to present)
+DevOps Engineer, Dnipro Systems, Kyiv (2015 to present)
 He moved 40 services to Kubernetes on AWS.
 
 EDUCATION

@@ -7,9 +7,9 @@ PROFILE
 Business Analyst with experience across the roles below.
 
 EXPERIENCE
-Business Analyst, Aer Lingus, Dublin (2020 to present)
+Business Analyst, Shannon Air, Dublin (2020 to present)
 She gathered requirements for a loyalty programme rebuild and ran UAT with 30 users.
-Data Analyst, Bank of Ireland, Dublin (2016 to 2020)
+Data Analyst, Liffey Bank, Dublin (2016 to 2020)
 Built Power BI dashboards for branch performance.
 
 EDUCATION

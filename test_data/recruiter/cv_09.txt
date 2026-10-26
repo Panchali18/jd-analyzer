@@ -7,7 +7,7 @@ PROFILE
 Solutions Architect with experience across the roles below.
 
 EXPERIENCE
-Solutions Architect, Indra, Madrid (2016 to present)
+Solutions Architect, Sierra Iberica, Madrid (2016 to present)
 He designed AWS architectures for 12 public-sector clients.
 
 EDUCATION

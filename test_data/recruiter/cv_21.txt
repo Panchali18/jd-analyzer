@@ -13,12 +13,13 @@ Senior Business Analyst, Lismore Insurance Group, Dublin | 2021 to present
 - Maintain requirements traceability and control evidence for Central Bank of Ireland audits
 - Facilitate requirements workshops with claims, finance and IT teams in Dublin and Cork
 - Reviewed integration specifications with the vendor's engineers for the policy system API
+- Ran the assessment of two GenAI document-summarisation tools for the claims team, covering data protection, model risk and accuracy on 200 sample claims
 
 Business Analyst, Fenwick Digital, Dublin | 2018 to 2021
 - Gathered requirements for client websites and CRM integrations
 
 SKILLS
-Jira, Confluence, Visio, SQL, Power BI
+Jira, Confluence, Visio, SQL, Power BI, Microsoft Copilot
 
 TRAINING
 Prompt Engineering for Business Users (online course), 2025

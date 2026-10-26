@@ -92,7 +92,7 @@ def find_identifiers(text):
                 found.append((start, end, "REFEREE"))
                 continue
             if start >= header_end:
-                continue  # names further down are usually employers or products ("Severn Trent")
+                continue  # names further down are usually employers or products ("Harlow Vale")
             if any(a <= start and end <= b for a, b in address_spans):
                 continue  # a place in the address, not the candidate's name
         if item.entity_type == "NRP" and ("language" in line.lower() or LANGUAGE_LEVEL.search(line)):

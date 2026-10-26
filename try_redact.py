@@ -5,7 +5,7 @@ chuk.okafor@gmail.com | +353 87 123 4567 | 14 Rathmines Road, Dublin 6
 Date of birth: 12/03/1991 | Nationality: Nigerian | Married
 
 PROFILE
-Business analyst with 6 years' experience at Accenture in Dublin.
+Business analyst with 6 years' experience at Pasig Partners in Dublin.
 He led requirements workshops for a retail client."""
 
 analyzer = AnalyzerEngine()
