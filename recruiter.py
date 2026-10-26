@@ -17,11 +17,17 @@ from results_view import STATUS_ICON
 CV_FOLDER = Path("test_data/recruiter")
 RESULTS_FILE = CV_FOLDER / "screening_results.json"
 REQUIRED_TYPES = ("required", "qualification")
+# Groups describe the CV, not the person: "no evidence" means the CV doesn't show it, not that they can't do it
 GROUPS = [
-    ("all", "None missing", "No required item missing."),
-    ("few", "A few missing", "Up to a third of required items missing."),
-    ("most", "Most missing", "More than a third of required items missing."),
+    ("all", "Evidence for all required", "The CV shows evidence for every required item."),
+    ("few", "Evidence for most", "No evidence for up to a third of the required items."),
+    ("most", "Evidence for few", "No evidence for more than a third of the required items."),
 ]
+JOB_FILES = {
+    "AI Adoption & Delivery Specialist": "test_data/jd_01.txt",
+    "Senior Business Analyst, GenAI": "test_data/jd_02.txt",
+}
+TYPE_LABELS = {"required": "Required", "qualification": "Qualifications", "nice to have": "Nice to have"}
 # Decisions work like a real applicant tracking system: a stage plus a reason picked from a list.
 # Every reason is logged, and "Other" needs a note.
 STAGES = {
@@ -112,7 +118,37 @@ def record_decision(job, candidate_id, result, stage, reason, note):
 
 
 def short_group(result):
-    return {"all": "None missing", "few": "A few missing", "most": "Most missing"}[group_of(result)]
+    return {key: title for key, title, _ in GROUPS}[group_of(result)]
+
+
+def evidence_summary(result):
+    total, evidenced, partly, missing = evidence(result)
+    return f"{evidenced} met, {partly} partly, {missing} no evidence"
+
+
+def show_job_brief(job, requirement_list):
+    """What every candidate is checked against, agreed before screening starts."""
+    items = [r for r in requirement_list["requirements"] if r["type"] in TYPE_LABELS]
+    counts = {t: sum(1 for r in items if r["type"] == t) for t in TYPE_LABELS}
+    singular = {"required": "required", "qualification": "qualification", "nice to have": "nice to have"}
+    plural = {"required": "required", "qualification": "qualifications", "nice to have": "nice to have"}
+    parts = [f"{n} {(singular if n == 1 else plural)[t]}" for t, n in counts.items() if n]
+    with st.container(border=True):
+        st.markdown(f"**{job}**")
+        st.caption(
+            f"{len(items)} requirements: {', '.join(parts)}. They were set once from the job description, "
+            "and every candidate is checked against this same list."
+        )
+        with st.expander("The requirements every candidate is checked against"):
+            for t, title in TYPE_LABELS.items():
+                group = [r["skill"] for r in items if r["type"] == t]
+                if group:
+                    st.markdown(f"**{title}**")
+                    st.markdown("\n".join(f"- {skill}" for skill in group))
+        path = JOB_FILES.get(job)
+        if path and Path(path).exists():
+            with st.expander("Read the job description"):
+                st.text(Path(path).read_text())
 
 
 def show_shortlist(job, candidates):
@@ -127,14 +163,15 @@ def show_shortlist(job, candidates):
         rows.append(
             {
                 "Candidate": label(candidate_id),
-                "Evidence": short_group(candidates[candidate_id]),
-                "Required met": f"{evidenced} of {total}",
+                "Group": short_group(candidates[candidate_id]),
+                f"Required items ({total})": evidence_summary(candidates[candidate_id]),
                 "Stage": f"{decided} · {real_name(candidate_id)}" if decided else "New",
                 "Current role": current_role(candidate_id),
             }
         )
     st.caption(
-        "Grouped by evidence for the required items, then in number order. Not ranked by score."
+        "Grouped by how much evidence the CV shows for the required items, then in number order. Not ranked by "
+        "score. \"No evidence\" means the CV doesn't show it, not that the candidate can't do it."
     )
     event = st.dataframe(
         rows, hide_index=True, on_select="rerun", selection_mode="single-row", key=f"table_{job}", width="stretch"
@@ -239,16 +276,15 @@ def render(max_analyses):
     results = load_results()
     st.html(
         '<p class="fp-promise">Screen candidates on evidence, with their identity hidden.</p>'
-        '<p class="fp-sub">A demo with 20 fictional candidates. The AI only sees blind CVs, candidates are grouped '
+        '<p class="fp-sub">A demo with fictional candidates. The AI only sees blind CVs, candidates are grouped '
         "by evidence rather than ranked, and you make every decision.</p>"
     )
 
-    job = st.selectbox("Job", list(results))
+    job = st.selectbox("Job you're screening for", list(results))
     candidates = results[job]["candidates"]
-    st.caption(
-        f"{len(candidates)} candidates, screened once by Claude on their blind CVs against the same "
-        "requirement list. No AI call happens on this screen."
-    )
+    show_job_brief(job, results[job]["requirements"])
+    st.subheader(f"Applicants ({len(candidates)})", anchor=False)
+    st.caption("Each CV was screened once by Claude, with personal details hidden. No AI call happens on this screen.")
     show_shortlist(job, candidates)
     order = {key: position for position, (key, _, _) in enumerate(GROUPS)}
     ids = sorted(candidates, key=lambda c: (order[group_of(candidates[c])], c))

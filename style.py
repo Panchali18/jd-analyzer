@@ -8,7 +8,7 @@ import streamlit as st
 INK = "#1F2A44"
 HIGHLIGHT = "#E4F57A"
 STATUS_COLOUR = {"evidenced": "#0F766E", "partly evidenced": "#A16207", "missing": "#B42318"}
-STATUS_WORD = {"evidenced": "Met", "partly evidenced": "Partly met", "missing": "Missing"}
+STATUS_WORD = {"evidenced": "Met", "partly evidenced": "Partly met", "missing": "No evidence"}
 
 CSS = f"""
 <style>
