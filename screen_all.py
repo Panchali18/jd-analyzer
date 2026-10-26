@@ -6,18 +6,13 @@ The recruiter demo reads this file, so a visit costs nothing.
 - Each job keeps the requirement list it was first screened against, so every candidate is
   measured the same way. Only CVs that haven't been screened yet cost an AI call.
 
-Run: python screen_all.py
-     python screen_all.py --global   uses Bedrock's global route instead of the EU one. Only for these
-                                     fictional CVs (no real person's data), e.g. when the EU route is down.
-                                     The live app always uses the EU route."""
+Run: python screen_all.py"""
 import json
-import sys
 import time
 from pathlib import Path
 
 from dotenv import load_dotenv
 
-import ai_matcher
 from ai_matcher import analyse, extract_requirements
 from blind import blind
 
@@ -45,10 +40,6 @@ def with_retries(step, *args):
             print(f"    Bedrock is busy, trying again in {wait} seconds...")
             time.sleep(wait)
 
-
-if "--global" in sys.argv:
-    ai_matcher.MODEL_ID = ai_matcher.MODEL_ID.replace("eu.", "global.", 1)
-print(f"Model route: {ai_matcher.MODEL_ID}")
 
 saved = json.loads(OUTPUT.read_text()) if OUTPUT.exists() else {}
 shortlist = [f for f in sorted(CV_FOLDER.glob("cv_*.txt")) if int(f.stem.split("_")[1]) >= FIRST_SHORTLIST_CV]

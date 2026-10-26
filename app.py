@@ -35,6 +35,18 @@ def job_from_link(url):
     return fetch_job(url)
 
 
+def friendly_error(error):
+    """Say what happened and what to do, in plain words, instead of showing the technical error."""
+    text = f"{type(error).__name__} {error}"
+    if "ServiceUnavailable" in text or "Throttling" in text:
+        return "The AI service is busy or temporarily unavailable. Try the example result, or check your own fit again later."
+    if "AccessDenied" in text or "expired" in text.lower() or "UnrecognizedClient" in text:
+        return "FitProof can't reach the AI service right now. Try the example result for now."
+    if "too long" in text:
+        return str(error)
+    return "Something went wrong while checking your fit. Please try again."
+
+
 def check_fit(jd_text, cv_text):
     """Run the analysis and show each step as it happens."""
     with st.status("Checking your fit...", expanded=True) as status:
@@ -170,7 +182,8 @@ elif run:
         st.rerun()  # fold the inputs away and show the result
     except Exception as error:
         st.session_state.pop("result", None)
-        st.error(f"The analysis failed: {error}")
+        print(f"Analysis failed: {error!r}")  # the technical detail goes to the app's logs, not the screen
+        st.error(friendly_error(error))
 
 result = st.session_state.get("result")
 if not result:
